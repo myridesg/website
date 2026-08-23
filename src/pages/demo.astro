@@ -1,0 +1,51 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import DemoGarage from '@/components/islands/DemoGarage'
+
+// The one genuine island on the site: tab switching is real interactivity that
+// cannot be expressed as static HTML. client:visible means the JS is not
+// fetched until the widget scrolls into view, so it never blocks first paint.
+---
+
+<BaseLayout
+  title="Demo garage"
+  description="See how MyRideSG tracks road tax, servicing, fuel and running costs — with sample data, no signup."
+>
+  <SiteNav />
+
+  <main class="bg-paper pb-24 pt-32 md:pt-40">
+    <div class="shell">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="eyebrow text-red">Demo garage</p>
+
+        <h1 class="mt-4 text-display-sm md:text-display">
+          Have a look before you install.
+        </h1>
+
+        <p class="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-muted">
+          This is a working preview with sample data. Tap through the tabs to see
+          how ownership records, fuel logs and workshops fit together.
+        </p>
+      </div>
+
+      <div class="mt-12">
+        <DemoGarage client:visible />
+      </div>
+
+      <p class="mx-auto mt-6 max-w-md text-center text-sm text-muted">
+        Sample data for illustration. Bikes, workshops and figures shown here are
+        fictional.
+      </p>
+
+      <div class="mt-12 flex flex-col items-center">
+        <p class="text-xl font-semibold">Ready to add your own bike?</p>
+        <StoreButtons class="mt-5 justify-center" />
+      </div>
+    </div>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

@@ -25,11 +25,10 @@ export const STORE = {
 /**
  * Primary navigation. Kept flat — the marketing site is deliberately shallow.
  */
-// TODO: add these back as each page lands — linking before then ships nav items
-// that 404:
-//   { label: 'Catalog', href: '/catalog' }  — needs the catalog index page
-//   { label: 'Demo',    href: '/demo' }     — lives on feat/demo
+// TODO: add { label: 'Catalog', href: '/catalog' } once the catalog index page
+// exists. Linking it before then ships a nav item that 404s.
 export const NAV = [
   { label: 'Features', href: '/#features' },
   { label: 'Guides', href: '/guides' },
+  { label: 'Demo', href: '/demo' },
 ] as const

@@ -1,6 +1,4 @@
 ---
-import StoreButtons from './StoreButtons.astro'
-
 // Copy deliberately stops at browsing and contact. The creative brief forbids
 // promising in-app booking or quote flows until production verification
 // confirms them, so "Request quotes / Book a slot" from the original draft
@@ -22,7 +20,12 @@ import StoreButtons from './StoreButtons.astro'
           services they offer, and get their contact details in the app.
         </p>
 
-        <StoreButtons tone="light" class="mt-8" />
+        <a
+          href="/demo"
+          class="mt-8 inline-flex min-h-12 items-center rounded-pill bg-ember px-7 text-md font-semibold text-paper transition-opacity hover:opacity-85"
+        >
+          See it in the demo
+        </a>
       </div>
 
       <aside class="max-w-xs rounded-xl border border-white/18 bg-white/5 p-7">
