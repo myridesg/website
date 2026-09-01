@@ -26,9 +26,17 @@ const {
 } = Astro.props
 
 /**
- * Roughly what Google renders before it truncates: ~60 characters for a title,
- * ~160 for a description. Neither is a ranking factor — the cost of overshooting
- * is that the search engine chooses the cut instead of us, usually mid-word.
+ * Roughly what Google renders before it truncates: ~60 for a title, ~160 for a
+ * description. Neither is a ranking factor — the cost of overshooting is that
+ * the search engine chooses the cut instead of us, usually mid-word.
+ *
+ * Measured in UTF-8 BYTES, not characters. Every title here separates with an
+ * em dash, which is one character but three bytes, so a character count reads
+ * two under per dash and quietly lands over budget — the failure that put
+ * /guides/petrol-prices-singapore (58 characters, 62 bytes, two dashes) over
+ * the line while a 58-character title with one dash sat under it. Bytes are
+ * also the better proxy of the two for the thing that actually matters: a
+ * three-byte dash is a wide glyph, a one-byte letter is a narrow one.
  */
 const TITLE_BUDGET = 60
 const DESCRIPTION_BUDGET = 160
@@ -41,6 +49,16 @@ const DESCRIPTION_BUDGET = 160
  */
 const SENTENCE_CUT_FLOOR = 120
 
+const encoder = new TextEncoder()
+const bytes = (text: string) => encoder.encode(text).length
+
+/** The longest prefix of `text` that still fits `budget` bytes. */
+function sliceToBytes(text: string, budget: number): string {
+  let end = text.length
+  while (end > 0 && bytes(text.slice(0, end)) > budget) end--
+  return text.slice(0, end)
+}
+
 const brandSuffix = ` — ${SITE.name}`
 
 /**
@@ -51,7 +69,7 @@ const brandSuffix = ` — ${SITE.name}`
  * one: they are fixed where they are written, not truncated here.
  */
 const pageTitle = title
-  ? title.length + brandSuffix.length <= TITLE_BUDGET
+  ? bytes(title) + bytes(brandSuffix) <= TITLE_BUDGET
     ? `${title}${brandSuffix}`
     : title
   : `${SITE.name} — ${SITE.tagline}`
@@ -68,19 +86,20 @@ const pageTitle = title
  */
 function clampDescription(text: string): string {
   const copy = text.trim()
-  if (copy.length <= DESCRIPTION_BUDGET) return copy
+  if (bytes(copy) <= DESCRIPTION_BUDGET) return copy
 
   let kept = ''
   for (const sentence of copy.split(/(?<=\.)\s+/)) {
     const candidate = kept ? `${kept} ${sentence}` : sentence
-    if (candidate.length > DESCRIPTION_BUDGET) break
+    if (bytes(candidate) > DESCRIPTION_BUDGET) break
     kept = candidate
   }
-  if (kept.length >= SENTENCE_CUT_FLOOR) return kept
+  if (bytes(kept) >= SENTENCE_CUT_FLOOR) return kept
 
   // Nothing usable on a sentence boundary. Cut on a word boundary, then drop a
-  // trailing conjunction so it does not end on "and…".
-  const cut = copy.slice(0, DESCRIPTION_BUDGET - 1)
+  // trailing conjunction so it does not end on "and…". The ellipsis is itself
+  // three bytes, so it comes out of the budget before the cut is measured.
+  const cut = sliceToBytes(copy, DESCRIPTION_BUDGET - bytes('…'))
   return `${cut
     .slice(0, cut.lastIndexOf(' '))
     .replace(/[\s,;:–—-]+$/, '')
