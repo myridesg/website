@@ -1,46 +1,84 @@
 ---
 import ProseLayout from '@/layouts/ProseLayout.astro'
 
-// Ported verbatim from myridesg-v2/apps/web/app/privacy/page.tsx.
+// Kept in step with myridesg-v2/apps/web/app/privacy/page.tsx. This is the copy
+// the app stores review — store.config.json points privacyPolicyUrl here — so
+// when one changes, change both.
 //
-// NEEDS LEGAL REVIEW BEFORE LAUNCH: this text describes "the MyRide SG web
-// application, accessible at myridesg.com". With the product moving to native
-// iOS/Android, several clauses are now inaccurate — notably §1 (scope), §2
-// (Usage Data references browser type), and §10 (cookies and local storage).
-// Wording has deliberately NOT been altered here; changing legal copy is not a
-// developer's call. Flag to whoever owns compliance.
+// Every disclosure below was verified against the code rather than drafted from
+// memory: permissions and plugins in apps/mobile/app.config.js, the Gemini call
+// in supabase/functions/extract-receipt, and the PII scrubbing in
+// apps/mobile/lib/sentry.ts.
 ---
 
 <ProseLayout
   title="Privacy Policy"
   description="How MyRideSG collects, uses and protects your data — what the app records about you and your motorcycle, who it is shared with, and your choices over it."
-  meta="Last updated: 6 August 2026"
+  meta="Last updated: 1 September 2026"
 >
+  <h2>At a glance</h2>
+  <ul>
+    <li>Your bikes, logs and records belong to you. We never sell your data.</li>
+    <li>
+      Receipt and odometer scanning sends the photo to Google's Gemini API to read it.
+      Fuel and odometer scans are read and discarded; service and expense receipts are
+      kept with your log until you delete them.
+    </li>
+    <li>
+      Location is used only while the app is open, to show workshops near you. We never
+      track you in the background.
+    </li>
+    <li>
+      Face ID / fingerprint unlock happens entirely on your device. Biometric data never
+      reaches us.
+    </li>
+    <li>
+      You can export everything, opt out of analytics, and delete your account — all
+      in-app, no email required.
+    </li>
+  </ul>
+
   <h2>1. Introduction</h2>
   <p>
-    MyRide SG ("we", "us", or "our") operates the MyRide SG web application (the
-    "Service"), accessible at <strong>myridesg.com</strong>. This Privacy Policy
-    explains how we collect, use, disclose, and safeguard your information when you
-    use our Service. By using the Service, you agree to the collection and use of
-    information in accordance with this policy.
+    MYRIDESG PTE. LTD. (UEN 202635558K) ("we", "us", or "our") operates the MyRideSG
+    mobile application for iOS and Android and the website at <strong>myridesg.com</strong
+    > (together, the "Service"). This Privacy Policy explains how we collect, use,
+    disclose, and safeguard your information when you use the Service. By using the
+    Service, you agree to the collection and use of information in accordance with this
+    policy.
   </p>
 
   <h2>2. Information We Collect</h2>
   <p>
-    <strong>Account Information:</strong> When you sign in with Google, we receive your
-    name, email address, and profile picture from Google. We do not receive your Google
-    password.
+    <strong>Account Information:</strong> You can sign in with Apple, with Google, or with
+    a one-time email code. From Apple or Google we receive your name and email address
+    (and profile picture, from Google) — never your password. If you choose Apple's
+    <em>Hide My Email</em>, we only ever see the private relay address Apple creates for
+    you.
   </p>
   <p>
-    <strong>User-Generated Data:</strong> Information you voluntarily enter into the
-    Service, including motorcycle details (make, model, plate number), maintenance logs,
-    fuel fill-up records, mileage readings, expense records, and document expiry dates
-    (COE, insurance, road tax).
+    <strong>Rider Data:</strong> Information you enter into the Service, including
+    motorcycle details (make, model, plate number), maintenance logs, fuel fill-up
+    records, mileage readings, expense records, and document expiry dates (COE,
+    insurance, road tax).
   </p>
   <p>
-    <strong>Usage Data:</strong> We may collect information about how the Service is
-    accessed and used, including your device type, browser type, pages viewed, and time
-    spent on pages.
+    <strong>Photos You Scan:</strong> If you use the scan feature, the photo you take of a
+    receipt, invoice, or odometer is processed as described in Section 4. Photos are only
+    ever captured when you tap the scan or attach button — the app never reads your camera
+    or photo library on its own.
+  </p>
+  <p>
+    <strong>Location:</strong> With your permission, your device location while the app is
+    in use, so we can show workshops near you and how far away they are. See Section 7.
+  </p>
+  <p>
+    <strong>Usage and Device Data:</strong> Information about how the Service is used —
+    screens opened, features used, device type and OS version. See Section 5.
+  </p>
+  <p>
+    <strong>Crash Reports:</strong> If the app crashes or something breaks, a technical
+    report is sent to us. See Section 6.
   </p>
 
   <h2>3. How We Use Your Information</h2>
@@ -48,14 +86,41 @@ import ProseLayout from '@/layouts/ProseLayout.astro'
     <li>To provide, operate, and maintain the Service</li>
     <li>To authenticate your identity and manage your account</li>
     <li>To store and display your motorcycle and maintenance data</li>
-    <li>To send service reminders and expiry alerts you have opted into</li>
+    <li>To read receipts and odometer photos you scan, so log forms can be filled in for you</li>
+    <li>To send service reminders, expiry alerts, and push notifications you have opted into</li>
     <li>To calculate and display fuel efficiency, cost per km, and spending analytics</li>
-    <li>To operate the XP rewards and gamification system</li>
+    <li>To operate the XP rewards, quests, and loyalty programme</li>
+    <li>To show workshops near you and let you contact or navigate to them</li>
     <li>To improve and personalise the Service</li>
     <li>To communicate important updates about the Service</li>
   </ul>
 
-  <h2>4. Usage Analytics</h2>
+  <h2>4. Receipt and Odometer Scanning</h2>
+  <p>
+    The scan feature uses AI to read the photo you take and fill in the log form for you.
+    The photo is sent over an encrypted connection from our servers to Google's Gemini
+    API, which returns the extracted fields (for example the workshop name, date, and
+    amounts). Google processes these images solely to provide this service to us and does
+    not use them to train its AI models.
+  </p>
+  <p>What happens to the photo depends on the type of scan:</p>
+  <ul>
+    <li>
+      <strong>Fuel and odometer scans</strong> are read and discarded — the photo is not
+      stored anywhere after the fields are extracted.
+    </li>
+    <li>
+      <strong>Service invoices and expense receipts</strong> are kept with the log entry
+      they belong to, so you can look at the original later. Deleting the log entry (or
+      your account) deletes the photo.
+    </li>
+  </ul>
+  <p>
+    Scanning is always optional — every form can be filled in by typing. Scans are
+    rate-limited per rider per day to keep the feature fair and secure.
+  </p>
+
+  <h2>5. Usage Analytics</h2>
   <p>
     We record how riders move through the app — which screens are opened, which features
     are used, and where a form is abandoned — so we can find what is confusing or broken
@@ -64,58 +129,93 @@ import ProseLayout from '@/layouts/ProseLayout.astro'
   </p>
   <p>
     These records never contain your name, email address, phone number, vehicle plate
-    number, NRIC, location, or anything you typed into the app. They are stored in our
-    own database and are never sold or shared with advertisers or other companies.
-  </p>
-  <p>
-    We keep this data for 180 days, after which it is deleted automatically. You can turn
-    it off at any time under Account → Share usage data, and deleting your account
-    removes the link between these records and you.
+    number, NRIC, location, or anything you typed into the app. They are stored in our own
+    database and are never sold or shared with advertisers or other companies. We keep
+    this data for 180 days, after which it is deleted automatically. You can turn it off
+    at any time under Account → Privacy and data → Share usage data, and deleting your
+    account removes the link between these records and you.
   </p>
 
-  <h2>5. Google Sign-In</h2>
+  <h2>6. Crash Reporting</h2>
   <p>
-    We use Google OAuth 2.0 to authenticate users. When you sign in with Google, we
-    access only your basic profile information (name and email address) as permitted by
-    the scopes you authorise. We do not access your Gmail, Google Drive, Google Contacts,
-    or any other Google service data. Your use of Google Sign-In is also governed by <a
-      href="https://policies.google.com/privacy"
-      target="_blank"
-      rel="noopener noreferrer">Google's Privacy Policy</a
-    >.
+    We use Sentry, a crash-reporting service, to learn when the app crashes or an error
+    occurs so we can fix it. Before a report leaves your device, we scrub it of personal
+    details — vehicle plate numbers, email addresses, and phone numbers are removed.
+    Reports contain technical context (device model, OS version, what the app was doing)
+    rather than the content of your logs.
   </p>
 
-  <h2>6. Data Sharing and Disclosure</h2>
+  <h2>7. Location</h2>
   <p>
-    We do not sell, trade, or rent your personal information to third parties. We may
-    share data in the following limited circumstances:
+    If you grant location permission, we use your position <strong
+      >only while the app is open</strong
+    > to show nearby workshops and their distances. We do not track your location in the
+    background, we do not keep a history of where you have been, and location is never
+    attached to your fuel, service, or expense records. You can use the Service without
+    granting location — workshop search simply won't sort by distance.
+  </p>
+
+  <h2>8. Biometric Unlock</h2>
+  <p>
+    You can choose to lock the app behind Face ID, Touch ID, or your device's fingerprint
+    unlock. The biometric check is performed entirely by your device's operating system —
+    your face or fingerprint data never leaves your device and is never visible to us.
+  </p>
+
+  <h2>9. Sign-In Providers</h2>
+  <p>
+    We use Apple and Google solely to authenticate you. We access only your basic profile
+    information (name and email address) as permitted by the scopes you authorise — we do
+    not access your iCloud, Gmail, Google Drive, contacts, or any other Apple or Google
+    service data. Your use of these sign-in options is also governed by
+    <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener noreferrer"
+      >Apple's Privacy Policy</a
+    > and
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
+      >Google's Privacy Policy</a
+    >. One-time sign-in codes are delivered by our email provider, Postmark.
+  </p>
+
+  <h2>10. Service Providers</h2>
+  <p>
+    We share data with a small number of vendors, only so they can perform services for
+    us, under their confidentiality and data-protection terms:
   </p>
   <ul>
     <li>
-      <strong>Service Providers:</strong> Third-party vendors who assist us in operating
-      the Service (e.g., cloud hosting, analytics) under confidentiality agreements.
+      <strong>Supabase</strong> — cloud database, authentication, and file storage. This is
+      where your account and rider data live.
     </li>
+    <li><strong>Google Gemini API</strong> — reads the photos you scan (Section 4).</li>
+    <li><strong>Google Maps</strong> — renders the workshop map inside the app.</li>
+    <li><strong>Sentry</strong> — crash reporting (Section 6).</li>
+    <li><strong>Postmark</strong> — delivers sign-in code and Service emails.</li>
+    <li><strong>Expo</strong> — delivers push notifications and app updates.</li>
+  </ul>
+  <p>We may also disclose data:</p>
+  <ul>
     <li>
-      <strong>Legal Requirements:</strong> If required by law, regulation, or valid legal
+      <strong>Legal Requirements:</strong> if required by law, regulation, or valid legal
       process.
     </li>
     <li>
-      <strong>Business Transfer:</strong> In the event of a merger, acquisition, or sale
-      of assets, user data may be transferred with appropriate notice.
+      <strong>Business Transfer:</strong> in the event of a merger, acquisition, or sale of
+      assets, user data may be transferred with appropriate notice.
     </li>
   </ul>
+  <p>We do not sell, trade, or rent your personal information to anyone.</p>
 
-  <h2>7. Data Retention</h2>
+  <h2>11. Data Retention and Deletion</h2>
   <p>
     We retain your personal data for as long as your account is active. You can delete
-    your account and associated data at any time, in-app, at <strong
-      >Account → Delete account</strong
-    > — no need to contact support. Deletion is immediate and cannot be undone; some records
-    may be retained where required by Singapore law. You may also request deletion by contacting
-    us at <strong>hello@myridesg.com</strong> if you prefer.
+    your account and associated data at any time, in-app, at Account → Privacy and data →
+    Delete account — no need to contact support. Deletion is immediate and cannot be
+    undone; some records may be retained where required by Singapore law. You can also
+    export everything you have entered as a CSV backup from the same screen, and you may
+    request deletion by contacting us at hello@myridesg.com if you prefer.
   </p>
 
-  <h2>8. Data Security</h2>
+  <h2>12. Data Security</h2>
   <p>
     We implement industry-standard security measures to protect your data, including
     encrypted connections (HTTPS/TLS), access controls, and secure cloud infrastructure.
@@ -123,58 +223,51 @@ import ProseLayout from '@/layouts/ProseLayout.astro'
     guarantee absolute security.
   </p>
 
-  <h2>9. Your Rights</h2>
+  <h2>13. Your Rights</h2>
   <p>You have the right to:</p>
   <ul>
     <li>Access the personal data we hold about you</li>
     <li>Request correction of inaccurate data</li>
+    <li>Export your data (in-app, as CSV)</li>
     <li>Request deletion of your data</li>
-    <li>
-      Withdraw consent at any time by disconnecting Google Sign-In and deleting your
-      account
-    </li>
-    <li>
-      Lodge a complaint with the Personal Data Protection Commission (PDPC) of Singapore
-    </li>
+    <li>Withdraw consent at any time by deleting your account</li>
+    <li>Lodge a complaint with the Personal Data Protection Commission (PDPC) of Singapore</li>
   </ul>
+  <p>To exercise any of these rights, contact us at hello@myridesg.com.</p>
+
+  <h2>14. Cookies and Local Storage</h2>
   <p>
-    To exercise any of these rights, contact us at <strong>hello@myridesg.com</strong>.
+    On the website, we use browser local storage and session cookies to maintain your
+    login session and application preferences (e.g., theme, settings). We do not use
+    third-party advertising cookies. You may clear cookies and local storage through your
+    browser settings, which will log you out of the Service.
   </p>
 
-  <h2>10. Cookies and Local Storage</h2>
-  <p>
-    We use browser local storage and session cookies to maintain your login session and
-    application preferences (e.g., theme, settings). We do not use third-party
-    advertising cookies. You may clear cookies and local storage through your browser
-    settings, which will log you out of the Service.
-  </p>
-
-  <h2>11. Children's Privacy</h2>
+  <h2>15. Children's Privacy</h2>
   <p>
     The Service is not directed to individuals under the age of 16. We do not knowingly
     collect personal data from children under 16. If you believe we have inadvertently
     collected such data, please contact us immediately and we will delete it.
   </p>
 
-  <h2>12. Changes to This Policy</h2>
+  <h2>16. Changes to This Policy</h2>
   <p>
-    We may update this Privacy Policy from time to time. We will notify you of
-    significant changes by updating the "Last updated" date at the top of this page.
-    Continued use of the Service after changes constitutes acceptance of the revised
-    policy.
+    We may update this Privacy Policy from time to time. We will notify you of significant
+    changes by updating the "Last updated" date at the top of this page. Continued use of
+    the Service after changes constitutes acceptance of the revised policy.
   </p>
 
-  <h2>13. Governing Law</h2>
+  <h2>17. Governing Law</h2>
   <p>
     This Privacy Policy is governed by the laws of Singapore, including the Personal Data
     Protection Act 2012 (PDPA). Any disputes shall be subject to the exclusive
     jurisdiction of the courts of Singapore.
   </p>
 
-  <h2>14. Contact Us</h2>
+  <h2>18. Contact Us</h2>
   <p>If you have any questions about this Privacy Policy, please contact us:</p>
   <p>
-    <strong>MyRide SG</strong><br />
+    <strong>MYRIDESG PTE. LTD.</strong> (UEN 202635558K)<br />
     Email: <a href="mailto:hello@myridesg.com">hello@myridesg.com</a><br />
     Website: <a href="https://myridesg.com">https://myridesg.com</a><br />
     Singapore

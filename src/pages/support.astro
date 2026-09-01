@@ -1,0 +1,83 @@
+---
+import ProseLayout from '@/layouts/ProseLayout.astro'
+
+// Apple and Google both require a reachable support URL on the store listing,
+// and the reviewer opens it. store.config.json points supportUrl here, so this
+// page must stay live and must answer "how do I get help" without a login.
+---
+
+<ProseLayout
+  title="Support"
+  description="Get help with MyRideSG — how to reach us, what to include, and answers to the questions riders ask most."
+>
+  <p>
+    Something not working, or an idea for what MyRideSG should do next? Email
+    <a href="mailto:hello@myridesg.com">hello@myridesg.com</a> and a human will read it.
+    We aim to reply within two working days.
+  </p>
+
+  <h2>Before you write</h2>
+  <p>These details get you a useful answer faster:</p>
+  <ul>
+    <li>Your phone and OS version (for example, iPhone 15 on iOS 26)</li>
+    <li>What you were doing when it went wrong</li>
+    <li>A screenshot, if the problem is something you can see</li>
+  </ul>
+  <p>
+    Please don't email us your NRIC, passwords, or card details — we will never ask for
+    them.
+  </p>
+
+  <h2>Common questions</h2>
+
+  <h3>How do I delete my account?</h3>
+  <p>
+    In the app, go to Account → Privacy and data → Delete account. Deletion is immediate
+    and cannot be undone. You do not need to contact us first.
+  </p>
+
+  <h3>Can I get my data out?</h3>
+  <p>
+    Yes. Account → Privacy and data → Export your data gives you a CSV of everything you
+    have logged.
+  </p>
+
+  <h3>The receipt scan didn't read my receipt properly</h3>
+  <p>
+    Scanning fills the form in for you, but you can always correct any field before
+    saving. Crumpled or faded receipts are the usual culprits. If it is consistently wrong
+    for a particular workshop's receipts, send us a photo and we will look at it.
+  </p>
+
+  <h3>Why does the app ask for my location?</h3>
+  <p>
+    Only to show workshops near you and how far away they are, and only while the app is
+    open. You can decline and still use everything else — workshop search just won't sort
+    by distance.
+  </p>
+
+  <h3>A workshop's details are wrong</h3>
+  <p>
+    Tell us which one and what's wrong, and we will fix the listing. Rider corrections are
+    how the directory stays accurate.
+  </p>
+
+  <h3>How do I stop notifications?</h3>
+  <p>
+    Reminders can be muted per bike in the app, and you can turn off notifications for
+    MyRideSG entirely in your phone's Settings.
+  </p>
+
+  <h2>Privacy and terms</h2>
+  <p>
+    Read our <a href="/privacy/">Privacy Policy</a> and
+    <a href="/terms/">Terms of Service</a>.
+  </p>
+
+  <h2>Company</h2>
+  <p>
+    <strong>MYRIDESG PTE. LTD.</strong> (UEN 202635558K)<br />
+    Email: <a href="mailto:hello@myridesg.com">hello@myridesg.com</a><br />
+    Singapore
+  </p>
+</ProseLayout>
