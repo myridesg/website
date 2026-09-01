@@ -13,6 +13,18 @@ export default defineConfig({
   // at runtime, so no route may fetch on request. See AGENTS.md.
   output: 'static',
 
+  // Pages are emitted as directories (/guides/index.html), so /guides/ is the
+  // canonical address and /guides only reaches it through a 308. Every internal
+  // link was written without the slash, which meant every internal navigation
+  // on the site paid a redirect round trip and the canonical URL itself had no
+  // inbound links — an SEO audit read all 32 pages as orphans behind 32 Critical
+  // redirects. The links are fixed; this stops them regressing, by making the
+  // dev server refuse the slashless form instead of quietly serving it.
+  //
+  // The redirect in config/nginx.conf stays regardless: it is what catches
+  // inbound links from elsewhere, which we do not control.
+  trailingSlash: 'always',
+
   // Content Security Policy. Astro hashes every inline script and style it
   // emits and writes them into a <meta http-equiv> on each page. That is the
   // only mechanism that works here: the site has no external script files at

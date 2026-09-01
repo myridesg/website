@@ -32,5 +32,5 @@ export const STORE = {
 export const NAV = [
   { label: 'Features', href: '/#features' },
   { label: 'FAQ', href: '/#faq' },
-  { label: 'Guides', href: '/guides' },
+  { label: 'Guides', href: '/guides/' },
 ] as const

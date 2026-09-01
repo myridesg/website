@@ -41,7 +41,7 @@ const links = (node.slugs ?? []).filter(
       <ul class="mt-4 flex flex-col gap-2.5">
         {links.map((link) => (
           <li class="leading-snug">
-            <a href={`/guides/${link.slug}`}>{link.title}</a>
+            <a href={`/guides/${link.slug}/`}>{link.title}</a>
           </li>
         ))}
       </ul>
