@@ -16,8 +16,6 @@ npm-debug.log*
 pnpm-debug.log*
 
 # tooling / agent state
-.claude-flow/
-.swarm/
 .DS_Store
 *.tsbuildinfo
 
@@ -27,3 +25,6 @@ pnpm-debug.log*
 
 # playwright-mcp scratch output
 .playwright-mcp/
+
+# wrangler local state
+.wrangler/

@@ -1,0 +1,23 @@
+// Cloudflare Workers deploy config — static assets only, no Worker script.
+//
+// This file exists to stop `wrangler deploy` from auto-configuring the project.
+// With no wrangler config present, wrangler runs `astro add cloudflare`, which
+// installs the latest @astrojs/cloudflare adapter and wires it into
+// astro.config.mjs. The site is fully static (see AGENTS.md rule 1) and needs no
+// adapter, and that adapter's newer releases also import APIs astro 7.2 does not
+// export, so the rebuild fails.
+//
+// public/_headers and the generated dist/_redirects are read natively by
+// Workers static assets.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "website",
+  // Must not be newer than the workerd bundled with the pinned wrangler
+  // (4.127.1 supports up to 2026-09-04) or `wrangler dev` refuses to start.
+  "compatibility_date": "2026-09-04",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
