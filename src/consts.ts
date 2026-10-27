@@ -87,15 +87,77 @@ export const IOS_TESTING_HREF =
   )}`
 
 /**
- * Primary navigation. Kept flat — the marketing site is deliberately shallow.
+ * A link inside a dropdown group: where it goes, and the one-line description
+ * shown under it in the panels. Descriptions restate only what the target page
+ * itself claims — no counts, ratings or "verified" (AGENTS.md rule 6).
+ */
+export interface NavChild {
+  label: string
+  href: string
+  description: string
+}
+
+/**
+ * One primary-nav entry: a plain link, or a labelled group whose children
+ * render as a dropdown (desktop) or an eyebrow section (mobile). The union
+ * keeps `href` and `children` mutually exclusive — a group label opens a
+ * panel; it does not navigate, so it must not carry an href.
+ */
+export type NavItem = { label: string; href: string } | {
+  label: string
+  children: readonly NavChild[]
+}
+
+/**
+ * Primary navigation, page links only. The scroll anchors (/#features,
+ * /#faq) live in the footer, and every feature page is reachable from the
+ * Features group.
  */
 // TODO: add these back as each page lands — linking before then ships nav items
 // that 404:
 //   { label: 'Catalog', href: '/catalog' }  — needs the catalog index page
 //   { label: 'Demo',    href: '/demo' }     — lives on feat/demo
-export const NAV = [
-  { label: 'Maintenance app', href: '/motorcycle-maintenance-app/' },
-  { label: 'Features', href: '/#features' },
-  { label: 'FAQ', href: '/#faq' },
+export const NAV: readonly NavItem[] = [
+  {
+    label: 'Features',
+    children: [
+      {
+        label: 'Maintenance tracker',
+        href: '/motorcycle-maintenance-app/',
+        description: 'Log servicing, mileage and costs in one service history.',
+      },
+      {
+        label: 'Expense & fuel tracker',
+        href: '/motorcycle-expense-tracker/',
+        description: 'Log fuel fill-ups, mileage and running costs in SGD.',
+      },
+      {
+        label: 'Renewal reminders',
+        href: '/motorcycle-renewal-reminders/',
+        description: 'Reminders ahead of your COE, road tax and insurance expiry.',
+      },
+      {
+        label: 'Workshop directory',
+        href: '/motorcycle-workshop-directory/',
+        description: 'Find a workshop by area or service, then call or get directions.',
+      },
+    ],
+  },
+  {
+    label: 'Tools',
+    children: [
+      {
+        label: 'COE calculator',
+        href: '/motorcycle-coe-calculator/',
+        description: 'Work out the total, yearly and monthly cost of a COE renewal.',
+      },
+      {
+        label: 'Rider tools',
+        href: '/rider-tools/',
+        description: 'Causeway cameras and RON95 petrol prices in one place.',
+      },
+    ],
+  },
   { label: 'Guides', href: '/guides/' },
-] as const
+  { label: 'Support', href: '/support/' },
+]

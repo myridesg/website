@@ -1,5 +1,6 @@
 ---
 import { NAV } from '@/consts'
+import type { NavItem } from '@/consts'
 
 // "Get the app" used to open the web app, which is switched off. It now aims
 // at the download block on the home page, and BaseLayout's platform script
@@ -7,6 +8,44 @@ import { NAV } from '@/consts'
 // phone installs, while a desktop click lands somewhere that shows both.
 const GET_THE_APP = '/#get'
 import ThemeToggle from './ThemeToggle.astro'
+
+/**
+ * The route being rendered, normalised the same way the anchor script below
+ * normalises it (`/index.html` and `/` are the same route once built). Nav
+ * entries compare against it for aria-current.
+ */
+const currentPath = Astro.url.pathname.replace(/index\.html$/, '')
+
+/**
+ * True when href is the page being rendered. /guides/ also stands for its
+ * article pages — a reader on a guide is still in the Guides section.
+ */
+const isCurrent = (href: string) =>
+  href === currentPath || (href === '/guides/' && currentPath.startsWith('/guides/'))
+
+/** True when any child of a group is the current page; highlights the group. */
+const groupIsCurrent = (item: NavItem) =>
+  'children' in item && item.children.some((child) => isCurrent(child.href))
+
+/**
+ * The mobile panel renders NAV as labelled sections: an eyebrow, then its
+ * links. Each link carries its row index as it is counted out, so the entry
+ * stagger scales with the panel's real length instead of a hand-written
+ * nth-child list that breaks the moment a group changes size.
+ */
+let row = 0
+const MOBILE_SECTIONS = NAV.map((item) =>
+  'children' in item
+    ? {
+        eyebrow: item.label,
+        links: item.children.map((child) => ({ ...child, row: row++ })),
+      }
+    : {
+        eyebrow: null,
+        links: [{ label: item.label, href: item.href, row: row++ }],
+      },
+)
+const CTA_ROW = row
 ---
 
 <header class="fixed inset-x-0 top-4 z-50 px-4 md:top-6">
@@ -22,16 +61,54 @@ import ThemeToggle from './ThemeToggle.astro'
       MyRide<span class="text-red">SG</span>
     </a>
 
-    <ul class="hidden items-center gap-7 md:flex">
+    <ul class="hidden items-center gap-5 md:flex lg:gap-7">
       {
         NAV.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              class="text-sm font-medium text-ink/70 transition-colors hover:text-ink"
-            >
-              {item.label}
-            </a>
+          <li class="flex items-center">
+            {'children' in item ? (
+              <details class:list={['nav-drop', { 'nav-drop--current': groupIsCurrent(item) }]}>
+                <summary class="nav-top">
+                  {item.label}
+                  <svg
+                    class="nav-drop__chevron"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m4 6 4 4 4-4" />
+                  </svg>
+                </summary>
+
+                <div class="nav-drop__panel">
+                  <ul>
+                    {item.children.map((child, i) => (
+                      <li>
+                        <a
+                          href={child.href}
+                          style={`--i: ${i}`}
+                          aria-current={isCurrent(child.href) ? 'page' : undefined}
+                        >
+                          <span class="nav-drop__label">{child.label}</span>
+                          <span class="nav-drop__desc">{child.description}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </details>
+            ) : (
+              <a
+                href={item.href}
+                class="nav-top"
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            )}
           </li>
         ))
       }
@@ -56,17 +133,37 @@ import ThemeToggle from './ThemeToggle.astro'
         </summary>
 
         <div class="site-menu__panel">
-          <ul>
-            {
-              NAV.map((item) => (
-                <li>
-                  <a href={item.href}>{item.label}</a>
-                </li>
-              ))
-            }
-          </ul>
+          {
+            MOBILE_SECTIONS.map((section) => (
+              <>
+                {section.eyebrow && (
+                  <p class="site-menu__eyebrow eyebrow">{section.eyebrow}</p>
+                )}
+                <ul class:list={{ 'site-menu__plain': !section.eyebrow }}>
+                  {section.links.map((link) => (
+                    <li>
+                      <a
+                        href={link.href}
+                        style={`--i: ${link.row}`}
+                        aria-current={isCurrent(link.href) ? 'page' : undefined}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ))
+          }
 
-          <a href={GET_THE_APP} data-store-link class="site-menu__cta">Get the app</a>
+          <a
+            href={GET_THE_APP}
+            data-store-link
+            class="site-menu__cta"
+            style={`--i: ${CTA_ROW}`}
+          >
+            Get the app
+          </a>
         </div>
       </details>
     </div>
@@ -74,8 +171,142 @@ import ThemeToggle from './ThemeToggle.astro'
 </header>
 
 <style>
+  /* ── Desktop top-level items ─────────────────────────────────────────────
+     Links and dropdown summaries share one treatment so the four entries read
+     as one row. 44px min height matches the toggle and the menu button: the
+     pill is already that tall, so this buys touch targets without growing it. */
+  .nav-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-block-size: 2.75rem;
+    padding-inline: 0.25rem;
+    border-radius: 0.5rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    white-space: nowrap;
+    color: --alpha(var(--color-ink) / 70%);
+    transition: color 160ms ease;
+    cursor: pointer;
+  }
+
+  .nav-top:hover {
+    color: var(--color-ink);
+  }
+
+  summary.nav-top {
+    list-style: none;
+  }
+
+  summary.nav-top::-webkit-details-marker {
+    display: none;
+  }
+
+  /* The page being read, and — through .nav-drop--current — the group that
+     contains it (Tools lights up on the COE calculator, for instance). */
+  .nav-top[aria-current='page'],
+  .nav-drop--current > summary.nav-top {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  /* ── Desktop dropdown ────────────────────────────────────────────────────
+     A bare <details>/<summary> pair: the open state is native semantics, so
+     there is no aria-expanded to fake and no JS needed to open it. The small
+     script below only adds dismissal. */
+  .nav-drop {
+    position: relative;
+  }
+
+  .nav-drop__chevron {
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    flex-shrink: 0;
+    transition: transform 200ms ease;
+  }
+
+  .nav-drop[open] .nav-drop__chevron {
+    transform: rotate(180deg);
+  }
+
+  .nav-drop__panel {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    inset-inline-start: 0;
+    z-index: 20;
+    inline-size: 19rem;
+    padding: 0.5rem;
+    border: 1px solid --alpha(var(--color-ink) / 8%);
+    border-radius: 1.25rem;
+    background: var(--color-paper);
+    box-shadow: 0 18px 48px rgba(8, 8, 8, 0.22);
+    transform-origin: top left;
+  }
+
+  .nav-drop__panel ul {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav-drop__panel a {
+    display: block;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.75rem;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .nav-drop__panel a:hover,
+  .nav-drop__panel a[aria-current='page'] {
+    background: var(--color-soft);
+  }
+
+  .nav-drop__label {
+    display: block;
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-ink);
+  }
+
+  .nav-drop__panel a[aria-current='page'] .nav-drop__label {
+    font-weight: 700;
+  }
+
+  /* Descriptions run at ink/70 rather than the muted token: on the soft hover
+     fill, muted (#6f7178 on #f0f1f3) measures just under the 4.5:1 AA bar for
+     12px text, and this stays above it in both themes. */
+  .nav-drop__desc {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    color: --alpha(var(--color-ink) / 70%);
+  }
+
+  /* ── Mobile menu ───────────────────────────────────────────────────────── */
+
   .site-menu {
     position: relative;
+  }
+
+  /* Wider than the old 13rem: the labelled sections need the room, and this
+     still clears a 360px viewport with the header's gutters to spare. */
+  .site-menu__panel {
+    inline-size: 17rem;
+  }
+
+  .site-menu__eyebrow {
+    padding: 0.6rem 0.85rem 0.2rem;
+    color: var(--color-muted);
+  }
+
+  .site-menu__panel > .site-menu__eyebrow:first-child {
+    padding-top: 0.3rem;
   }
 
   /* ── Trigger ──────────────────────────────────────────────────────────── */
@@ -149,7 +380,6 @@ import ThemeToggle from './ThemeToggle.astro'
     position: absolute;
     inset-inline-end: 0;
     top: calc(100% + 0.6rem);
-    inline-size: 13rem;
     padding: 0.5rem;
     border: 1px solid --alpha(var(--color-ink) / 8%);
     border-radius: 1.25rem;
@@ -166,9 +396,28 @@ import ThemeToggle from './ThemeToggle.astro'
     list-style: none;
   }
 
+  /* Guides and Support render without an eyebrow, so left alone they read as
+     the tail of the Tools group above them. A hairline — the panel's own
+     border colour — above the first of them sets the plain links apart; the
+     sibling rule keeps Guides and Support one block rather than two ruled
+     sections. */
+  .site-menu__panel ul.site-menu__plain {
+    margin-top: 0.45rem;
+    padding-top: 0.45rem;
+    border-top: 1px solid --alpha(var(--color-ink) / 8%);
+  }
+
+  .site-menu__panel ul.site-menu__plain + ul.site-menu__plain {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
   .site-menu__panel a {
     display: block;
-    padding: 0.7rem 0.85rem;
+    /* 0.75rem block padding keeps every row at 45px — a full 44px touch
+       target once line-height is included. */
+    padding: 0.75rem 0.85rem;
     border-radius: 0.75rem;
     font-size: 0.9375rem;
     font-weight: 500;
@@ -178,7 +427,8 @@ import ThemeToggle from './ThemeToggle.astro'
       color 160ms ease;
   }
 
-  .site-menu__panel a:hover {
+  .site-menu__panel a:hover,
+  .site-menu__panel a[aria-current='page'] {
     background: var(--color-soft);
     color: var(--color-ink);
   }
@@ -200,27 +450,19 @@ import ThemeToggle from './ThemeToggle.astro'
      transitioning ::details-content: a dropdown wants scale and lift, not a
      height reveal, and the panel is absolutely positioned so its height never
      affects layout. Each row is staggered slightly behind the panel so the
-     menu assembles rather than appearing all at once. */
+     menu assembles rather than appearing all at once. The delay is a custom
+     property set per row in the markup, so it scales to however many rows a
+     panel ends up with — capped, so the tail never trails the open gesture. */
   @media (prefers-reduced-motion: no-preference) {
-    .site-menu[open] .site-menu__panel {
+    .site-menu[open] .site-menu__panel,
+    .nav-drop[open] .nav-drop__panel {
       animation: menu-panel-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
-    .site-menu[open] .site-menu__panel a {
+    .site-menu[open] .site-menu__panel a,
+    .nav-drop[open] .nav-drop__panel a {
       animation: menu-row-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-
-    .site-menu[open] .site-menu__panel li:nth-child(1) a {
-      animation-delay: 40ms;
-    }
-    .site-menu[open] .site-menu__panel li:nth-child(2) a {
-      animation-delay: 75ms;
-    }
-    .site-menu[open] .site-menu__panel li:nth-child(3) a {
-      animation-delay: 110ms;
-    }
-    .site-menu[open] .site-menu__cta {
-      animation-delay: 145ms;
+      animation-delay: min(calc(40ms + var(--i, 0) * 30ms), 300ms);
     }
   }
 
@@ -249,10 +491,16 @@ import ThemeToggle from './ThemeToggle.astro'
 
 <script>
   // <details> has no notion of "click away to dismiss", which is the main thing
-  // that makes a bare disclosure feel unfinished as a menu. Twelve lines fixes
-  // that. Without this script the menu still opens and closes from its own
-  // button, so the failure mode is merely less convenient, not broken.
-  document.querySelectorAll<HTMLDetailsElement>('.site-menu').forEach((menu) => {
+  // that makes a bare disclosure feel unfinished as a menu. This is that close
+  // logic, generalised to every details menu on the page — the mobile
+  // .site-menu and the desktop .nav-drop dropdowns alike. Without this script
+  // the menus still open and close from their own summary, so the failure mode
+  // is merely less convenient, not broken.
+  const menus = Array.from(
+    document.querySelectorAll<HTMLDetailsElement>('.site-menu, .nav-drop'),
+  )
+
+  menus.forEach((menu) => {
     document.addEventListener('click', (event) => {
       if (menu.open && !menu.contains(event.target as Node)) menu.open = false
     })
@@ -262,6 +510,16 @@ import ThemeToggle from './ThemeToggle.astro'
         menu.open = false
         menu.querySelector('summary')?.focus()
       }
+    })
+
+    // Opening one menu closes the others, so the header never shows two
+    // panels at once. The toggle event fires for programmatic open/close too,
+    // not just summary clicks.
+    menu.addEventListener('toggle', () => {
+      if (!menu.open) return
+      menus.forEach((other) => {
+        if (other !== menu && other.open) other.open = false
+      })
     })
 
     // Navigating to an in-page anchor should dismiss it too.
