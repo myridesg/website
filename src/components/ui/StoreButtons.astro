@@ -1,5 +1,9 @@
 ---
+import { Image } from 'astro:assets'
 import { ANDROID_LIVE, IOS_LIVE, IOS_TESTING_HREF, STORE, TESTFLIGHT } from '@/consts'
+import appStoreBadgeBlack from '@/assets/badges/app-store-badge-black.svg'
+import appStoreBadgeWhite from '@/assets/badges/app-store-badge-white.svg'
+import googlePlayBadge from '@/assets/badges/google-play-badge.png'
 
 interface Props {
   /** 'dark' sits on a light surface; 'light' sits on a dark surface. */
@@ -29,35 +33,78 @@ const { tone = 'dark', center = false, class: className = '' } = Astro.props
 // hole. Same for Android.
 const onDark = tone === 'light'
 
-const primary = onDark
-  ? 'bg-paper text-ink hover:opacity-85'
-  : 'bg-ember text-on-dark hover:opacity-85'
-
-const secondary = onDark
-  ? 'border border-white/25 text-on-dark hover:bg-white/10'
-  : 'border border-ink/15 hover:bg-soft'
-
-const note = onDark ? 'text-white/45' : 'text-muted'
+// /45 measured 4.47:1 on #080808 — a hair under AA for 13px text. /55 is 6.27:1.
+const note = onDark ? 'text-white/55' : 'text-muted'
 const noteLink = onDark ? 'text-on-dark' : 'text-ink'
 
 const base =
   'inline-flex min-h-12 items-center rounded-pill px-7 text-md font-semibold transition-opacity'
+
+// Fallback-only button styling. The store links themselves are the official
+// badge artwork, which carries its own surface, so they get just the shared
+// hover treatment.
+const secondary = onDark
+  ? 'border border-white/25 text-on-dark hover:bg-white/10'
+  : 'border border-ink/15 hover:bg-soft'
+
+// Badges render at a 48px visible height, matching the min-h-12 text buttons
+// they replaced and comfortably above Apple's 40px minimum. Both are given
+// explicit width and height so the row reserves its space before the images
+// arrive.
+//
+//   Apple   — official SVG is full-bleed at 119.66407 × 40, so 48px tall is
+//             119.66407 × 48 / 40 = 143.60px wide; rounded to 144 (a 0.3%
+//             stretch that no eye will find).
+//   Google  — the official PNG ships 646 × 250 with a transparent margin; the
+//             file in src/assets/badges/ is cropped to its visible 564 × 168,
+//             so 48px tall is 564 × 48 / 168 = 161.14px wide; rounded to 161.
+//             The Image is served at twice that (322 × 96) and pulled back to
+//             a 48px box with h-12 w-auto, so it stays sharp on retina screens
+//             without the layout box ever moving. (Astro 7's <Image> has no
+//             density prop — the 2x-serve/CSS-pin pair is the equivalent.)
+const APPLE_W = 144
+const GOOGLE_W = 161
+
+// Apple's guidelines offer the badge in black and white; the black badge goes
+// on light surfaces and the white one on dark, which is what `tone` tracks.
+const appStoreBadge = onDark ? appStoreBadgeWhite : appStoreBadgeBlack
 ---
 
 <div class:list={['flex flex-col', center && 'items-center text-center', className]}>
   <div class:list={['flex flex-wrap items-center gap-3', center && 'justify-center']}>
     {
       ANDROID_LIVE && (
-        <a href={STORE.android} class:list={[base, primary]} data-store="android">
-          Get it on Google Play
+        <a
+          href={STORE.android}
+          data-store="android"
+          class="inline-flex transition-opacity hover:opacity-85"
+        >
+          <Image
+            src={googlePlayBadge}
+            alt="Get it on Google Play"
+            width={GOOGLE_W * 2}
+            height={96}
+            class="h-12 w-auto"
+            loading="eager"
+          />
         </a>
       )
     }
 
     {
       IOS_LIVE ? (
-        <a href={STORE.ios} class:list={[base, primary]} data-store="ios">
-          Download on the App Store
+        <a
+          href={STORE.ios}
+          data-store="ios"
+          class="inline-flex transition-opacity hover:opacity-85"
+        >
+          <Image
+            src={appStoreBadge}
+            alt="Download on the App Store"
+            width={APPLE_W}
+            height={48}
+            loading="eager"
+          />
         </a>
       ) : (
         <a href={TESTFLIGHT} class:list={[base, secondary]} data-store="ios">

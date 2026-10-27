@@ -1,14 +1,32 @@
 ---
 import ProseLayout from '@/layouts/ProseLayout.astro'
+import { breadcrumbEntity, entityId, webPageEntity, ORGANIZATION_PATH } from '@/lib/seo'
 
 // Apple and Google both require a reachable support URL on the store listing,
 // and the reviewer opens it. store.config.json points supportUrl here, so this
 // page must stay live and must answer "how do I get help" without a login.
+
+const structuredData = [
+  webPageEntity(Astro.site!, {
+    path: '/support/',
+    type: 'ContactPage',
+    name: 'Support',
+    description:
+      'Get help with MyRideSG — how to reach us, what to include, and answers to the questions riders ask most.',
+    // Support is the organisation's channel, not a product feature.
+    about: { '@id': entityId(Astro.site!, ORGANIZATION_PATH) },
+  }),
+  breadcrumbEntity(Astro.site!, '/support/', [
+    { name: 'Home', href: '/' },
+    { name: 'Support' },
+  ]),
+]
 ---
 
 <ProseLayout
   title="Support"
   description="Get help with MyRideSG — how to reach us, what to include, and answers to the questions riders ask most."
+  structuredData={structuredData}
 >
   <p>
     Something not working, or an idea for what MyRideSG should do next? Email

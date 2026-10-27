@@ -14,13 +14,13 @@ const STEPS = [
   },
   {
     n: '03',
-    title: 'Stay ahead of renewals',
-    body: 'Receive reminders in advance of road tax, COE, insurance and servicing.',
+    title: 'Review your next due dates',
+    body: 'Keep your servicing interval, road tax, COE and insurance dates together.',
   },
 ]
 ---
 
-<section class="bg-soft py-20 md:py-28">
+<section id="how-it-works" class="bg-soft py-20 md:py-28">
   <div class="shell">
     <p class="eyebrow text-red">How it works</p>
 
@@ -32,7 +32,7 @@ const STEPS = [
           <li class="rounded-xl bg-paper p-7 md:p-8">
             <p class="font-display text-display-sm leading-none font-700 text-red">{step.n}</p>
             <h3 class="mt-4 text-2xl">{step.title}</h3>
-            <p class="mt-2 text-md leading-relaxed text-muted">{step.body}</p>
+            <p class="mt-2 text-md leading-relaxed text-ink/75">{step.body}</p>
           </li>
         ))
       }

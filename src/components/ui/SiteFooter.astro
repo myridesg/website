@@ -13,11 +13,24 @@ const COLUMNS = [
     ],
   },
   {
+    // The six feature pages. They are the site's search-entry points, so they
+    // get a column of their own instead of competing with the in-page anchors.
+    heading: 'Features',
+    links: [
+      { label: 'Maintenance app', href: '/motorcycle-maintenance-app/' },
+      { label: 'Expense tracker', href: '/motorcycle-expense-tracker/' },
+      { label: 'Renewal reminders', href: '/motorcycle-renewal-reminders/' },
+      { label: 'Workshop directory', href: '/motorcycle-workshop-directory/' },
+      { label: 'COE calculator', href: '/motorcycle-coe-calculator/' },
+      { label: 'Rider tools', href: '/rider-tools/' },
+    ],
+  },
+  {
     heading: 'Riding guides',
     links: [
       { label: 'All guides', href: '/guides/' },
       { label: 'Workshops', href: '/#workshops' },
-      { label: 'How it works', href: '/#faq' },
+      { label: 'How it works', href: '/#how-it-works' },
     ],
   },
   {
@@ -37,12 +50,12 @@ const year = new Date().getFullYear()
 
 <footer class="border-t border-white/8 bg-black pb-12 pt-16 md:pt-20">
   <div class="shell">
-    <div class="grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)] md:gap-8">
+    <div class="grid gap-10 md:grid-cols-2 md:gap-8 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
       <div>
         <p class="font-display text-2xl font-700 text-on-dark">
           MyRide<span class="text-ember-on-dark">SG</span>
         </p>
-        <p class="mt-3 max-w-52 text-sm leading-relaxed text-white/35">
+        <p class="mt-3 max-w-52 text-sm leading-relaxed text-white/55">
           Made in Singapore, for Singapore riders.
         </p>
       </div>
@@ -50,7 +63,7 @@ const year = new Date().getFullYear()
       {
         COLUMNS.map((col) => (
           <nav aria-label={col.heading}>
-            <p class="eyebrow text-white/35">{col.heading}</p>
+            <p class="eyebrow text-white/55">{col.heading}</p>
             <ul class="mt-4 flex flex-col gap-2.5">
               {col.links.map((link) => (
                 <li>
@@ -70,7 +83,7 @@ const year = new Date().getFullYear()
     </div>
 
     <div
-      class="mt-14 flex flex-col gap-2 border-t border-white/8 pt-6 text-sm text-white/25 sm:flex-row sm:justify-between"
+      class="mt-14 flex flex-col gap-2 border-t border-white/8 pt-6 text-sm text-white/50 sm:flex-row sm:justify-between"
     >
       <p>© {year} MyRideSG. All rights reserved.</p>
       <p>Singapore</p>

@@ -6,6 +6,9 @@ import GuideBody from '@/components/ui/guide/GuideBody.astro'
 import { listGuideArticles, getGuideArticle } from '@/content/usecases'
 import { contentRepo } from '@/lib/content'
 import type { Article } from '@/content/entities'
+import { relatedGuides, isMaintenanceGuide } from '@/lib/guide-navigation'
+import { breadcrumbEntity, entityId, webPageEntity, ORGANIZATION_PATH } from '@/lib/seo'
+import RelatedGuides from '@/components/ui/guide/RelatedGuides.astro'
 
 // One page per published guide, resolved at build time. With Sanity
 // unconfigured this returns [], so the route simply produces nothing and the
@@ -17,42 +20,124 @@ export const getStaticPaths = (async () => {
     guides.map((guide) => getGuideArticle(contentRepo, guide.slug)),
   )
 
+  const indexableSlugs = new Set(articles.filter((article) => article && !article.seo.noIndex).map((article) => article!.slug))
+  const availableGuides = guides.filter((guide) => indexableSlugs.has(guide.slug))
+
   return articles
     .filter((article): article is Article => article !== null)
-    .map((article) => ({ params: { slug: article.slug }, props: { article } }))
+    .map((article) => ({ params: { slug: article.slug }, props: { article, guides: availableGuides } }))
 }) satisfies GetStaticPaths
 
 // Props are inferred from getStaticPaths above; a local `Props` interface would
 // be ignored by Astro's generated types for a dynamic route.
-const { article } = Astro.props
+const { article, guides } = Astro.props
 
 // Portable Text arrives as JSON in bodySource, tagged by bodyFormat, because
 // the domain entity is renderer-agnostic. mdx-v1 is the other format in the
 // monorepo and nothing here can render it, so treat it as an empty body rather
 // than handing PortableText something it will throw on.
-const blocks =
+const originalBlocks =
   article.bodyFormat === 'portable-text-v1'
-    ? (JSON.parse(article.bodySource) as PortableTextProps['value'])
+    ? (JSON.parse(article.bodySource) as Extract<PortableTextProps['value'], unknown[]>)
     : []
 
-const updated = new Intl.DateTimeFormat('en-SG', {
+// Only suppress an exactly repeated introductory paragraph. The CMS text and
+// all other body blocks stay intact, including links and inline formatting.
+const first = originalBlocks[0] as {
+  _type?: string
+  style?: string
+  markDefs?: unknown[]
+  children?: Array<{ _type?: string; text?: string; marks?: string[] }>
+} | undefined
+const repeatedIntroduction = first?._type === 'block'
+  && (!first.style || first.style === 'normal')
+  && !first.markDefs?.length
+  && first.children?.every((child) => child._type === 'span' && !child.marks?.length)
+  && first.children.map((child) => child.text ?? '').join('').trim() === article.description.trim()
+const blocks = repeatedIntroduction ? originalBlocks.slice(1) : originalBlocks
+
+const hasRelatedBlock = originalBlocks.some((block) =>
+  (block as { _type?: string })._type === 'relatedLinks',
+)
+const recommendations = hasRelatedBlock ? [] : relatedGuides(article, guides)
+const hasAuthor = article.author.name.trim() && article.author.name !== 'Unknown'
+const dateFormat = new Intl.DateTimeFormat('en-SG', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
-}).format(article.updatedAt)
+})
+const canonical = new URL(article.seo.canonicalUrl ?? `/guides/${article.slug}/`, Astro.site).href
+// A CMS-supplied canonical may be an absolute URL; the seo helpers resolve any
+// absolute href against the site untouched, so the WebPage's @id and url keep
+// matching the canonical link either way.
+const site = Astro.site!
+// Sanity dates only: publishedAt/updatedAt come straight from the CMS entity,
+// never invented here. The Article carries no image field, so no image is
+// claimed; if a real author is attributed in Sanity they are cited, otherwise
+// authorship falls back to the publishing organization.
+const structuredData = [
+  webPageEntity(site, {
+    path: canonical,
+    name: article.title,
+    description: article.description,
+    // The article is what this page exists to show.
+    mainEntity: { '@id': `${canonical}#article` },
+  }),
+  {
+    '@type': 'Article',
+    '@id': `${canonical}#article`,
+    headline: article.title,
+    description: article.description,
+    url: canonical,
+    mainEntityOfPage: { '@id': `${canonical}#webpage` },
+    datePublished: article.publishedAt.toISOString(),
+    dateModified: article.updatedAt.toISOString(),
+    inLanguage: 'en-SG',
+    ...(hasAuthor
+      ? { author: { '@type': 'Person', name: article.author.name } }
+      : { author: { '@id': entityId(site, ORGANIZATION_PATH) } }),
+    publisher: { '@id': entityId(site, ORGANIZATION_PATH) },
+  },
+  breadcrumbEntity(site, canonical, [
+    { name: 'Home', href: '/' },
+    { name: 'Riding guides', href: '/guides/' },
+    { name: article.title },
+  ]),
+]
 ---
 
 <ProseLayout
   title={article.title}
   seoTitle={article.seo.metaTitle ?? undefined}
   description={article.seo.metaDescription ?? article.description}
-  meta={`Updated ${updated}`}
   noindex={article.seo.noIndex}
   canonical={article.seo.canonicalUrl ?? undefined}
+  breadcrumbs={[
+    { name: 'Home', href: '/' },
+    { name: 'Riding guides', href: '/guides/' },
+    { name: article.title },
+  ]}
+  structuredData={structuredData}
 >
+  <div slot="meta" class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
+    {hasAuthor && <span>By {article.author.name}</span>}
+    <span>Published <time datetime={article.publishedAt.toISOString()}>{dateFormat.format(article.publishedAt)}</time></span>
+    <span>Updated <time datetime={article.updatedAt.toISOString()}>{dateFormat.format(article.updatedAt)}</time></span>
+  </div>
   <p class="text-lg leading-relaxed text-muted">{article.description}</p>
 
   <GuideBody value={blocks} />
+
+  {isMaintenanceGuide(article) && (
+    <aside class="mt-10 rounded-md bg-soft px-6 py-7">
+      <p>
+        Keep the date, mileage and cost of your next service together with the
+        <a href="/motorcycle-maintenance-app/">MyRideSG motorcycle maintenance tracker</a>.
+      </p>
+    </aside>
+  )}
+
+  <RelatedGuides guides={recommendations} />
 
   <p class="mt-14 text-sm">
     <a href="/guides/" class="text-red underline underline-offset-2">All guides</a>

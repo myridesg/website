@@ -1,0 +1,246 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import PhoneFrame from '@/components/ui/PhoneFrame.astro'
+import BikeScreen from '@/components/ui/app/BikeScreen.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import { breadcrumbEntity, entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
+
+const title = 'Motorcycle COE, Road Tax & Insurance Reminders'
+const description = 'Keep motorcycle road tax, COE and insurance renewal dates in one app. MyRideSG sends reminder notifications before each expiry, so nothing lapses.'
+const site = Astro.site!
+const pagePath = '/motorcycle-renewal-reminders/'
+
+const questions = [
+  {
+    q: 'Which renewal dates can MyRideSG track?',
+    a: 'The COE expiry, road tax expiry and insurance expiry dates on each bike’s profile. Enter them when you add your motorcycle, and update them whenever you renew.',
+  },
+  {
+    q: 'When do the reminders arrive?',
+    a: 'At 30, 14, 7 and 1 day before each expiry and on the day itself, delivered in the morning Singapore time. If the date passes, a further nudge follows the next day and a week later, and several documents falling due the same morning arrive as one notification rather than a barrage.',
+  },
+  {
+    q: 'Does MyRideSG fetch my renewal dates from LTA automatically?',
+    a: 'No. The reminders count down from the expiry dates you enter on your bike’s profile, so the app is only as current as the dates you keep in it. Renewed at the counter? Update the date in the app and the next reminders move with it.',
+  },
+  {
+    q: 'Will it remind me about servicing as well?',
+    a: 'Yes. Service reminders are worked out from the service records you log and the interval set for your bike — an oil change every so many kilometres or months, for example — with notifications in the run-up to the due date and a nudge if it passes.',
+  },
+  {
+    q: 'What happens if I renew but forget to update the app?',
+    a: 'You may get the overdue nudges for the date you entered. Each of them asks you to tap and update, so a minute of typing stops the reminders for another year.',
+  },
+]
+
+const structuredData = [
+  webPageEntity(site, {
+    path: pagePath,
+    name: title,
+    description,
+    about: { '@id': entityId(site, APP_PATH) },
+  }),
+  breadcrumbEntity(site, pagePath, [
+    { name: 'Home', href: '/' },
+    { name: 'Motorcycle renewal reminders' },
+  ]),
+  // The questions rendered in the FAQ section below, hung off this page's
+  // WebPage with a stable @id and isPartOf.
+  faqPageEntity(site, pagePath, questions),
+]
+
+const features = [
+  {
+    title: 'The three dates that matter, per bike',
+    body: 'Road tax, insurance and COE expiry dates sit on each motorcycle’s profile, next to its mileage and servicing history. Own more than one bike? Every bike carries its own set.',
+  },
+  {
+    title: 'A reminder ladder, not one alarm',
+    body: 'A month out you get a heads-up, then reminders at two weeks, a week, a day and the day itself. The date passing is not the end of it either — a nudge follows until you tell the app you have renewed.',
+  },
+  {
+    title: 'One quiet morning message',
+    body: 'Reminders are delivered in the morning Singapore time, and documents falling due together are gathered into a single notification, so a renewal cluster reads like a list, not a fire drill.',
+  },
+  {
+    title: 'Servicing on the same clock',
+    body: 'Service reminders come from the records you log and the interval your bike runs on, so an oil change due in a fortnight is flagged the same way as a road tax deadline.',
+  },
+]
+---
+
+<BaseLayout title={title} description={description} structuredData={structuredData}>
+  <SiteNav />
+  <main>
+    <section class="bg-paper pb-20 pt-32 md:pb-28 md:pt-40">
+      <div class="shell">
+        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Renewal reminders' }]} />
+        <div class="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
+          <div class="max-w-xl">
+            <h1 class="text-display-lg md:text-display-xl">Your renewal dates, remembered for you.</h1>
+            <p class="mt-6 text-xl leading-relaxed text-muted">
+              MyRideSG helps you track motorcycle road tax, COE and insurance
+              renewals in one place, and sends a reminder before each expiry —
+              so riding on a lapsed document stays something that happens to
+              other people.
+            </p>
+            <StoreButtons class="mt-8" />
+            <p class="mt-5 text-sm text-muted">Available on iOS and Android.</p>
+          </div>
+          <figure class="mx-auto">
+            <PhoneFrame width={300} chrome={false}>
+              <div class="app-screen" role="img" aria-label="Illustrative MyRideSG bike overview with sample road tax, insurance and COE expiry dates and a road tax countdown">
+                <BikeScreen />
+              </div>
+            </PhoneFrame>
+            <figcaption class="mt-5 max-w-xs text-center text-sm leading-relaxed text-muted">
+              Illustrative app preview with sample ownership dates and mileage.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-black py-20 md:py-28">
+      <div class="shell">
+        <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+          <div>
+            <h2 class="max-w-md text-display-sm text-on-dark md:text-display">
+              Three expiry dates. Zero excuses.
+            </h2>
+            <p class="mt-6 max-w-md text-lg leading-relaxed text-white/65">
+              Riding on expired road tax, insurance or COE is not a small
+              oversight in Singapore. A tracker that only shows the dates is
+              half a job — the reminders are the point.
+            </p>
+          </div>
+          <div class="grid gap-x-10 gap-y-9 sm:grid-cols-2">
+            {features.map((feature) => (
+              <div class="border-t border-white/20 pt-5">
+                <h3 class="text-2xl text-on-dark">{feature.title}</h3>
+                <p class="mt-3 leading-relaxed text-white/65">{feature.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell grid gap-10 lg:grid-cols-2 lg:gap-20">
+        <div class="max-w-xl">
+          <h2 class="text-display-sm md:text-display">What the reminders are based on.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-muted">
+            The expiry dates you enter. MyRideSG does not read your records
+            from LTA or your insurer — it counts down from the dates on your
+            bike’s profile and keeps asking until you mark them renewed.
+          </p>
+          <p class="mt-5 leading-relaxed text-muted">
+            That is deliberate. Renewal dates are yours to keep current: renew
+            your road tax, tap the new date in, and the whole ladder of
+            reminders moves a year down the road.
+          </p>
+        </div>
+        <div class="rounded-xl bg-soft p-7 md:p-9">
+          <h3 class="text-2xl">A road tax renewal, tracked</h3>
+          <dl class="mt-6 divide-y divide-ink/12">
+            {[
+              ['When you add the bike', 'Enter the expiry date from your renewal notice'],
+              ['One month before', 'A heads-up: road tax expires in 30 days'],
+              ['Final week', 'Reminders at 14, 7 and 1 day, then on the day'],
+              ['If it lapses', 'A nudge the next day, and again a week later'],
+              ['After you renew', 'Tap to update the date; the reminders reset'],
+            ].map(([label, value]) => (
+              <div class="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-4">
+                <dt class="text-ink/75">{label}</dt>
+                <dd class="font-medium">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft py-20 md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm md:text-display">Set it up in one sitting.</h2>
+        <ol class="mt-10 grid gap-8 md:grid-cols-3">
+          {[
+            ['Add your dates', 'Enter your road tax, insurance and COE expiry dates when you add each bike to MyRideSG.'],
+            ['Leave the rest to the app', 'Reminders are scheduled against those dates and re-checked every time you open the app.'],
+            ['Renew, then update', 'Renew as you normally would, tap the new date into the app, and the countdown starts again.'],
+          ].map(([heading, body], index) => (
+            <li class="border-t border-ink/15 pt-6">
+              <span class="font-display text-display-sm text-red">{index + 1}</span>
+              <h3 class="mt-4 text-2xl">{heading}</h3>
+              <p class="mt-3 leading-relaxed text-ink/75">{body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell">
+        <div class="mx-auto max-w-2xl">
+          <h2 class="text-display-sm md:text-display">Questions about renewal reminders.</h2>
+          <div class="mt-10 border-t border-ink/15">
+            {questions.map((question) => (
+              <details class="border-b border-ink/15 py-5">
+                <summary class="cursor-pointer text-xl font-medium">{question.q}</summary>
+                <p class="mt-4 leading-relaxed text-muted">{question.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft py-20 md:py-28">
+      <div class="shell">
+        <div class="max-w-2xl">
+          <h2 class="text-display-sm md:text-display">Going deeper on renewals.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-ink/75">
+            Our guides explain what you are renewing; the app keeps the dates.
+          </p>
+        </div>
+        <ul class="mt-10 grid gap-8 md:grid-cols-3">
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/guides/motorcycle-road-tax-singapore/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Motorcycle road tax in Singapore</a></h3>
+            <p class="mt-3 leading-relaxed text-ink/75">How road tax is calculated and the renewal rules that apply.</p>
+          </li>
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/guides/motorcycle-coe-singapore/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Motorcycle COE, explained</a></h3>
+            <p class="mt-3 leading-relaxed text-ink/75">Bidding, renewal at the prevailing quota premium, and the 5- versus 10-year choice.</p>
+          </li>
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/guides/motorcycle-insurance-singapore/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Motorcycle insurance in Singapore</a></h3>
+            <p class="mt-3 leading-relaxed text-ink/75">Cover types and what to check before your policy renews.</p>
+          </li>
+        </ul>
+        <div class="mt-12 rounded-xl border border-ink/12 bg-paper p-7 md:p-9">
+          <h3 class="text-2xl">Related tools</h3>
+          <p class="mt-3 leading-relaxed text-muted">
+            Working out what a COE renewal costs? Try the <a href="/motorcycle-coe-calculator/" class="text-red underline underline-offset-4">motorcycle COE calculator</a>,
+            and keep renewals out of your budget surprises with the <a href="/motorcycle-expense-tracker/" class="text-red underline underline-offset-4">motorcycle expense tracker</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-black py-20 text-center md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm text-on-dark md:text-display">Never ride on a lapsed date.</h2>
+        <p class="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-white/65">
+          Put your road tax, insurance and COE dates in MyRideSG and let the
+          reminders do the remembering.
+        </p>
+        <StoreButtons tone="light" center class="mt-8" />
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

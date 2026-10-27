@@ -1,0 +1,242 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import PhoneFrame from '@/components/ui/PhoneFrame.astro'
+import WorkshopsScreen from '@/components/ui/app/WorkshopsScreen.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import { breadcrumbEntity, entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
+
+const title = 'Singapore Motorcycle Workshop Directory'
+const description = 'Search the Singapore motorcycle workshop directory in MyRideSG. Find a bike mechanic by area or service, then call, WhatsApp or get directions.'
+const site = Astro.site!
+const pagePath = '/motorcycle-workshop-directory/'
+
+const questions = [
+  {
+    q: 'How do I find a bike mechanic near me?',
+    a: 'Open the workshops tab in MyRideSG and search by name, area or the kind of work you need done. Each listing carries the shop’s contact details, so you can call, message on WhatsApp or open directions without leaving the app.',
+  },
+  {
+    q: 'Does MyRideSG vet or endorse the workshops listed?',
+    a: 'No. MyRideSG does not verify, vet or endorse any workshop in the directory. The listings help you find and contact workshops; judging whether a shop is right for your bike is up to you.',
+  },
+  {
+    q: 'Can I book a service through the app?',
+    a: 'No. The directory gets you to the right workshop and puts its phone, WhatsApp and directions in reach, but arranging the work and the appointment happens directly between you and the workshop.',
+  },
+  {
+    q: 'Can I keep a record of which workshop serviced my bike?',
+    a: 'Yes. Log the visit as a service record with the date, mileage, work carried out and cost, and it stays with your bike’s history — useful the next time you sell, claim or compare quotes.',
+  },
+  {
+    q: 'What should I ask before handing over my bike?',
+    a: 'Say what the problem is, ask what the work will cost before it starts, and ask for the replaced parts back if you want them. A clear brief up front prevents most misunderstandings later.',
+  },
+]
+
+const structuredData = [
+  webPageEntity(site, {
+    path: pagePath,
+    name: title,
+    description,
+    about: { '@id': entityId(site, APP_PATH) },
+  }),
+  breadcrumbEntity(site, pagePath, [
+    { name: 'Home', href: '/' },
+    { name: 'Motorcycle workshop directory' },
+  ]),
+  // The questions rendered in the FAQ section below, hung off this page's
+  // WebPage with a stable @id and isPartOf.
+  faqPageEntity(site, pagePath, questions),
+]
+
+const features = [
+  {
+    title: 'Search the way you would ask a friend',
+    body: 'Look up a shop by name, narrow it by area, or search for the kind of work you need done. The directory is built for the moment your bike needs attention, not for endless browsing.',
+  },
+  {
+    title: 'Contact details that go somewhere',
+    body: 'Every listing puts the workshop within reach: call, message on WhatsApp, open their website, or launch directions to the address. No copying numbers out of an app to dial them elsewhere.',
+  },
+  {
+    title: 'Find one before you need one',
+    body: 'The worst time to look for a mechanic is when the bike will not start. Browse workshops near home or work while everything is running fine, so the fallback already exists.',
+  },
+  {
+    title: 'The visit becomes part of the record',
+    body: 'After the work is done, log it as a service entry against your bike. Over time the directory helps you find workshops; your service log remembers what each one did.',
+  },
+]
+---
+
+<BaseLayout title={title} description={description} structuredData={structuredData}>
+  <SiteNav />
+  <main>
+    <section class="bg-paper pb-20 pt-32 md:pb-28 md:pt-40">
+      <div class="shell">
+        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Workshop directory' }]} />
+        <div class="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
+          <div class="max-w-xl">
+            <h1 class="text-display-lg md:text-display-xl">Find a bike mechanic, wherever you ride.</h1>
+            <p class="mt-6 text-xl leading-relaxed text-muted">
+              MyRideSG puts a Singapore motorcycle workshop directory in your
+              pocket. Search by name, area or service, then call, WhatsApp or
+              navigate to the shop — on iOS and Android.
+            </p>
+            <StoreButtons class="mt-8" />
+            <p class="mt-5 text-sm text-muted">Available on iOS and Android.</p>
+          </div>
+          <figure class="mx-auto">
+            <PhoneFrame width={300} chrome={false}>
+              <div class="app-screen" role="img" aria-label="Illustrative MyRideSG workshops search with sample workshop listings and contact actions">
+                <WorkshopsScreen />
+              </div>
+            </PhoneFrame>
+            <figcaption class="mt-5 max-w-xs text-center text-sm leading-relaxed text-muted">
+              Illustrative app preview with sample listings.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-black py-20 md:py-28">
+      <div class="shell">
+        <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+          <div>
+            <h2 class="max-w-md text-display-sm text-on-dark md:text-display">
+              From “somewhere in Sin Ming” to a shop you can call.
+            </h2>
+            <p class="mt-6 max-w-md text-lg leading-relaxed text-white/65">
+              Every rider eventually needs a workshop they did not plan to
+              visit. The directory exists for that day, and for the day you
+              want a second opinion.
+            </p>
+          </div>
+          <div class="grid gap-x-10 gap-y-9 sm:grid-cols-2">
+            {features.map((feature) => (
+              <div class="border-t border-white/20 pt-5">
+                <h3 class="text-2xl text-on-dark">{feature.title}</h3>
+                <p class="mt-3 leading-relaxed text-white/65">{feature.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell grid gap-10 lg:grid-cols-2 lg:gap-20">
+        <div class="max-w-xl">
+          <h2 class="text-display-sm md:text-display">Choosing a mechanic is your call. Make it well.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-muted">
+            MyRideSG does not vet the workshops in its directory, so treat the
+            listings as a starting point and choose the way you would anywhere
+            else.
+          </p>
+          <p class="mt-5 leading-relaxed text-muted">
+            Ask whether the shop regularly works on your make and model, agree
+            what a job costs before it begins, and ask what the price includes.
+            For bigger work, a quote in writing is worth the five minutes.
+          </p>
+        </div>
+        <div class="rounded-xl bg-soft p-7 md:p-9">
+          <h3 class="text-2xl">Questions worth asking</h3>
+          <ul class="mt-6 space-y-4">
+            {[
+              'Have you worked on this model before?',
+              'What exactly is included in the service price?',
+              'Which parts will you use — original or aftermarket?',
+              'Can I have the replaced parts back?',
+              'Is there anything else you would flag while the bike is on the lift?',
+            ].map((question) => (
+              <li class="flex gap-3 leading-relaxed">
+                <span class="mt-1 size-2 flex-shrink-0 rounded-full bg-red" aria-hidden="true"></span>
+                {question}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft py-20 md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm md:text-display">From search to service record.</h2>
+        <ol class="mt-10 grid gap-8 md:grid-cols-3">
+          {[
+            ['Search', 'Open the workshops tab and search by name, area or the work you need done.'],
+            ['Make contact', 'Call, WhatsApp, or open directions — the listing hands you the shop’s details directly.'],
+            ['Log the visit', 'After the work, record it as a service entry so your bike’s history stays complete.'],
+          ].map(([heading, body], index) => (
+            <li class="border-t border-ink/15 pt-6">
+              <span class="font-display text-display-sm text-red">{index + 1}</span>
+              <h3 class="mt-4 text-2xl">{heading}</h3>
+              <p class="mt-3 leading-relaxed text-ink/75">{body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell">
+        <div class="mx-auto max-w-2xl">
+          <h2 class="text-display-sm md:text-display">Questions about the workshop directory.</h2>
+          <div class="mt-10 border-t border-ink/15">
+            {questions.map((question) => (
+              <details class="border-b border-ink/15 py-5">
+                <summary class="cursor-pointer text-xl font-medium">{question.q}</summary>
+                <p class="mt-4 leading-relaxed text-muted">{question.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft py-20 md:py-28">
+      <div class="shell">
+        <div class="max-w-2xl">
+          <h2 class="text-display-sm md:text-display">Around the directory.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-ink/75">
+            The directory finds the workshop; these keep the rest of ownership
+            in order.
+          </p>
+        </div>
+        <ul class="mt-10 grid gap-8 md:grid-cols-3">
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/motorcycle-maintenance-app/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Motorcycle maintenance app</a></h3>
+            <p class="mt-3 leading-relaxed text-ink/75">Keep every service record, with the workshop’s work and the cost.</p>
+          </li>
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/motorcycle-renewal-reminders/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Renewal reminders</a></h3>
+            <p class="mt-3 leading-relaxed text-ink/75">Road tax, insurance and COE renewals, flagged before they lapse.</p>
+          </li>
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/guides/workshops-singapore/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Choosing workshops in Singapore</a></h3>
+            <p class="mt-3 leading-relaxed text-ink/75">What to look for in a workshop, and how the trade works here.</p>
+          </li>
+        </ul>
+        <p class="mt-10 max-w-2xl text-sm leading-relaxed text-ink/75">
+          Workshop listings are directory information, not recommendations. MyRideSG is not
+          affiliated with the workshops listed and does not guarantee any work carried out.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-black py-20 text-center md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm text-on-dark md:text-display">Know your workshop before you need it.</h2>
+        <p class="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-white/65">
+          Browse Singapore motorcycle workshops in MyRideSG on iOS or Android.
+        </p>
+        <StoreButtons tone="light" center class="mt-8" />
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

@@ -1,0 +1,91 @@
+{
+  "generatedAt": "2026-10-14T13:02:53.403Z",
+  "runtime": "Cloudflare workerd via Wrangler 4.127.1 --local",
+  "compatibilityDate": "2026-09-04",
+  "source": "same synthetic/captured fixtures as the Node benchmark",
+  "cachedResponses": false,
+  "warmupPerCase": 20,
+  "results": [
+    {
+      "label": "short article",
+      "path": "/guides/motorcycle-maintenance-benchmark-1/",
+      "expected": "Synthetic benchmark article 1",
+      "portableTextBytes": 14142,
+      "bodyBlocks": 26,
+      "firstObserved": {
+        "wallMs": 5.593499999999999,
+        "htmlBytes": 31783
+      },
+      "count": 200,
+      "wallMs": {
+        "mean": 2.0985224849999993,
+        "p50": 1.941332999999986,
+        "p95": 2.8271669999999745,
+        "max": 6.6723329999999805
+      },
+      "htmlBytes": 31783,
+      "sampling": null
+    },
+    {
+      "label": "typical article",
+      "path": "/guides/motorcycle-maintenance-benchmark-2/",
+      "expected": "Synthetic benchmark article 2",
+      "portableTextBytes": 30383,
+      "bodyBlocks": 72,
+      "firstObserved": {
+        "wallMs": 2.807749999999942,
+        "htmlBytes": 41552
+      },
+      "count": 200,
+      "wallMs": {
+        "mean": 2.241068954999995,
+        "p50": 1.9306249999999636,
+        "p95": 2.8428339999999253,
+        "max": 8.666458999999918
+      },
+      "htmlBytes": 41552,
+      "sampling": null
+    },
+    {
+      "label": "long article",
+      "path": "/guides/motorcycle-maintenance-benchmark-3/",
+      "expected": "Synthetic benchmark article 3",
+      "portableTextBytes": 79629,
+      "bodyBlocks": 212,
+      "firstObserved": {
+        "wallMs": 2.6448749999999563,
+        "htmlBytes": 70932
+      },
+      "count": 200,
+      "wallMs": {
+        "mean": 3.0674808749999998,
+        "p50": 2.4532500000000255,
+        "p95": 8.71049999999991,
+        "max": 10.320167000000083
+      },
+      "htmlBytes": 70932,
+      "sampling": null
+    },
+    {
+      "label": "guide index",
+      "path": "/guides/",
+      "expected": "Motorcycle guides for Singapore riders",
+      "guideCount": 29,
+      "firstObserved": {
+        "wallMs": 2.4216670000000704,
+        "htmlBytes": 27636
+      },
+      "count": 200,
+      "wallMs": {
+        "mean": 1.5683043800000052,
+        "p50": 1.4452499999999873,
+        "p95": 2.27866599999993,
+        "max": 5.502958000000035
+      },
+      "htmlBytes": 27636,
+      "sampling": null
+    }
+  ],
+  "missingSlugStatus": 404,
+  "limitations": "Local emulator on the Mac; upstream data is in memory. The local runtime does not establish deployed CPU metering, CDN hit rate or production quotas."
+}

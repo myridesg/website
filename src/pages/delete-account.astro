@@ -1,15 +1,31 @@
 ---
 import ProseLayout from '@/layouts/ProseLayout.astro'
+import { breadcrumbEntity, entityId, webPageEntity, APP_PATH } from '@/lib/seo'
 
 // Google Play requires a web-accessible account-deletion URL for any app with
 // accounts — reachable without installing the app, stating what is deleted and
 // what is retained. The Data safety form points here. Deletion itself happens
 // in-app; this page exists for people who have already uninstalled.
+
+const structuredData = [
+  webPageEntity(Astro.site!, {
+    path: '/delete-account/',
+    name: 'Delete your account',
+    description:
+      'How to delete your MyRideSG account and everything in it — from inside the app, or by email if you no longer have it installed.',
+    about: { '@id': entityId(Astro.site!, APP_PATH) },
+  }),
+  breadcrumbEntity(Astro.site!, '/delete-account/', [
+    { name: 'Home', href: '/' },
+    { name: 'Delete your account' },
+  ]),
+]
 ---
 
 <ProseLayout
   title="Delete your account"
   description="How to delete your MyRideSG account and everything in it — from inside the app, or by email if you no longer have it installed."
+  structuredData={structuredData}
 >
   <p>
     Deleting your MyRideSG account removes your bikes, maintenance logs, fuel and expense

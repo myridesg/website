@@ -1,5 +1,6 @@
 ---
 import ProseLayout from '@/layouts/ProseLayout.astro'
+import { breadcrumbEntity, entityId, webPageEntity, APP_PATH } from '@/lib/seo'
 
 // Kept in step with myridesg-v2/apps/web/app/privacy/page.tsx. This is the copy
 // the app stores review — store.config.json points privacyPolicyUrl here — so
@@ -9,12 +10,29 @@ import ProseLayout from '@/layouts/ProseLayout.astro'
 // memory: permissions and plugins in apps/mobile/app.config.js, the Gemini call
 // in supabase/functions/extract-receipt, and the PII scrubbing in
 // apps/mobile/lib/sentry.ts.
+
+// dateModified is the "Last updated" date the page itself displays.
+const structuredData = [
+  webPageEntity(Astro.site!, {
+    path: '/privacy/',
+    name: 'Privacy Policy',
+    description:
+      'How MyRideSG collects, uses and protects your data — what the app records about you and your motorcycle, who it is shared with, and your choices over it.',
+    about: { '@id': entityId(Astro.site!, APP_PATH) },
+    dateModified: '2026-09-01',
+  }),
+  breadcrumbEntity(Astro.site!, '/privacy/', [
+    { name: 'Home', href: '/' },
+    { name: 'Privacy Policy' },
+  ]),
+]
 ---
 
 <ProseLayout
   title="Privacy Policy"
   description="How MyRideSG collects, uses and protects your data — what the app records about you and your motorcycle, who it is shared with, and your choices over it."
   meta="Last updated: 1 September 2026"
+  structuredData={structuredData}
 >
   <h2>At a glance</h2>
   <ul>

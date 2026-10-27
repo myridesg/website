@@ -1,6 +1,24 @@
 ---
 import '@/styles/global.css'
+import { getImage } from 'astro:assets'
 import { SITE, STORE } from '@/consts'
+import { buildGraph, serializeJsonLd } from '@/lib/seo'
+import defaultOgSource from '@/assets/hero-carpark-desktop.jpg'
+
+// The three faces that render above the fold: Barlow Condensed 700 for the
+// hero h1 and the nav brand, Barlow 400 for the hero copy, Barlow 700 for the
+// eyebrow. Their @fontsource woff2 files are declared in global.css, so the
+// browser only discovers them once the (inlined) stylesheet is parsed — by
+// then the fallback fonts have already painted, and the swap re-laid-out the
+// hero, which measured as CLS 0.124 on mobile Lighthouse. Preloading from the
+// HTML starts those fetches immediately instead, so the webfont is ready at
+// first paint. The `?url` imports resolve to the same hashed _astro/*.woff2
+// URLs the CSS references, so nothing is downloaded twice. Every other face —
+// Barlow 500/600, Barlow Condensed 600 — is below the fold or inside hidden
+// nav items and keeps its ordinary CSS-driven fetch.
+import barlowCondensed700Url from '@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2?url'
+import barlow400Url from '@fontsource/barlow/files/barlow-latin-400-normal.woff2?url'
+import barlow700Url from '@fontsource/barlow/files/barlow-latin-700-normal.woff2?url'
 
 interface Props {
   /** Page title. Rendered as "<title> — MyRideSG"; omit on the home page. */
@@ -15,6 +33,8 @@ interface Props {
    * authored elsewhere and republished here — CMS-supplied canonicalUrl.
    */
   canonical?: string
+  /** Page-specific schema.org entities, merged with the shared Organization and WebSite. */
+  structuredData?: Record<string, unknown>[]
 }
 
 const {
@@ -23,53 +43,32 @@ const {
   ogImage,
   noindex = false,
   canonical: canonicalOverride,
+  structuredData = [],
 } = Astro.props
 
 /**
- * Roughly what Google renders before it truncates: ~60 for a title, ~160 for a
- * description. Neither is a ranking factor — the cost of overshooting is that
- * the search engine chooses the cut instead of us, usually mid-word.
- *
- * Measured in UTF-8 BYTES, not characters. Every title here separates with an
- * em dash, which is one character but three bytes, so a character count reads
- * two under per dash and quietly lands over budget — the failure that put
- * /guides/petrol-prices-singapore (58 characters, 62 bytes, two dashes) over
- * the line while a 58-character title with one dash sat under it. Bytes are
- * also the better proxy of the two for the thing that actually matters: a
- * three-byte dash is a wide glyph, a one-byte letter is a narrow one.
+ * Length guidance in characters. Search engines truncate by rendered pixel
+ * width, which neither characters nor bytes reproduce, so characters are used
+ * because they are what authors can count. The budget only avoids a cut we did
+ * not choose; it is not a ranking rule. Authored titles are never truncated
+ * here — a title that overruns is fixed where it is written.
  */
 const TITLE_BUDGET = 60
 const DESCRIPTION_BUDGET = 160
 /**
  * A sentence-boundary cut is only preferred while it still fills the snippet.
- * Some ledes open with a short hook — "Singapore's humidity destroys motorcycle
- * electrics faster than anywhere else." — and stopping there would throw away
- * half the budget along with the half of the sentence that says what the guide
- * covers. Below this, the word-boundary cut wins instead.
+ * Some ledes open with a short hook, and stopping there would throw away half
+ * the budget. Below this, the word-boundary cut wins instead.
  */
 const SENTENCE_CUT_FLOOR = 120
 
-const encoder = new TextEncoder()
-const bytes = (text: string) => encoder.encode(text).length
-
-/** The longest prefix of `text` that still fits `budget` bytes. */
-function sliceToBytes(text: string, budget: number): string {
-  let end = text.length
-  while (end > 0 && bytes(text.slice(0, end)) > budget) end--
-  return text.slice(0, end)
-}
+const length = (text: string) => [...text].length
 
 const brandSuffix = ` — ${SITE.name}`
 
-/**
- * The brand suffix is the part we control, so it is the part that yields. A
- * title already at the budget gains nothing from ` — MyRideSG` except a
- * guaranteed ellipsis in the result — and Google appends the site name itself
- * anyway. Titles that overrun on their own are a copy problem, not a layout
- * one: they are fixed where they are written, not truncated here.
- */
+/** The brand suffix yields first: it is dropped when it would push the title over budget. */
 const pageTitle = title
-  ? bytes(title) + bytes(brandSuffix) <= TITLE_BUDGET
+  ? length(title) + length(brandSuffix) <= TITLE_BUDGET
     ? `${title}${brandSuffix}`
     : title
   : `${SITE.name} — ${SITE.tagline}`
@@ -86,20 +85,20 @@ const pageTitle = title
  */
 function clampDescription(text: string): string {
   const copy = text.trim()
-  if (bytes(copy) <= DESCRIPTION_BUDGET) return copy
+  if (length(copy) <= DESCRIPTION_BUDGET) return copy
 
   let kept = ''
   for (const sentence of copy.split(/(?<=\.)\s+/)) {
     const candidate = kept ? `${kept} ${sentence}` : sentence
-    if (bytes(candidate) > DESCRIPTION_BUDGET) break
+    if (length(candidate) > DESCRIPTION_BUDGET) break
     kept = candidate
   }
-  if (bytes(kept) >= SENTENCE_CUT_FLOOR) return kept
+  if (length(kept) >= SENTENCE_CUT_FLOOR) return kept
 
   // Nothing usable on a sentence boundary. Cut on a word boundary, then drop a
-  // trailing conjunction so it does not end on "and…". The ellipsis is itself
-  // three bytes, so it comes out of the budget before the cut is measured.
-  const cut = sliceToBytes(copy, DESCRIPTION_BUDGET - bytes('…'))
+  // trailing conjunction so it does not end on "and…". The ellipsis takes one
+  // character of the budget.
+  const cut = [...copy].slice(0, DESCRIPTION_BUDGET - 1).join('')
   return `${cut
     .slice(0, cut.lastIndexOf(' '))
     .replace(/[\s,;:–—-]+$/, '')
@@ -111,7 +110,33 @@ const metaDescription = clampDescription(description)
 const canonical = canonicalOverride
   ? new URL(canonicalOverride, Astro.site).href
   : new URL(Astro.url.pathname, Astro.site).href
-const socialImage = ogImage ? new URL(ogImage, Astro.site).href : undefined
+
+// Default card: the existing hero, cropped to the 1200x630 Open Graph size at
+// build time. JPEG rather than WebP because social crawlers handle it reliably.
+const defaultOg = ogImage
+  ? undefined
+  : await getImage({ src: defaultOgSource, width: 1200, height: 630, fit: 'cover', format: 'jpeg' })
+const socialImage = ogImage
+  ? new URL(ogImage, Astro.site).href
+  : new URL(defaultOg!.src, Astro.site).href
+const socialImageAlt = defaultOg
+  ? 'A motorcycle on a Singapore carpark rooftop at night, with the city skyline behind'
+  : undefined
+
+const graph = buildGraph(Astro.site!, structuredData)
+
+/**
+ * Search-console ownership metas, supplied per environment rather than
+ * committed. Read exactly the way src/lib/content.ts reads the Sanity vars:
+ * shell first (CI), import.meta.env second (local .env). Rendered only when
+ * set, so a build without them ships nothing extra.
+ */
+function envVar(name: string): string | undefined {
+  return process.env[name] ?? (import.meta.env as Record<string, string | undefined>)[name]
+}
+
+const googleSiteVerification = envVar('GOOGLE_SITE_VERIFICATION')
+const bingSiteVerification = envVar('BING_SITE_VERIFICATION')
 ---
 
 <!doctype html>
@@ -124,8 +149,22 @@ const socialImage = ogImage ? new URL(ogImage, Astro.site).href : undefined
     <meta name="description" content={metaDescription} />
     <link rel="canonical" href={canonical} />
 
+    {googleSiteVerification && (
+      <meta name="google-site-verification" content={googleSiteVerification} />
+    )}
+    {bingSiteVerification && <meta name="msvalidate.01" content={bingSiteVerification} />}
+
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    {/* Preload the faces the hero and nav paint with. `crossorigin` is
+        required even same-origin — font fetches are CORS-mode, and a preload
+        without it never matches the CSS-initiated request. font-src 'self'
+        already allows the files themselves. */}
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={barlowCondensed700Url} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={barlow400Url} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={barlow700Url} />
+
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#171110" />
     <!-- Tells the UA to render form controls, scrollbars and the like in the
@@ -142,10 +181,19 @@ const socialImage = ogImage ? new URL(ogImage, Astro.site).href : undefined
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={SITE.locale} />
-    {socialImage && <meta property="og:image" content={socialImage} />}
+    <meta property="og:image" content={socialImage} />
+    {defaultOg && <meta property="og:image:type" content="image/jpeg" />}
+    {defaultOg && <meta property="og:image:width" content="1200" />}
+    {defaultOg && <meta property="og:image:height" content="630" />}
+    {socialImageAlt && <meta property="og:image:alt" content={socialImageAlt} />}
 
-    <meta name="twitter:card" content={socialImage ? 'summary_large_image' : 'summary'} />
-    {socialImage && <meta name="twitter:image" content={socialImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    {socialImageAlt && <meta name="twitter:image:alt" content={socialImageAlt} />}
+
+    <script type="application/ld+json" is:inline set:html={serializeJsonLd(graph)} />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
 

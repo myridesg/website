@@ -1,0 +1,235 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import { breadcrumbEntity, entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
+
+const title = 'Rider Tools: Causeway Cams, Fuel Prices & COE'
+const description = 'Check the Causeway cameras, compare RON95 petrol prices and work out a COE renewal — everyday rider tools in the MyRideSG app for Singapore.'
+const site = Astro.site!
+const pagePath = '/rider-tools/'
+
+const questions = [
+  {
+    q: 'Does MyRideSG show Causeway cameras?',
+    a: 'Yes. The app groups LTA traffic cameras at Woodlands Checkpoint and Tuas Second Link, so you can look at both crossings — and zoom into a fullscreen view — before you point the bike north.',
+  },
+  {
+    q: 'How fresh are the Causeway camera images?',
+    a: 'The app reads LTA’s traffic-image feed through data.gov.sg and re-fetches it about once a minute while the camera screen is open. How up to date a frame is depends on when LTA captured it, and each camera shows that time.',
+  },
+  {
+    q: 'Can I compare RON95 petrol prices in the app?',
+    a: 'Yes. MyRideSG lists pump prices by brand and grade, including RON95, and highlights the lowest, so you can compare before you ride to a station. Enter your fuel-card discount and the app shows the effective price per litre.',
+  },
+  {
+    q: 'How often are the fuel prices updated?',
+    a: 'A scheduled job refreshes the price board once a day, and the app shows when it was last updated. Pump prices can change between updates, so the screen says to treat the figures as indicative and verify at the pump.',
+  },
+  {
+    q: 'Is the COE calculator the same as the one on this website?',
+    a: 'The renewal arithmetic is the same. The app’s version puts the five- and ten-year terms side by side and can weigh the renewal against the price of a new bike; the web version on our COE calculator page keeps to the renewal sums.',
+  },
+]
+
+const structuredData = [
+  webPageEntity(site, {
+    path: pagePath,
+    name: title,
+    description,
+    about: { '@id': entityId(site, APP_PATH) },
+  }),
+  breadcrumbEntity(site, pagePath, [
+    { name: 'Home', href: '/' },
+    { name: 'Rider tools' },
+  ]),
+  // The questions rendered in the FAQ section below, hung off this page's
+  // WebPage with a stable @id and isPartOf.
+  faqPageEntity(site, pagePath, questions),
+]
+---
+
+<BaseLayout title={title} description={description} structuredData={structuredData}>
+  <SiteNav />
+  <main>
+    <section class="bg-paper pb-20 pt-32 md:pb-28 md:pt-40">
+      <div class="shell">
+        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Rider tools' }]} />
+        <div class="max-w-3xl">
+          <h1 class="text-display-lg md:text-display-xl">Tools you open before you ride.</h1>
+          <p class="mt-6 text-xl leading-relaxed text-muted">
+            A Causeway camera view for bikes at both checkpoints, RON95 petrol
+            prices worth comparing, and a motorcycle COE calculator — the
+            everyday rider tools inside MyRideSG, on iOS and Android.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#causeway-cams" class="rounded-pill border border-ink/15 px-5 py-2.5 font-semibold hover:bg-soft">Causeway cams</a>
+            <a href="#fuel-prices" class="rounded-pill border border-ink/15 px-5 py-2.5 font-semibold hover:bg-soft">Petrol prices</a>
+            <a href="/motorcycle-coe-calculator/" class="rounded-pill border border-ink/15 px-5 py-2.5 font-semibold hover:bg-soft">COE calculator</a>
+          </div>
+          <StoreButtons class="mt-8" />
+          <p class="mt-5 text-sm text-muted">Available on iOS and Android.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="causeway-cams" class="bg-black py-20 md:py-28">
+      <div class="shell">
+        <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-20">
+          <div>
+            <p class="eyebrow text-ember-on-dark">Before the Causeway</p>
+            <h2 class="mt-4 max-w-xl text-display-sm text-on-dark md:text-display">
+              Causeway cameras for bikes, at both crossings.
+            </h2>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-white/65">
+              The queue you cannot see is the one that ruins the trip. MyRideSG
+              pulls LTA’s traffic cameras at Woodlands Checkpoint and the Tuas
+              Second Link into one screen, so you can look at both crossings,
+              tap into a fullscreen view, and decide whether today is the day
+              for the ride up.
+            </p>
+            <p class="mt-5 max-w-xl leading-relaxed text-white/65">
+              While the camera screen is open, the app re-fetches LTA’s
+              traffic-image feed about once a minute, and each camera shows how
+              long ago its frame was taken. The feed comes from
+              data.gov.sg; how current an image is depends on when LTA
+              captured it.
+            </p>
+          </div>
+          <aside class="max-w-sm rounded-xl border border-white/18 bg-white/5 p-7">
+            <h3 class="text-xl font-semibold text-on-dark">Good to know</h3>
+            <ul class="mt-4 space-y-3 text-sm leading-relaxed text-white/65">
+              <li>Covers Woodlands Checkpoint and Tuas Second Link.</li>
+              <li>Fullscreen, zoomable view for each camera.</li>
+              <li>Feed: LTA traffic images, via data.gov.sg.</li>
+              <li>Refreshes roughly every minute while the screen is open.</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="fuel-prices" class="bg-paper py-20 md:py-28">
+      <div class="shell">
+        <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+          <div>
+            <p class="eyebrow text-red">At the pump</p>
+            <h2 class="mt-4 max-w-xl text-display-sm md:text-display">
+              Compare RON95 petrol prices before you fill.
+            </h2>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-muted">
+              Petrol is a motorcycle’s biggest running cost, and the brands
+              rarely move together. MyRideSG lists pump prices by brand and
+              grade — RON95 included — and highlights the lowest, so choosing
+              where to fill up stops being a guess.
+            </p>
+            <p class="mt-5 leading-relaxed text-muted">
+              Add your fuel card or discount and the app shows the effective
+              price per litre. The board is refreshed by a scheduled job once a
+              day and the app shows when it was last updated — prices at the
+              pump can differ, which is why the screen tells you to verify
+              there.
+            </p>
+          </div>
+          <aside class="max-w-sm justify-self-end rounded-xl border border-ink/12 bg-soft p-7">
+            <h3 class="text-xl font-semibold">Good to know</h3>
+            <ul class="mt-4 space-y-3 text-sm leading-relaxed text-ink/75">
+              <li>Prices by brand and grade, including RON95.</li>
+              <li>The lowest price is highlighted on the screen.</li>
+              <li>Enter your discount to see effective prices per litre.</li>
+              <li>Board refreshed once a day; update time shown in the app.</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft py-20 md:py-28">
+      <div class="shell">
+        <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-20">
+          <div>
+            <p class="eyebrow text-red">At renewal time</p>
+            <h2 class="mt-4 max-w-xl text-display-sm md:text-display">
+              The motorcycle COE calculator.
+            </h2>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-ink/75">
+              Ten years arrive faster than any rider expects. The COE
+              calculator works out what a Category D renewal costs per year and
+              per month from the PQP you would pay, with the five- and ten-year
+              terms side by side — and a place to weigh the renewal against the
+              price of a new bike.
+            </p>
+            <a href="/motorcycle-coe-calculator/" class="mt-6 inline-block text-lg font-semibold text-red underline underline-offset-4">
+              Open the COE calculator on the web
+            </a>
+          </div>
+          <aside class="max-w-sm justify-self-end rounded-xl border border-ink/12 bg-paper p-7">
+            <h3 class="text-xl font-semibold">Good to know</h3>
+            <ul class="mt-4 space-y-3 text-sm leading-relaxed text-muted">
+              <li>Built for Category D — motorcycles.</li>
+              <li>You enter the PQP; the calculator does the sums.</li>
+              <li>Shows total, yearly and monthly cost of a renewal.</li>
+              <li>Also in the app, next to your COE expiry date.</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell">
+        <div class="max-w-2xl">
+          <h2 class="text-display-sm md:text-display">Tools beside the paperwork.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-muted">
+            The rider tools sit in the same app as your ownership records, so a
+            cheap fill-up and a renewal deadline are never far apart.
+          </p>
+        </div>
+        <ul class="mt-10 grid gap-8 md:grid-cols-3">
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/motorcycle-expense-tracker/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Motorcycle expense tracker</a></h3>
+            <p class="mt-3 leading-relaxed text-muted">Log fill-ups and see what your petrol habit really costs per kilometre.</p>
+          </li>
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/motorcycle-renewal-reminders/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Renewal reminders</a></h3>
+            <p class="mt-3 leading-relaxed text-muted">Road tax, insurance and COE renewals, flagged before they lapse.</p>
+          </li>
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/guides/petrol-prices-singapore/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Petrol prices, explained</a></h3>
+            <p class="mt-3 leading-relaxed text-muted">How pump pricing works in Singapore, and what a litre buys you.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="bg-paper pb-20 md:pb-28">
+      <div class="shell">
+        <div class="mx-auto max-w-2xl">
+          <h2 class="text-display-sm md:text-display">Questions about the rider tools.</h2>
+          <div class="mt-10 border-t border-ink/15">
+            {questions.map((question) => (
+              <details class="border-b border-ink/15 py-5">
+                <summary class="cursor-pointer text-xl font-medium">{question.q}</summary>
+                <p class="mt-4 leading-relaxed text-muted">{question.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-black py-20 text-center md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm text-on-dark md:text-display">Check the road before you roll.</h2>
+        <p class="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-white/65">
+          Causeway cameras, petrol prices and the COE calculator — in
+          MyRideSG on iOS and Android.
+        </p>
+        <StoreButtons tone="light" center class="mt-8" />
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

@@ -1,0 +1,242 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import PhoneFrame from '@/components/ui/PhoneFrame.astro'
+import FuelScreen from '@/components/ui/app/FuelScreen.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import { breadcrumbEntity, entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
+
+const title = 'Motorcycle Expense Tracker for Singapore Riders'
+const description = 'A bike expense tracker for Singapore riders. Log fuel fill-ups, mileage and running costs in SGD, and see what your motorcycle really costs to run.'
+const site = Astro.site!
+const pagePath = '/motorcycle-expense-tracker/'
+
+const questions = [
+  {
+    q: 'What is a bike expense tracker?',
+    a: 'A place to record what your motorcycle costs you and look back at it later. MyRideSG keeps fuel fill-ups, mileage and expenses against your bike, in Singapore dollars.',
+  },
+  {
+    q: 'How do I calculate my motorcycle’s petrol consumption?',
+    a: 'Log each fill-up with the litres, the amount paid and the odometer reading. MyRideSG works out economy full-to-full: distance travelled between two full tanks divided by the litres pumped in between. Partial top-ups are carried into the next segment rather than treated as a full tank, so the km/L figure stays honest.',
+  },
+  {
+    q: 'Does the fuel tracker work in SGD?',
+    a: 'Yes. Amounts are entered and totalled in Singapore dollars, so your fill-ups, expenses and monthly spending all read in the currency you actually pay in.',
+  },
+  {
+    q: 'Can I log mileage without buying fuel?',
+    a: 'Yes. Mileage entries are separate from fill-ups, so you can record an odometer reading any time and see how far the bike has gone between them.',
+  },
+  {
+    q: 'What does it cost to use?',
+    a: 'Core tracking is free, including servicing history, renewal dates, fuel logs and running costs. No payment details are required to create an account. Additional advanced features may be offered on a paid plan in future.',
+  },
+]
+
+const structuredData = [
+  webPageEntity(site, {
+    path: pagePath,
+    name: title,
+    description,
+    about: { '@id': entityId(site, APP_PATH) },
+  }),
+  breadcrumbEntity(site, pagePath, [
+    { name: 'Home', href: '/' },
+    { name: 'Motorcycle expense tracker' },
+  ]),
+  // The questions rendered in the FAQ section below, hung off this page's
+  // WebPage with a stable @id and isPartOf.
+  faqPageEntity(site, pagePath, questions),
+]
+
+const features = [
+  {
+    title: 'Every fill-up, with the details that matter',
+    body: 'Record the litres, the amount paid, the odometer reading and where you filled up. Flag whether you brimmed the tank, because that is what makes consumption numbers honest.',
+  },
+  {
+    title: 'Petrol consumption worked out for you',
+    body: 'MyRideSG calculates fuel economy the way riders actually measure it: the distance between two full tanks, divided by the litres pumped in between. Partial top-ups carry forward instead of being mistaken for full tanks.',
+  },
+  {
+    title: 'Spending beyond the petrol station',
+    body: 'Log insurance, road tax, parking, gear, servicing and upgrades against your bike, each with its own category. Running costs and one-off purchases stop disappearing into a shoebox of receipts.',
+  },
+  {
+    title: 'Mileage on its own axis',
+    body: 'Log odometer readings whenever you like, separate from fill-ups. Watch how far your motorcycle travels month to month without buying petrol to find out.',
+  },
+]
+
+---
+
+<BaseLayout title={title} description={description} structuredData={structuredData}>
+  <SiteNav />
+  <main>
+    <section class="bg-paper pb-20 pt-32 md:pb-28 md:pt-40">
+      <div class="shell">
+        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Expense tracker' }]} />
+        <div class="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
+          <div class="max-w-xl">
+            <h1 class="text-display-lg md:text-display-xl">Every dollar your bike costs, in one log.</h1>
+            <p class="mt-6 text-xl leading-relaxed text-muted">
+              MyRideSG is a bike expense tracker for Singapore riders. Log fuel,
+              mileage and running costs against your motorcycle, then see the
+              real cost of keeping it on the road — in SGD, on iOS and Android.
+            </p>
+            <StoreButtons class="mt-8" />
+            <p class="mt-5 text-sm text-muted">Available on iOS and Android.</p>
+          </div>
+          <figure class="mx-auto">
+            <PhoneFrame width={300} chrome={false}>
+              <div class="app-screen" role="img" aria-label="Illustrative MyRideSG fuel hub with sample fill-ups, a fuel economy figure and petrol prices">
+                <FuelScreen />
+              </div>
+            </PhoneFrame>
+            <figcaption class="mt-5 max-w-xs text-center text-sm leading-relaxed text-muted">
+              Illustrative app preview with sample fill-ups and prices.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-black py-20 md:py-28">
+      <div class="shell">
+        <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+          <div>
+            <h2 class="max-w-md text-display-sm text-on-dark md:text-display">
+              Petrol, parking, paperwork. All of it counts.
+            </h2>
+            <p class="mt-6 max-w-md text-lg leading-relaxed text-white/65">
+              The pump is only part of what a motorcycle costs. An expense log
+              that captures everything is the one that tells you the truth at
+              the end of the month.
+            </p>
+          </div>
+          <div class="grid gap-x-10 gap-y-9 sm:grid-cols-2">
+            {features.map((feature) => (
+              <div class="border-t border-white/20 pt-5">
+                <h3 class="text-2xl text-on-dark">{feature.title}</h3>
+                <p class="mt-3 leading-relaxed text-white/65">{feature.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell grid gap-10 lg:grid-cols-2 lg:gap-20">
+        <div class="max-w-xl">
+          <h2 class="text-display-sm md:text-display">How your petrol consumption is worked out.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-muted">
+            Divide the distance between two full tanks by the litres it took to
+            fill them, and you have kilometres per litre you can trust. It is
+            the method riders have used at the pump for decades — MyRideSG just
+            does the arithmetic on every fill-up you log.
+          </p>
+          <p class="mt-5 leading-relaxed text-muted">
+            Top-ups between full tanks are added to the next segment instead of
+            producing a number of their own, and until you have logged two full
+            tanks there is no figure at all — a blank beats a wrong answer.
+          </p>
+        </div>
+        <div class="rounded-xl bg-soft p-7 md:p-9">
+          <h3 class="text-2xl">The full-to-full method</h3>
+          <ol class="mt-6 space-y-5">
+            {[
+              'Fill the tank to the brim and log the litres, cost and odometer reading.',
+              'Ride as normal. Top up along the way and log those litres too.',
+              'The next time you fill to the brim, the distance covered divided by every litre since the last full tank is your consumption.',
+            ].map((step, index) => (
+              <li class="flex gap-4">
+                <span class="font-display text-2xl text-red">{index + 1}</span>
+                <p class="leading-relaxed">{step}</p>
+              </li>
+            ))}
+          </ol>
+          <p class="mt-6 text-sm leading-relaxed text-ink/75">
+            Your own figures come from your own riding. They describe your bike
+            and your throttle hand, not a model’s official figure.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft py-20 md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm md:text-display">Start with your next fill-up.</h2>
+        <ol class="mt-10 grid gap-8 md:grid-cols-3">
+          {[
+            ['Add your motorcycle', 'Download MyRideSG and add your bike. Amounts are kept in Singapore dollars from the first entry.'],
+            ['Log fuel, mileage and expenses', 'Each fill-up, odometer reading and cost goes against your bike, with a category so spending adds up where it should.'],
+            ['Review what riding really costs', 'Look back at spending by month and category, and watch your fuel economy settle into a figure you can rely on.'],
+          ].map(([heading, body], index) => (
+            <li class="border-t border-ink/15 pt-6">
+              <span class="font-display text-display-sm text-red">{index + 1}</span>
+              <h3 class="mt-4 text-2xl">{heading}</h3>
+              <p class="mt-3 leading-relaxed text-ink/75">{body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell">
+        <div class="mx-auto max-w-2xl">
+          <h2 class="text-display-sm md:text-display">Questions about tracking bike costs.</h2>
+          <div class="mt-10 border-t border-ink/15">
+            {questions.map((question) => (
+              <details class="border-b border-ink/15 py-5">
+                <summary class="cursor-pointer text-xl font-medium">{question.q}</summary>
+                <p class="mt-4 leading-relaxed text-muted">{question.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft py-20 md:py-28">
+      <div class="shell">
+        <div class="max-w-2xl">
+          <h2 class="text-display-sm md:text-display">More than an expense log.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-ink/75">
+            MyRideSG keeps the rest of your ownership records beside your
+            spending.
+          </p>
+        </div>
+        <ul class="mt-10 grid gap-8 md:grid-cols-3">
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/motorcycle-maintenance-app/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Motorcycle maintenance app</a></h3>
+            <p class="mt-3 leading-relaxed text-ink/75">Keep a servicing record beside the costs it created.</p>
+          </li>
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/motorcycle-renewal-reminders/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Renewal reminders</a></h3>
+            <p class="mt-3 leading-relaxed text-ink/75">Road tax, insurance and COE renewals, flagged before they lapse.</p>
+          </li>
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/guides/petrol-prices-singapore/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Singapore petrol prices, explained</a></h3>
+            <p class="mt-3 leading-relaxed text-ink/75">How pump pricing works here, and what RON95 costs you per kilometre.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="bg-black py-20 text-center md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm text-on-dark md:text-display">Know your running costs.</h2>
+        <p class="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-white/65">
+          Start your motorcycle expense log with MyRideSG on iOS or Android.
+        </p>
+        <StoreButtons tone="light" center class="mt-8" />
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

@@ -32,7 +32,7 @@
         data-coe-price
         class:list={[
           'mt-1.5 block w-full rounded-xs border border-ink/20 bg-paper px-3 py-2',
-          'text-md text-ink placeholder:text-muted/70',
+          'text-md text-ink placeholder:text-ink/65',
         ]}
       />
     </label>
@@ -49,7 +49,7 @@
         data-coe-years
         class:list={[
           'mt-1.5 block w-full rounded-xs border border-ink/20 bg-paper px-3 py-2',
-          'text-md text-ink placeholder:text-muted/70',
+          'text-md text-ink placeholder:text-ink/65',
         ]}
       />
     </label>
@@ -57,17 +57,19 @@
 
   <div class="mt-5 grid gap-4 rounded-xs bg-soft px-4 py-4 sm:grid-cols-2">
     <div>
-      <span class="eyebrow block text-muted">Per year</span>
+      <span class="eyebrow block text-ink/75">Per year</span>
       <output data-coe-annual class="mt-1 block text-xl font-semibold text-ink">—</output>
     </div>
 
     <div>
-      <span class="eyebrow block text-muted">Per month</span>
+      <span class="eyebrow block text-ink/75">Per month</span>
       <output data-coe-monthly class="mt-1 block text-xl font-semibold text-ink">—</output>
     </div>
   </div>
 
-  <p class="mt-4 text-sm leading-relaxed text-muted">
+  {/* ink/75, not muted: this note sits on the bg-soft results band, where
+      muted is 4.31:1 — under AA. ink/75 is 6.6:1 light, 10:1 dark. */}
+  <p class="mt-4 text-sm leading-relaxed text-ink/75">
     Straight-line cost of the premium only — it excludes road tax, insurance and
     servicing. Check LTA for the current PQP before you rely on a figure.
   </p>

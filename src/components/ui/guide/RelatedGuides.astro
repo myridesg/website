@@ -1,0 +1,50 @@
+---
+interface Props {
+  guides: Array<{ slug: string; title: string }>
+  showAppLink?: boolean
+}
+
+const { guides, showAppLink = false } = Astro.props
+---
+
+{
+  (guides.length > 0 || showAppLink) && (
+    <aside class="mt-14 border-t border-ink/12 pt-8">
+      {guides.length > 0 && (
+        <>
+          <p class="eyebrow text-muted">More guides</p>
+          <ul class="mt-4 flex flex-col gap-2.5">
+            {guides.map((guide) => (
+              <li class="leading-snug">
+                <a href={`/guides/${guide.slug}/`}>{guide.title}</a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {showAppLink && (
+        <p class:list={[guides.length > 0 && 'mt-6']}>
+          Want to keep track of servicing records and mileage in one place? See the{' '}
+          <a href="/motorcycle-maintenance-app/">motorcycle maintenance app</a>.
+        </p>
+      )}
+    </aside>
+  )
+}
+
+<style>
+  ul {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: 0;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+</style>

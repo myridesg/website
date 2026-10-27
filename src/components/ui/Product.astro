@@ -21,6 +21,8 @@ const ROWS = [
   {
     title: 'Ownership at a glance',
     body: 'Road tax, COE and insurance countdowns on a single screen, so nothing needs looking up and nothing gets missed.',
+    href: '/motorcycle-maintenance-app/',
+    linkLabel: 'Explore the maintenance app',
     Screen: BikeScreen,
     label: 'MyRideSG bike overview: road tax due in 21 days, alongside the other key ownership dates',
     frame: 'bg-rose',
@@ -28,13 +30,17 @@ const ROWS = [
   {
     title: 'Every dollar you spend riding',
     body: 'Log fill-ups in seconds. Track cost per kilometre, monthly spend and efficiency over time, so you know what the bike really costs.',
+    href: '/motorcycle-expense-tracker/',
+    linkLabel: 'See the expense tracker',
     Screen: FuelScreen,
-    label: 'MyRideSG fuel screen: log a fill-up, the cheapest RON95 today, and fuel economy in km per litre',
+    label: 'MyRideSG fuel screen: log a fill-up, the cheapest RON95 nearby, and fuel economy in km per litre',
     frame: 'bg-soft',
   },
   {
     title: 'Find a workshop in two taps',
     body: 'Browse workshops near you, review the services they offer, and get in touch without leaving the app.',
+    href: '/motorcycle-workshop-directory/',
+    linkLabel: 'Browse the workshop directory',
     Screen: WorkshopsScreen,
     label: 'MyRideSG workshops directory with call, WhatsApp, directions and website actions',
     frame: 'bg-rose',
@@ -47,7 +53,7 @@ const ROWS = [
     <p class="eyebrow text-red">The app</p>
 
     <h2 class="mt-4 max-w-xl text-display-sm md:text-display">
-      Start every ride with confidence.
+      Your motorcycle app for maintenance, fuel and costs.
     </h2>
 
     <div class="mt-14 flex flex-col gap-16 md:gap-24">
@@ -57,6 +63,12 @@ const ROWS = [
             <div class:list={[i % 2 === 1 && 'md:order-2']}>
               <h3 class="text-display-sm md:text-[2.5rem]">{row.title}</h3>
               <p class="mt-4 max-w-md text-lg leading-relaxed text-muted">{row.body}</p>
+              <a
+                href={row.href}
+                class="mt-4 inline-block text-md font-semibold text-red hover:underline"
+              >
+                {row.linkLabel} →
+              </a>
             </div>
 
             <div
@@ -77,11 +89,16 @@ const ROWS = [
 
                   role="img" + aria-label: a screen reader should hear "the app
                   looks like this", not walk forty spans of sample data. */}
-              <PhoneFrame variant="light" width={270} chrome={false}>
-                <div class="app-screen" role="img" aria-label={row.label}>
-                  <row.Screen />
-                </div>
-              </PhoneFrame>
+              <figure class="mx-auto">
+                <PhoneFrame variant="light" width={270} chrome={false}>
+                  <div class="app-screen" role="img" aria-label={row.label}>
+                    <row.Screen />
+                  </div>
+                </PhoneFrame>
+                <figcaption class="mt-5 max-w-xs text-center text-sm leading-relaxed text-ink/75">
+                  Illustrative app preview with sample data.
+                </figcaption>
+              </figure>
             </div>
           </div>
         ))

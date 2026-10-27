@@ -36,7 +36,7 @@ const links = (node.slugs ?? []).filter(
       {/* A span, not a heading: this is a widget label, and promoting it to h2
           would inject a section into the guide's outline that the author never
           wrote. `.prose-body h2` would also override the eyebrow sizing. */}
-      <span class="eyebrow block text-muted">Related guides</span>
+      <span class="eyebrow block text-ink/75">Related guides</span>
 
       <ul class="mt-4 flex flex-col gap-2.5">
         {links.map((link) => (

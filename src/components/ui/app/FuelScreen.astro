@@ -61,7 +61,7 @@ const FILL_UPS = [
           <path d="M4 20V5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v15" stroke-linecap="round"></path>
           <path d="M3 20h11M6.5 8.5h4M16 10.5h2.5V17a1.6 1.6 0 0 0 3.2 0V9.2l-2.4-2.4" stroke-linecap="round"></path>
         </svg>
-        Cheapest RON95 today
+        Cheapest RON95 nearby
       </p>
       <p class="fuel__cheapest-value">S$2.89/L</p>
     </div>
@@ -210,7 +210,12 @@ const FILL_UPS = [
   }
 
   .fuel__cheapest .fuel__tile-label {
-    color: var(--app-primary);
+    /* --app-primary measured 4.23:1 here in light and 3.56:1 in dark — under
+       AA for 13.6px text either way. The app's destructive red clears it in
+       light (5.67:1); in dark, muted-fg (6.77:1) keeps the label quiet while
+       the red border and tint carry the emphasis. Same light-dark() pattern as
+       the .app-screen tokens in global.css. */
+    color: light-dark(var(--app-destructive), var(--app-muted-fg));
   }
 
   .fuel__cheapest-value {

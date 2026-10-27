@@ -1,0 +1,322 @@
+{
+  "generatedAt": "2026-10-14T12:47:20.923Z",
+  "startedAt": "2026-10-14T12:47:10.488Z",
+  "source": "synthetic fixtures",
+  "upstream": null,
+  "machine": {
+    "cpu": "Apple M4 Pro",
+    "architecture": "arm64",
+    "platform": "darwin",
+    "node": "v26.7.0",
+    "astro": "7.2.4"
+  },
+  "methodology": {
+    "renderer": "Production-compiled Astro App with a benchmark-only Node adapter, copied guide template, layouts, Portable Text components and CSP.",
+    "scope": "HTML responses only. No image optimization, client asset downloads, CDN, Netlify adapter, platform billing or deployed Worker measurement.",
+    "warmupPerCase": 20,
+    "measuredSequentialRendersPerCase": 200,
+    "simulatedDelaySamples": 12,
+    "fixtureReads": "Parse captured/synthetic JSON and use the existing vendored Sanity mappers. No upstream calls in timed render loop.",
+    "cpu": "process.cpuUsage user + system; whole local Node process CPU including GC/background work. Not Cloudflare CPU metering.",
+    "wall": "Await complete HTML response; includes synthetic I/O delay where explicitly labeled.",
+    "cold": "Fresh Node process imports compiled entry, then renders the short article; excludes OS process-launch time.",
+    "memory": "Resident memory is observed, not allocated memory billed by Netlify.",
+    "projections": "Illustrative 1 GB allocation, measured mean wall time with 200 ms simulated upstream latency, assumed CDN HTML hit rates. Excludes cold starts, other functions, requests, bandwidth and deploy credits."
+  },
+  "warm": {
+    "mode": "warm",
+    "bootstrapMs": 18.174208,
+    "peakRssBytes": 230703104,
+    "processMaxRssBytes": 230719488,
+    "samples": [
+      {
+        "label": "short article",
+        "path": "/guides/motorcycle-maintenance-benchmark-1/",
+        "expected": "Synthetic benchmark article 1",
+        "portableTextBytes": 14142,
+        "bodyBlocks": 26,
+        "count": 200,
+        "firstRequest": {
+          "wallMs": 19.398417000000002,
+          "cpuMs": 23.989,
+          "htmlBytes": 31623
+        },
+        "wallMs": {
+          "mean": 0.6307691800000006,
+          "p50": 0.5554170000000056,
+          "p95": 1.2241250000000008,
+          "max": 2.1644589999999937
+        },
+        "cpuMs": {
+          "mean": 1.1265300000000003,
+          "p50": 0.656,
+          "p95": 3.797,
+          "max": 7.952
+        },
+        "htmlBytes": 31623
+      },
+      {
+        "label": "typical article",
+        "path": "/guides/motorcycle-maintenance-benchmark-2/",
+        "expected": "Synthetic benchmark article 2",
+        "portableTextBytes": 30383,
+        "bodyBlocks": 72,
+        "count": 200,
+        "firstRequest": {
+          "wallMs": 0.9932499999999891,
+          "cpuMs": 1.974,
+          "htmlBytes": 41392
+        },
+        "wallMs": {
+          "mean": 0.814437319999998,
+          "p50": 0.670915999999977,
+          "p95": 1.8992920000000026,
+          "max": 3.0855419999999754
+        },
+        "cpuMs": {
+          "mean": 1.4802449999999994,
+          "p50": 0.73,
+          "p95": 6.006,
+          "max": 12.382
+        },
+        "htmlBytes": 41392
+      },
+      {
+        "label": "long article",
+        "path": "/guides/motorcycle-maintenance-benchmark-3/",
+        "expected": "Synthetic benchmark article 3",
+        "portableTextBytes": 79629,
+        "bodyBlocks": 212,
+        "count": 200,
+        "firstRequest": {
+          "wallMs": 1.2833340000000248,
+          "cpuMs": 1.277,
+          "htmlBytes": 70772
+        },
+        "wallMs": {
+          "mean": 1.4172972849999952,
+          "p50": 1.138749999999959,
+          "p95": 2.8676249999999754,
+          "max": 4.847499999999968
+        },
+        "cpuMs": {
+          "mean": 2.439089999999999,
+          "p50": 1.222,
+          "p95": 7.298,
+          "max": 15.149
+        },
+        "htmlBytes": 70772
+      },
+      {
+        "label": "guide index",
+        "path": "/guides/",
+        "expected": "Motorcycle guides for Singapore riders",
+        "guideCount": 29,
+        "count": 200,
+        "firstRequest": {
+          "wallMs": 3.9064999999999372,
+          "cpuMs": 7.748,
+          "htmlBytes": 27476
+        },
+        "wallMs": {
+          "mean": 0.3078009899999978,
+          "p50": 0.2840840000000071,
+          "p95": 0.3910409999999729,
+          "max": 1.1465420000000677
+        },
+        "cpuMs": {
+          "mean": 0.3889050000000001,
+          "p50": 0.285,
+          "p95": 0.496,
+          "max": 3.36
+        },
+        "htmlBytes": 27476
+      },
+      {
+        "label": "typical article + 200 ms simulated upstream delay",
+        "path": "/guides/motorcycle-maintenance-benchmark-2/",
+        "simulatedUpstreamMs": 200,
+        "count": 12,
+        "wallMs": {
+          "mean": 205.63752791666673,
+          "p50": 205.39183400000002,
+          "p95": 208.74079200000006,
+          "max": 208.74079200000006
+        },
+        "cpuMs": {
+          "mean": 6.335416666666667,
+          "p50": 5.05,
+          "p95": 23.236,
+          "max": 23.236
+        },
+        "htmlBytes": 41392
+      },
+      {
+        "label": "typical article + 500 ms simulated upstream delay",
+        "path": "/guides/motorcycle-maintenance-benchmark-2/",
+        "simulatedUpstreamMs": 500,
+        "count": 12,
+        "wallMs": {
+          "mean": 505.80513183333323,
+          "p50": 505.1582080000003,
+          "p95": 509.0026659999985,
+          "max": 509.0026659999985
+        },
+        "cpuMs": {
+          "mean": 5.23075,
+          "p50": 4.236,
+          "p95": 18.533,
+          "max": 18.533
+        },
+        "htmlBytes": 41392
+      }
+    ]
+  },
+  "cold": [
+    {
+      "mode": "cold",
+      "bootstrapMs": 18.35,
+      "peakRssBytes": 76333056,
+      "processMaxRssBytes": 76349440,
+      "samples": [
+        {
+          "label": "short article",
+          "path": "/guides/motorcycle-maintenance-benchmark-1/",
+          "expected": "Synthetic benchmark article 1",
+          "portableTextBytes": 14142,
+          "bodyBlocks": 26,
+          "wallMs": 21.073709,
+          "cpuMs": 25.699,
+          "htmlBytes": 31623,
+          "bootstrapMs": 18.35
+        }
+      ]
+    },
+    {
+      "mode": "cold",
+      "bootstrapMs": 19.054291,
+      "peakRssBytes": 76070912,
+      "processMaxRssBytes": 76120064,
+      "samples": [
+        {
+          "label": "short article",
+          "path": "/guides/motorcycle-maintenance-benchmark-1/",
+          "expected": "Synthetic benchmark article 1",
+          "portableTextBytes": 14142,
+          "bodyBlocks": 26,
+          "wallMs": 20.803834000000002,
+          "cpuMs": 25.883,
+          "htmlBytes": 31623,
+          "bootstrapMs": 19.054291
+        }
+      ]
+    },
+    {
+      "mode": "cold",
+      "bootstrapMs": 18.111458,
+      "peakRssBytes": 76087296,
+      "processMaxRssBytes": 76120064,
+      "samples": [
+        {
+          "label": "short article",
+          "path": "/guides/motorcycle-maintenance-benchmark-1/",
+          "expected": "Synthetic benchmark article 1",
+          "portableTextBytes": 14142,
+          "bodyBlocks": 26,
+          "wallMs": 19.266875,
+          "cpuMs": 23.894,
+          "htmlBytes": 31623,
+          "bootstrapMs": 18.111458
+        }
+      ]
+    },
+    {
+      "mode": "cold",
+      "bootstrapMs": 17.077208,
+      "peakRssBytes": 76431360,
+      "processMaxRssBytes": 76496896,
+      "samples": [
+        {
+          "label": "short article",
+          "path": "/guides/motorcycle-maintenance-benchmark-1/",
+          "expected": "Synthetic benchmark article 1",
+          "portableTextBytes": 14142,
+          "bodyBlocks": 26,
+          "wallMs": 19.239375,
+          "cpuMs": 23.695,
+          "htmlBytes": 31623,
+          "bootstrapMs": 17.077208
+        }
+      ]
+    },
+    {
+      "mode": "cold",
+      "bootstrapMs": 18.344499999999996,
+      "peakRssBytes": 76349440,
+      "processMaxRssBytes": 76382208,
+      "samples": [
+        {
+          "label": "short article",
+          "path": "/guides/motorcycle-maintenance-benchmark-1/",
+          "expected": "Synthetic benchmark article 1",
+          "portableTextBytes": 14142,
+          "bodyBlocks": 26,
+          "wallMs": 22.365417,
+          "cpuMs": 28.811,
+          "htmlBytes": 31623,
+          "bootstrapMs": 18.344499999999996
+        }
+      ]
+    }
+  ],
+  "projections": [
+    {
+      "monthlyGuideViews": 10000,
+      "assumedCdnHtmlHitRate": 0,
+      "uncachedRenders": 10000,
+      "assumedAllocatedMemoryGB": 1,
+      "modeledGBHours": 0.5712153553240743
+    },
+    {
+      "monthlyGuideViews": 10000,
+      "assumedCdnHtmlHitRate": 0.95,
+      "uncachedRenders": 500.00000000000045,
+      "assumedAllocatedMemoryGB": 1,
+      "modeledGBHours": 0.02856076776620374
+    },
+    {
+      "monthlyGuideViews": 10000,
+      "assumedCdnHtmlHitRate": 0.99,
+      "uncachedRenders": 100.00000000000009,
+      "assumedAllocatedMemoryGB": 1,
+      "modeledGBHours": 0.005712153553240748
+    },
+    {
+      "monthlyGuideViews": 100000,
+      "assumedCdnHtmlHitRate": 0,
+      "uncachedRenders": 100000,
+      "assumedAllocatedMemoryGB": 1,
+      "modeledGBHours": 5.712153553240743
+    },
+    {
+      "monthlyGuideViews": 100000,
+      "assumedCdnHtmlHitRate": 0.95,
+      "uncachedRenders": 5000.000000000005,
+      "assumedAllocatedMemoryGB": 1,
+      "modeledGBHours": 0.28560767766203743
+    },
+    {
+      "monthlyGuideViews": 100000,
+      "assumedCdnHtmlHitRate": 0.99,
+      "uncachedRenders": 1000.0000000000009,
+      "assumedAllocatedMemoryGB": 1,
+      "modeledGBHours": 0.05712153553240748
+    }
+  ],
+  "sandbox": "/var/folders/hs/r9vj80vd2bs0ky2prjyfh6sm0000gn/T/myridesg-guide-benchmark-VD2wkp",
+  "references": {
+    "netlifyCompute": "https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/how-credits-work/",
+    "cloudflareCpu": "https://developers.cloudflare.com/workers/platform/limits/",
+    "localWorkerd": "https://developers.cloudflare.com/workers/local-development/"
+  }
+}

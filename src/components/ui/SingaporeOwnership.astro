@@ -4,10 +4,20 @@
 // Both are forbidden by the Claim Guardrails in
 // myridesg-v2/docs/marketing-site-creative-brief.md. This section proves local
 // relevance through what the product actually does instead.
-const FACTS = [
+type Fact = {
+  title: string
+  body: string
+  /** Contextual link to the matching feature page, when one exists. */
+  href?: string
+  linkLabel?: string
+}
+
+const FACTS: Fact[] = [
   {
     title: 'The renewal dates that matter here',
     body: 'COE, road tax and insurance are counted down from the day each one falls due, rather than left sitting in an email archive.',
+    href: '/motorcycle-renewal-reminders/',
+    linkLabel: 'How renewal reminders work',
   },
   {
     title: 'Recorded in SGD and kilometres',
@@ -16,6 +26,8 @@ const FACTS = [
   {
     title: 'A Singapore workshop directory',
     body: 'Browse workshops by region and speciality, with the services and contact details needed to make a decision.',
+    href: '/motorcycle-workshop-directory/',
+    linkLabel: 'Browse the workshop directory',
   },
   {
     title: 'Fuel costs that reflect the pump',
@@ -29,7 +41,7 @@ const FACTS = [
     <p class="eyebrow text-red">Built for Singapore ownership</p>
 
     <h2 class="mt-4 max-w-2xl text-display-sm md:text-display">
-      Everything a bike costs you here, in one place.
+      Everything a bike costs you in Singapore, in one place.
     </h2>
 
     <div class="mt-12 grid gap-px overflow-hidden rounded-xl bg-ink/10 sm:grid-cols-2">
@@ -38,6 +50,14 @@ const FACTS = [
           <div class="bg-paper p-6 md:p-8">
             <h3 class="text-2xl">{fact.title}</h3>
             <p class="mt-2.5 text-md leading-relaxed text-muted">{fact.body}</p>
+            {fact.href && (
+              <a
+                href={fact.href}
+                class="mt-3 inline-block text-md font-semibold text-red hover:underline"
+              >
+                {fact.linkLabel} →
+              </a>
+            )}
           </div>
         ))
       }

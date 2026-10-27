@@ -1,0 +1,227 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import CoeCalculator from '@/components/ui/guide/CoeCalculator.astro'
+import { breadcrumbEntity, entityId, faqPageEntity, webPageEntity, APP_PATH, ORGANIZATION_PATH } from '@/lib/seo'
+
+const title = 'Motorcycle COE Calculator for Singapore Riders'
+const description = 'Work out the cost of renewing a Category D motorcycle COE. Enter the PQP and renewal term to see the total, yearly and monthly cost of the renewal.'
+const canonical = new URL('/motorcycle-coe-calculator/', Astro.site)
+const site = Astro.site!
+
+const questions = [
+  {
+    q: 'What does this motorcycle COE calculator work out?',
+    a: 'What a COE renewal costs spread over its term. Give it the PQP you would pay and the number of years you would renew for, and it shows the total, the cost per year and the cost per month. It does the arithmetic on your figures only — it does not look up a premium for you.',
+  },
+  {
+    q: 'What is the PQP?',
+    a: 'The Prevailing Quota Premium — what you pay to renew a COE without bidding. LTA works it out as the moving average of COE prices over the last three months, so it moves from month to month.',
+  },
+  {
+    q: 'What is the difference between the 5-year and 10-year renewal?',
+    a: 'A 10-year renewal costs 100% of the PQP. A 5-year renewal costs 50% of the PQP but can only be taken once — a motorcycle renewed for five years must be deregistered when the term ends.',
+  },
+  {
+    q: 'Does the calculator include road tax and insurance?',
+    a: 'No. It spreads the COE premium only, as the note under the calculator says. Road tax, insurance and servicing sit on top, and MyRideSG can remind you before each of those renews.',
+  },
+  {
+    q: 'Where do I find the current PQP?',
+    a: 'Check LTA’s OneMotoring website — the link is on this page. The premium changes, so enter the current figure rather than one you noted down months ago.',
+  },
+]
+
+// The in-browser tool itself. It is the page's main entity: the calculator is
+// what the page is here for, distinct from the MobileApplication, which stays
+// the app entity shared across the site.
+const calculatorId = new URL('/motorcycle-coe-calculator/#calculator', Astro.site).href
+
+const webApplication = {
+  '@type': 'WebApplication',
+  '@id': calculatorId,
+  name: 'Motorcycle COE renewal calculator',
+  url: canonical.href,
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any',
+  // The sums run in an inline script in the page; without JavaScript the
+  // inputs do nothing.
+  browserRequirements: 'Requires JavaScript',
+  isAccessibleForFree: true,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'SGD',
+  },
+  provider: { '@id': new URL(ORGANIZATION_PATH, Astro.site).href },
+}
+
+const structuredData = [
+  webPageEntity(site, {
+    path: '/motorcycle-coe-calculator/',
+    name: title,
+    description,
+    about: { '@id': entityId(site, APP_PATH) },
+    // The in-browser tool is what the page is here for.
+    mainEntity: { '@id': calculatorId },
+  }),
+  breadcrumbEntity(site, '/motorcycle-coe-calculator/', [
+    { name: 'Home', href: '/' },
+    { name: 'Motorcycle COE calculator' },
+  ]),
+  webApplication,
+  // The questions rendered in the FAQ section below, hung off this page's
+  // WebPage with a stable @id and isPartOf.
+  faqPageEntity(site, '/motorcycle-coe-calculator/', questions),
+]
+
+const LTA_COE_URL =
+  'https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/upfront-vehicle-costs/certificate-of-entitlement--coe-.html'
+---
+
+<BaseLayout title={title} description={description} structuredData={structuredData}>
+  <SiteNav />
+  <main>
+    <section class="bg-paper pb-20 pt-32 md:pb-28 md:pt-40">
+      <div class="shell">
+        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'COE calculator' }]} />
+        <div class="grid items-start gap-14 lg:grid-cols-[1fr_auto]">
+          <div class="max-w-xl">
+            <h1 class="text-display-lg md:text-display-xl">What would your COE renewal cost?</h1>
+            <p class="mt-6 text-xl leading-relaxed text-muted">
+              A motorcycle COE calculator for the decision every Singapore rider
+              faces as the tenth year approaches: what the renewal works out to
+              per year and per month, from the PQP you would actually pay.
+            </p>
+            <StoreButtons class="mt-8" />
+            <p class="mt-5 text-sm text-muted">Also in the app, on iOS and Android.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft py-16 md:py-24">
+      <div class="shell">
+        <div class="mx-auto max-w-2xl">
+          <h2 class="text-display-sm md:text-display">The calculator.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-ink/75">
+            The inputs start empty on purpose. COE premiums move, so bring the
+            current PQP from <a href={LTA_COE_URL} target="_blank" rel="noopener noreferrer" class="text-red underline underline-offset-4">LTA OneMotoring</a>,
+            type it in, and the sums below update as you type.
+          </p>
+        </div>
+        <div class="mx-auto mt-10 max-w-2xl rounded-xl bg-paper p-2 md:p-4">
+          <CoeCalculator />
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell grid gap-10 lg:grid-cols-2 lg:gap-20">
+        <div class="max-w-xl">
+          <h2 class="text-display-sm md:text-display">How COE renewal works for motorcycles.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-muted">
+            A motorcycle sits in Category D. Its COE is valid for ten years
+            from registration, and when it runs out you have two choices:
+            deregister the bike, or renew the COE by paying the Prevailing
+            Quota Premium — no bidding involved.
+          </p>
+          <p class="mt-5 leading-relaxed text-muted">
+            The PQP is the moving average of COE prices over the last three
+            months, so it moves with the market. Renew for ten years and you
+            pay it in full; renew for five and you pay half, but a five-year
+            renewal can only be taken once — the bike must be deregistered
+            when that term ends.
+          </p>
+        </div>
+        <div class="rounded-xl bg-soft p-7 md:p-9">
+          <h3 class="text-2xl">Worth knowing before you renew</h3>
+          <dl class="mt-6 divide-y divide-ink/12">
+            {[
+              ['Renewing', 'No bidding needed — you pay the PQP for your category'],
+              ['After expiry', 'The bike cannot be ridden while its COE has lapsed'],
+              ['5-year term', '50% of the PQP, once only — deregister when it ends'],
+              ['10-year term', '100% of the PQP'],
+              ['PARF rebate', 'Renewing means giving up any PARF rebate that would have been paid at deregistration'],
+              ['Where to check', 'The current PQP is published on LTA OneMotoring'],
+            ].map(([label, value]) => (
+              <div class="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-4">
+                <dt class="text-ink/75">{label}</dt>
+                <dd class="font-medium">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft py-20 md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm md:text-display">The same calculator rides in your pocket.</h2>
+        <div class="mt-10 grid gap-8 md:grid-cols-3">
+          <div class="border-t border-ink/15 pt-6">
+            <span class="font-display text-display-sm text-red">1</span>
+            <h3 class="mt-4 text-2xl">In the app</h3>
+            <p class="mt-3 leading-relaxed text-ink/75">
+              The MyRideSG app carries this calculator with the five- and
+              ten-year terms side by side, and a place to compare the renewal
+              against the price of a new bike.
+            </p>
+          </div>
+          <div class="border-t border-ink/15 pt-6">
+            <span class="font-display text-display-sm text-red">2</span>
+            <h3 class="mt-4 text-2xl">Alongside your dates</h3>
+            <p class="mt-3 leading-relaxed text-ink/75">
+              Save your bike in MyRideSG and the COE expiry sits with your road
+              tax and insurance dates, with <a href="/motorcycle-renewal-reminders/" class="text-red underline underline-offset-4">a reminder before each one</a>.
+            </p>
+          </div>
+          <div class="border-t border-ink/15 pt-6">
+            <span class="font-display text-display-sm text-red">3</span>
+            <h3 class="mt-4 text-2xl">With the numbers that follow</h3>
+            <p class="mt-3 leading-relaxed text-ink/75">
+              The COE is one line of the budget. <a href="/motorcycle-expense-tracker/" class="text-red underline underline-offset-4">Track the rest</a> —
+              petrol, parking, servicing — as you go.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell">
+        <div class="mx-auto max-w-2xl">
+          <h2 class="text-display-sm md:text-display">Questions about COE renewal.</h2>
+          <div class="mt-10 border-t border-ink/15">
+            {questions.map((question) => (
+              <details class="border-b border-ink/15 py-5">
+                <summary class="cursor-pointer text-xl font-medium">{question.q}</summary>
+                <p class="mt-4 leading-relaxed text-muted">{question.a}</p>
+              </details>
+            ))}
+          </div>
+          <p class="mt-10 text-sm leading-relaxed text-muted">
+            For the full picture — bidding, quotas and rebates — read our guide
+            to <a href="/guides/motorcycle-coe-singapore/" class="text-red underline underline-offset-4">motorcycle COE in Singapore</a>,
+            or see the other <a href="/rider-tools/" class="text-red underline underline-offset-4">rider tools</a> in the app.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-black py-20 text-center md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm text-on-dark md:text-display">Plan the renewal before it plans you.</h2>
+        <p class="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-white/65">
+          The COE calculator — here on the web, and in MyRideSG on iOS and
+          Android.
+        </p>
+        <StoreButtons tone="light" center class="mt-8" />
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

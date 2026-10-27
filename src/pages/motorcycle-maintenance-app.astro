@@ -1,0 +1,238 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import PhoneFrame from '@/components/ui/PhoneFrame.astro'
+import BikeScreen from '@/components/ui/app/BikeScreen.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import FeaturedGuides from '@/components/ui/FeaturedGuides.astro'
+import { breadcrumbEntity, entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
+
+const title = 'Motorcycle Maintenance App for Singapore Riders'
+const description = 'MyRideSG is a motorcycle maintenance tracker and logbook app for SG riders. Record servicing, mileage and costs in one service history, on iOS and Android.'
+const site = Astro.site!
+const pagePath = '/motorcycle-maintenance-app/'
+
+const questions = [
+  {
+    q: 'What is a motorcycle maintenance tracker?',
+    a: 'It is a place to record servicing and review your motorcycle’s maintenance history. MyRideSG keeps service dates, mileage and costs together with your bike profile.',
+  },
+  {
+    q: 'Can I use MyRideSG on iPhone and Android?',
+    a: 'Yes. MyRideSG is available on the App Store and Google Play. Download the native app to add your bike and start recording services.',
+  },
+  {
+    q: 'Does MyRideSG automatically record a workshop visit?',
+    a: 'Add your servicing entries in the app after the work is done. Keeping the date, mileage, work carried out and cost together makes your record easier to review later.',
+  },
+  {
+    q: 'Is maintenance tracking the same as GPS tracking?',
+    a: 'They serve different purposes. This page describes service records, mileage and ownership dates. It does not describe a GPS location or theft-tracking service.',
+  },
+  {
+    q: 'Which service intervals should I follow?',
+    a: 'Use the owner’s manual for your exact model and year, and ask your mechanic about your riding conditions. A service log records your work; an example shown here is not a manufacturer’s maintenance schedule.',
+  },
+]
+
+const structuredData = [
+  webPageEntity(site, {
+    path: pagePath,
+    name: title,
+    description,
+    about: { '@id': entityId(site, APP_PATH) },
+  }),
+  breadcrumbEntity(site, pagePath, [
+    { name: 'Home', href: '/' },
+    { name: 'Motorcycle maintenance app' },
+  ]),
+  // The questions rendered in the FAQ section below, hung off this page's
+  // WebPage with a stable @id and isPartOf.
+  faqPageEntity(site, pagePath, questions),
+]
+
+const features = [
+  {
+    title: 'A motorcycle servicing record you can look back on',
+    body: 'Record the work carried out, the service date and the odometer reading. Keep oil changes, repairs and other servicing in the same motorcycle logbook.',
+  },
+  {
+    title: 'Mileage alongside every service',
+    body: 'An oil change at 12,000 km means more than a date alone. Log mileage with each entry so you can see how far you have ridden since the last service.',
+  },
+  {
+    title: 'The cost of keeping your bike running',
+    body: 'Log servicing expenses and fuel fill-ups. Build a record of what you spend on your motorcycle over time, in Singapore dollars.',
+  },
+  {
+    title: 'Singapore ownership dates in the same place',
+    body: 'Keep road tax, insurance and COE expiry dates with your bike profile. Review your key dates alongside your servicing records.',
+  },
+]
+
+---
+
+<BaseLayout title={title} description={description} structuredData={structuredData}>
+  <SiteNav />
+  <main>
+    <section class="bg-paper pb-20 pt-32 md:pb-28 md:pt-40">
+      <div class="shell">
+        <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Maintenance app' }]} />
+        <div class="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
+          <div class="max-w-xl">
+            <h1 class="text-display-lg md:text-display-xl">Your motorcycle’s service history, together.</h1>
+            <p class="mt-6 text-xl leading-relaxed text-muted">
+              MyRideSG is a motorcycle maintenance app for iOS and Android, made
+              for Singapore riders. Record servicing, mileage and costs so the
+              next time you need your bike’s history, you know where to look.
+            </p>
+            <StoreButtons class="mt-8" />
+            <p class="mt-5 text-sm text-muted">Available on iOS and Android.</p>
+          </div>
+          <figure class="mx-auto">
+            <PhoneFrame width={300} chrome={false}>
+              <div class="app-screen" role="img" aria-label="Illustrative MyRideSG bike overview with sample dates, mileage and servicing interval">
+                <BikeScreen />
+              </div>
+            </PhoneFrame>
+            <figcaption class="mt-5 max-w-xs text-center text-sm leading-relaxed text-muted">
+              Illustrative app preview with sample ownership dates and mileage.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-black py-20 md:py-28">
+      <div class="shell">
+        <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+          <div>
+            <h2 class="max-w-md text-display-sm text-on-dark md:text-display">
+              Less searching through receipts. More useful records.
+            </h2>
+            <p class="mt-6 max-w-md text-lg leading-relaxed text-white/65">
+              A motorcycle maintenance log starts with the details you enter.
+              Keep them consistent, and your past services become easier to compare.
+            </p>
+          </div>
+          <div class="grid gap-x-10 gap-y-9 sm:grid-cols-2">
+            {features.map((feature) => (
+              <div class="border-t border-white/20 pt-5">
+                <h3 class="text-2xl text-on-dark">{feature.title}</h3>
+                <p class="mt-3 leading-relaxed text-white/65">{feature.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell grid gap-10 lg:grid-cols-2 lg:gap-20">
+        <div class="max-w-xl">
+          <h2 class="text-display-sm md:text-display">What a useful servicing record looks like.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-muted">
+            After a workshop visit, record the date, odometer reading, work carried
+            out and amount paid. Add a note about what was inspected or replaced.
+          </p>
+          <p class="mt-5 leading-relaxed text-muted">
+            These are sample details to show how a record fits together. The
+            mileage and cost are examples, not a recommended interval or workshop quote.
+          </p>
+        </div>
+        <div class="rounded-xl bg-soft p-7 md:p-9">
+          <h3 class="text-2xl">Example service record</h3>
+          <dl class="mt-6 divide-y divide-ink/12">
+            {[
+              ['Work carried out', 'Engine oil and oil filter changed'],
+              ['Service date', '8 October 2026'],
+              ['Odometer', '12,000 km'],
+              ['Amount paid', 'S$65'],
+              ['Notes', 'Keep the receipt and note the oil grade used.'],
+            ].map(([label, value]) => (
+              <div class="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-4">
+                <dt class="text-ink/75">{label}</dt>
+                <dd class="font-medium">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft py-20 md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm md:text-display">Start with your next service.</h2>
+        <ol class="mt-10 grid gap-8 md:grid-cols-3">
+          {[
+            ['Add your motorcycle', 'Download MyRideSG and add your bike’s model, mileage and ownership dates.'],
+            ['Record the work', 'Enter a servicing record with its date, odometer reading and cost after the work is complete.'],
+            ['Review your history', 'Look back through your entries when planning servicing, checking spending or discussing the bike with a mechanic.'],
+          ].map(([heading, body], index) => (
+            <li class="border-t border-ink/15 pt-6">
+              <span class="font-display text-display-sm text-red">{index + 1}</span>
+              <h3 class="mt-4 text-2xl">{heading}</h3>
+              <p class="mt-3 leading-relaxed text-ink/75">{body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell">
+        <div class="mx-auto max-w-2xl">
+          <h2 class="text-display-sm md:text-display">Questions about maintenance tracking.</h2>
+          <div class="mt-10 border-t border-ink/15">
+            {questions.map((question) => (
+              <details class="border-b border-ink/15 py-5">
+                <summary class="cursor-pointer text-xl font-medium">{question.q}</summary>
+                <p class="mt-4 leading-relaxed text-muted">{question.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <FeaturedGuides />
+
+    <section class="bg-paper py-20 md:py-28">
+      <div class="shell">
+        <div class="max-w-2xl">
+          <h2 class="text-display-sm md:text-display">Beyond the service log.</h2>
+          <p class="mt-5 text-lg leading-relaxed text-muted">
+            The same app keeps the rest of your motorcycle’s records in order.
+          </p>
+        </div>
+        <ul class="mt-10 grid gap-8 md:grid-cols-3">
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/motorcycle-expense-tracker/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Motorcycle expense tracker</a></h3>
+            <p class="mt-3 leading-relaxed text-muted">Fuel, mileage and running costs, totalled in Singapore dollars.</p>
+          </li>
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/motorcycle-renewal-reminders/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Renewal reminders</a></h3>
+            <p class="mt-3 leading-relaxed text-muted">Road tax, insurance and COE renewals, flagged before they lapse.</p>
+          </li>
+          <li class="border-t border-ink/15 pt-6">
+            <h3 class="text-2xl"><a href="/motorcycle-workshop-directory/" class="underline decoration-ink/25 underline-offset-4 hover:text-red">Workshop directory</a></h3>
+            <p class="mt-3 leading-relaxed text-muted">Find a bike mechanic by area or service, then call or get directions.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="bg-black py-20 text-center md:py-28">
+      <div class="shell">
+        <h2 class="text-display-sm text-on-dark md:text-display">Keep your motorcycle records close.</h2>
+        <p class="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-white/65">
+          Start your motorcycle service log with MyRideSG on iOS or Android.
+        </p>
+        <StoreButtons tone="light" center class="mt-8" />
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

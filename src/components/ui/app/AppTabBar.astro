@@ -86,7 +86,10 @@ const TABS = [
   }
 
   .tabs__item--active {
-    color: var(--app-primary);
+    /* --app-primary is 4.93:1 on the card in light but 3.17:1 in dark — under
+       AA for the 0.8em label. Foreground (14.69:1 there) keeps the active tab
+       readable in dark; light keeps the brand red. */
+    color: light-dark(var(--app-primary), var(--app-fg));
   }
 
   .tabs__log {

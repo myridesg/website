@@ -6,7 +6,16 @@
 // Note the petrol-price wording. The brief forbids describing the feed as
 // real-time when its cadence is not, so this says "updated regularly", not
 // "live".
-const TOOLS = [
+type Tool = {
+  title: string
+  body: string
+  path: string
+  /** Contextual link to the matching feature page, when one exists. */
+  href?: string
+  linkLabel?: string
+}
+
+const TOOLS: Tool[] = [
   {
     title: 'Petrol prices',
     body: 'Compare listed pump prices across stations, updated regularly.',
@@ -21,6 +30,8 @@ const TOOLS = [
     title: 'COE calculator',
     body: 'Work through the figures before your next purchase.',
     path: 'M8 3H16A2 2 0 0 1 18 5V19A2 2 0 0 1 16 21H8A2 2 0 0 1 6 19V5A2 2 0 0 1 8 3ZM10 7h4M10 11h.01M14 11h.01M10 15h.01M14 15h.01',
+    href: '/motorcycle-coe-calculator/',
+    linkLabel: 'Try the COE calculator',
   },
   {
     title: 'Bike guides',
@@ -34,7 +45,11 @@ const TOOLS = [
   <div class="shell">
     <p class="eyebrow text-ember-on-dark">Rider tools</p>
 
-    <div class="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <h2 class="mt-4 max-w-xl text-display-sm text-on-dark md:text-display">
+      Everything else you check before a ride.
+    </h2>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {
         TOOLS.map((tool) => (
           <article class="rounded-xl border border-white/10 bg-white/6 p-6 transition-colors hover:bg-white/10">
@@ -55,9 +70,24 @@ const TOOLS = [
 
             <h3 class="mt-4 text-lg font-semibold text-on-dark">{tool.title}</h3>
             <p class="mt-1.5 text-sm leading-relaxed text-white/50">{tool.body}</p>
+            {tool.href && (
+              <a
+                href={tool.href}
+                class="mt-3 inline-block text-sm font-semibold text-ember-on-dark hover:underline"
+              >
+                {tool.linkLabel} →
+              </a>
+            )}
           </article>
         ))
       }
     </div>
+
+    <a
+      href="/rider-tools/"
+      class="mt-10 inline-block text-md font-semibold text-ember-on-dark hover:underline"
+    >
+      See all rider tools →
+    </a>
   </div>
 </section>

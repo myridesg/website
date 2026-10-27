@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro'
 import SiteNav from '@/components/ui/SiteNav.astro'
 import SiteFooter from '@/components/ui/SiteFooter.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
 
 interface Props {
   title: string
@@ -15,9 +16,12 @@ interface Props {
   seoTitle?: string
   noindex?: boolean
   canonical?: string
+  breadcrumbs?: Array<{ name: string; href?: string }>
+  structuredData?: Record<string, unknown>[]
 }
 
-const { title, description, meta, seoTitle, noindex, canonical } = Astro.props
+const { title, description, meta, seoTitle, noindex, canonical, breadcrumbs, structuredData } =
+  Astro.props
 ---
 
 <BaseLayout
@@ -25,14 +29,17 @@ const { title, description, meta, seoTitle, noindex, canonical } = Astro.props
   description={description}
   noindex={noindex}
   canonical={canonical}
+  structuredData={structuredData}
 >
   <SiteNav />
 
   <main class="bg-paper pb-24 pt-32 md:pt-40">
     <div class="shell">
       <article class="prose-body mx-auto max-w-[46rem]">
+        {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
         <h1 class="text-display-sm md:text-display">{title}</h1>
         {meta && <p class="mt-3 text-sm text-muted">{meta}</p>}
+        <slot name="meta" />
 
         <div class="mt-10">
           <slot />

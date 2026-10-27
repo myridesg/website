@@ -35,7 +35,9 @@ const tone = TONES[node.type ?? 'info'] ?? TONES.info
 <aside class:list={['my-7 rounded-xs border-l-4 px-5 py-4', tone.surface, tone.accent]}>
   {/* A span, not a <p>: `.prose-body p` would add a paragraph's bottom margin
       and line-height to what is a one-word label. */}
-  <span class="eyebrow block text-muted">{tone.label}</span>
+  {/* ink/75 rather than muted: muted fails AA on the soft and rose surfaces
+      this sits on (4.31:1 / 4.10:1 light). ink/75 is 6.4+:1 in both themes. */}
+  <span class="eyebrow block text-ink/75">{tone.label}</span>
 
   <div class="mt-2 [&>p:last-child]:mb-0">
     <PortableText value={node.body ?? []} />

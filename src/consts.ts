@@ -7,8 +7,9 @@ export const SITE = {
   name: 'MyRideSG',
   /** Used for <title> suffixes and og:site_name. */
   tagline: 'Your bike, sorted.',
+  // Meta-description budget is 160 chars (BaseLayout); this is 154.
   description:
-    'Track servicing, running costs and renewal dates. Find trusted workshops when it is time to act. Built for Singapore riders.',
+    'MyRideSG is a motorcycle app for Singapore riders: a maintenance tracker, fuel and expense log, and COE, road tax and service reminders on iOS and Android.',
   locale: 'en_SG',
 } as const
 
@@ -93,6 +94,7 @@ export const IOS_TESTING_HREF =
 //   { label: 'Catalog', href: '/catalog' }  — needs the catalog index page
 //   { label: 'Demo',    href: '/demo' }     — lives on feat/demo
 export const NAV = [
+  { label: 'Maintenance app', href: '/motorcycle-maintenance-app/' },
   { label: 'Features', href: '/#features' },
   { label: 'FAQ', href: '/#faq' },
   { label: 'Guides', href: '/guides/' },

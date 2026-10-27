@@ -113,7 +113,11 @@ const ACTIONS = [
     border: 1px solid var(--app-border);
     border-radius: 1.1em;
     background: var(--app-muted);
-    color: var(--app-muted-fg);
+    /* --app-muted-fg alone measured 4.41:1 on this field in light (4.70 dark)
+       — under AA. Nudging it 15% toward --app-fg clears 4.5 in BOTH schemes
+       (5.7 / 5.45) while still reading as placeholder text, not entered text.
+       Derived from the app's own tokens, like the alpha utilities above. */
+    color: color-mix(in oklab, var(--app-muted-fg) 85%, var(--app-fg));
     font-size: 1.05em;
   }
 

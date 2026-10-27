@@ -13,9 +13,39 @@ import Privacy from '@/components/ui/Privacy.astro'
 import Faq from '@/components/ui/Faq.astro'
 import FinalCta from '@/components/ui/FinalCta.astro'
 import SiteFooter from '@/components/ui/SiteFooter.astro'
+import FeaturedGuides from '@/components/ui/FeaturedGuides.astro'
+import { getImage } from 'astro:assets'
+import heroDesktop from '@/assets/hero-carpark-desktop.jpg'
+import { FAQ_ITEMS } from '@/lib/faq-items'
+import { entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
+import { SITE } from '@/consts'
+
+const title = 'Motorcycle App Singapore | Service, Fuel & COE'
+const pagePath = '/'
+
+// The hero is the page's main image; the same 1200x630 crop BaseLayout builds
+// for the default og:image, so both point at one asset.
+const ogImage = await getImage({ src: heroDesktop, width: 1200, height: 630, fit: 'cover', format: 'jpeg' })
+
+const structuredData = [
+  webPageEntity(Astro.site!, {
+    path: pagePath,
+    name: title,
+    description: SITE.description,
+    about: { '@id': entityId(Astro.site!, APP_PATH) },
+    image: {
+      '@type': 'ImageObject',
+      url: new URL(ogImage.src, Astro.site).href,
+      width: 1200,
+      height: 630,
+    },
+  }),
+  // The same array Faq.astro renders below, so schema and visible text agree.
+  faqPageEntity(Astro.site!, pagePath, FAQ_ITEMS),
+]
 ---
 
-<BaseLayout>
+<BaseLayout title={title} structuredData={structuredData}>
   <SiteNav />
 
   <main>
@@ -26,6 +56,7 @@ import SiteFooter from '@/components/ui/SiteFooter.astro'
     <HowItWorks />
     <Workshops />
     <RiderTools />
+    <FeaturedGuides />
     <Pricing />
     <Privacy />
     <Faq />

@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
+import legacyGuideRedirects from './src/integrations/legacy-redirects.mjs'
 
 // https://astro.build/config
 export default defineConfig({
@@ -25,6 +26,13 @@ export default defineConfig({
   // inbound links from elsewhere, which we do not control.
   trailingSlash: 'always',
 
+  // Inline every stylesheet into the documents that use it rather than emitting
+  // a render-blocking <link rel=stylesheet> per page. Safe under the CSP above:
+  // Astro hashes the inlined <style> elements into the per-page <meta> policy.
+  build: {
+    inlineStylesheets: 'always',
+  },
+
   // Content Security Policy. Astro hashes every inline script and style it
   // emits and writes them into a <meta http-equiv> on each page. That is the
   // only mechanism that works here: the site has no external script files at
@@ -36,7 +44,11 @@ export default defineConfig({
   // The site loads nothing off-origin: images come from astro:assets, fonts are
   // @fontsource (bundled), and Sanity is read at build time only. Hence 'self'
   // everywhere and 'none' for the things nothing uses — there are no forms, no
-  // fetch calls, no workers and no manifest.
+  // workers and no manifest. connect-src is 'self' rather than 'none': the
+  // site still makes no fetch calls, so same-origin is all it would ever need,
+  // and 'none' blocked audit tools that fetch /robots.txt from the page
+  // context — Lighthouse reported "robots.txt is not valid" (SEO) because the
+  // request itself was refused, not because the file was wrong.
   //
   // Two directives a <meta> CSP cannot carry — frame-ancestors, which every
   // browser ignores there, and HSTS, which is not CSP at all — live in
@@ -47,7 +59,7 @@ export default defineConfig({
         "default-src 'self'",
         "img-src 'self'",
         "font-src 'self'",
-        "connect-src 'none'",
+        "connect-src 'self'",
         "object-src 'none'",
         "base-uri 'self'",
         "form-action 'none'",
@@ -79,7 +91,20 @@ export default defineConfig({
   // then re-add react() here and the jsx options to tsconfig.json. Note that
   // the feat/demo branch DOES have an island (DemoGarage.tsx), so it needs all
   // of the above restored before it can build against this config.
-  integrations: [sitemap()],
+  // Sitemap: /404/ is a prerendered route but must never be listed, and every
+  // entry carries lastmod so search engines can prefer fresh crawls. Build
+  // date is acceptable lastmod — every page here is rebuilt together. URLs
+  // keep their trailing slashes (trailingSlash: 'always' above).
+  integrations: [
+    sitemap({
+      lastmod: new Date(),
+      filter: (page) => {
+        const path = new URL(page).pathname
+        return path !== '/404' && path !== '/404/'
+      },
+    }),
+    legacyGuideRedirects(),
+  ],
 
   // Nothing on this site is authored in Markdown today — guides arrive as
   // Portable Text and every page is .astro — so this highlighter never runs.

@@ -1,5 +1,6 @@
 ---
 import ProseLayout from '@/layouts/ProseLayout.astro'
+import { breadcrumbEntity, entityId, webPageEntity, APP_PATH } from '@/lib/seo'
 
 // Ported verbatim from myridesg-v2/apps/web/app/terms/page.tsx.
 //
@@ -8,12 +9,29 @@ import ProseLayout from '@/layouts/ProseLayout.astro'
 // features ("Live petrol price information", "Community ride events and
 // forums") that need checking against what actually ships on native. Wording
 // deliberately unchanged — amending legal copy is not a developer's call.
+
+// dateModified is the "Last updated" date the page itself displays.
+const structuredData = [
+  webPageEntity(Astro.site!, {
+    path: '/terms/',
+    name: 'Terms of Service',
+    description:
+      'The terms governing your use of the MyRideSG app and this site — what you may rely on, what you are responsible for, and the limits of the service.',
+    about: { '@id': entityId(Astro.site!, APP_PATH) },
+    dateModified: '2026-09-01',
+  }),
+  breadcrumbEntity(Astro.site!, '/terms/', [
+    { name: 'Home', href: '/' },
+    { name: 'Terms of Service' },
+  ]),
+]
 ---
 
 <ProseLayout
   title="Terms of Service"
   description="The terms governing your use of the MyRideSG app and this site — what you may rely on, what you are responsible for, and the limits of the service."
   meta="Last updated: 1 September 2026"
+  structuredData={structuredData}
 >
   <h2>1. Acceptance of Terms</h2>
   <p>

@@ -1,46 +1,15 @@
 ---
-// Native <details> — the accordion costs zero JavaScript. Styling and the
-// open/close animation live in the `faq-item` utility in global.css.
-//
 // All items start closed so the section opens as a clean, scannable list.
-const ITEMS = [
-  {
-    q: 'Is MyRideSG free to use?',
-    a: 'Yes. Core tracking is free, including servicing history, renewal reminders, fuel logs and running costs. No payment details are required to create an account. Additional advanced features may be offered on a paid plan in future.',
-  },
-  {
-    q: 'Which devices are supported?',
-    a: 'MyRideSG is available for iOS and Android. You can download it from the App Store or Google Play, and setting up your first bike takes about two minutes.',
-  },
-  {
-    q: 'Can I import existing records from a spreadsheet?',
-    a: 'Not yet. CSV import is planned for a future release. In the meantime, records can be added manually, which takes roughly two minutes per entry.',
-  },
-  {
-    q: 'What happens to my records if I sell my bike?',
-    a: 'Your records remain yours. You can export your full history at any time and pass the service record on to the new owner.',
-  },
-  {
-    q: 'Can workshops see my data?',
-    a: 'No. Your ownership records are private by default. Workshops only receive information that you choose to share with them.',
-  },
-  {
-    q: 'How are renewal reminders calculated?',
-    a: 'Reminders are based on the expiry dates you enter for road tax, insurance and COE, and on your servicing interval. You are notified ahead of each date rather than on the day it falls due.',
-  },
-]
+//
+// The items live in src/lib/faq-items.ts, shared with the home page's
+// FAQPage structured data (index.astro passes it into BaseLayout's single
+// @graph), so the visible accordion and the schema cannot drift.
+// Feature claims are kept in step with what the app actually does — see the
+// note at the top of that file.
+import { FAQ_ITEMS } from '@/lib/faq-items'
 
-// FAQPage structured data. Worth emitting properly: it earns rich results in
-// search and is one of the cleanest formats for AI crawlers to extract.
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: ITEMS.map((item) => ({
-    '@type': 'Question',
-    name: item.q,
-    acceptedAnswer: { '@type': 'Answer', text: item.a },
-  })),
-}
+// The questions and answers, straight from the shared array.
+const ITEMS = FAQ_ITEMS
 ---
 
 <section id="faq" class="bg-paper py-20 md:py-28">
@@ -63,8 +32,6 @@ const faqSchema = {
     </div>
   </div>
 </section>
-
-<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
 
 <script>
   // Drives the FAQ open/close motion in every browser. See the note in
