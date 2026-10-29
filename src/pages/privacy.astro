@@ -19,7 +19,7 @@ const structuredData = [
     description:
       'How MyRideSG collects, uses and protects your data — what the app records about you and your motorcycle, who it is shared with, and your choices over it.',
     about: { '@id': entityId(Astro.site!, APP_PATH) },
-    dateModified: '2026-10-22',
+    dateModified: '2026-10-30',
   }),
   breadcrumbEntity(Astro.site!, '/privacy/', [
     { name: 'Home', href: '/' },
@@ -31,7 +31,7 @@ const structuredData = [
 <ProseLayout
   title="Privacy Policy"
   description="How MyRideSG collects, uses and protects your data — what the app records about you and your motorcycle, who it is shared with, and your choices over it."
-  meta="Last updated: 22 October 2026"
+  meta="Last updated: 30 October 2026"
   structuredData={structuredData}
 >
   <h2>At a glance</h2>
@@ -94,7 +94,8 @@ const structuredData = [
   </p>
   <p>
     <strong>Usage and Device Data:</strong> Information about how the Service is used —
-    screens opened, features used, device type and OS version. See Section 5.
+    screens opened, features used, a few facts such as how many bikes you have, device
+    type and OS version. See Section 5.
   </p>
   <p>
     <strong>Crash Reports:</strong> If the app crashes or something breaks, a technical
@@ -143,8 +144,9 @@ const structuredData = [
   <h2>5. Usage Analytics</h2>
   <p>
     We record how riders move through the app — which screens are opened, which features
-    are used, and where a form is abandoned — so we can find what is confusing or broken
-    and fix it. We rely on the Business Improvement exception under Singapore's Personal
+    are used (for example logging mileage, opening a reminder, or contacting a workshop),
+    how you answer the notification permission prompt, when a save fails, and where a form
+    is abandoned — so we can find what is confusing or broken and fix it. We rely on the Business Improvement exception under Singapore's Personal
     Data Protection Act for this.
   </p>
   <p>
@@ -158,8 +160,11 @@ const structuredData = [
   <p>
     We also send these events to PostHog, a product-analytics service hosted in the EU,
     which acts as a processor on our behalf (see Section 10). PostHog receives event names
-    and your random account identifier, plus your device model, operating system version,
-    app language and time zone. It never receives your name, email, plate or precise
+    and your random account identifier, plus a few facts about how you use the app: how
+    many bikes you have, the licence class your bikes need (worked out from the bike model,
+    not from your licence), whether you have set a reminder, and the month you joined. It
+    also receives which version of the app sent each event, and your device model,
+    operating system version, app language and time zone. It never receives your name, email, plate or precise
     location, and it does not record your screen. PostHog keeps the events under its own
     retention period, which we do not control. When you delete your account, we also ask
     PostHog to delete your events and the profile tied to your random identifier. PostHog
