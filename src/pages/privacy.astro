@@ -19,7 +19,7 @@ const structuredData = [
     description:
       'How MyRideSG collects, uses and protects your data — what the app records about you and your motorcycle, who it is shared with, and your choices over it.',
     about: { '@id': entityId(Astro.site!, APP_PATH) },
-    dateModified: '2026-10-30',
+    dateModified: '2026-11-02',
   }),
   breadcrumbEntity(Astro.site!, '/privacy/', [
     { name: 'Home', href: '/' },
@@ -31,7 +31,7 @@ const structuredData = [
 <ProseLayout
   title="Privacy Policy"
   description="How MyRideSG collects, uses and protects your data — what the app records about you and your motorcycle, who it is shared with, and your choices over it."
-  meta="Last updated: 30 October 2026"
+  meta="Last updated: 2 November 2026"
   structuredData={structuredData}
 >
   <h2>At a glance</h2>
@@ -278,7 +278,7 @@ const structuredData = [
     <li>Withdraw consent at any time by deleting your account</li>
     <li>Lodge a complaint with the Personal Data Protection Commission (PDPC) of Singapore</li>
   </ul>
-  <p>To exercise any of these rights, contact us at hello@myridesg.com.</p>
+  <p>To exercise any of these rights, contact our Data Protection Officer at hello@myridesg.com.</p>
 
   <h2>14. Cookies and Local Storage</h2>
   <p>
@@ -316,5 +316,9 @@ const structuredData = [
     Email: <a href="mailto:hello@myridesg.com">hello@myridesg.com</a><br />
     Website: <a href="https://myridesg.com">https://myridesg.com</a><br />
     Singapore
+  </p>
+  <p>
+    <strong>Data Protection Officer:</strong> Muhammad Hidayah<br />
+    Email: <a href="mailto:hello@myridesg.com">hello@myridesg.com</a>
   </p>
 </ProseLayout>
