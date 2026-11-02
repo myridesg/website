@@ -1,7 +1,8 @@
 # MyRideSG — marketing site
 
 Standalone marketing and content site for MyRideSG, split out of the
-`myridesg-v2` monorepo. Astro, fully static, no backend.
+`myridesg-v2` monorepo. Astro, fully static, no backend, apart from the one
+exception in rule 1.
 
 The product is a **native iOS/Android app**. This site markets it and hosts the
 SEO content. There is no web app here, no auth, and no user accounts.
@@ -28,6 +29,7 @@ pnpm dev        # dev server
 pnpm build      # static build → dist/
 pnpm preview    # serve dist/
 pnpm check      # astro check — must be 0 errors before you finish
+pnpm test       # tests for worker/
 ```
 
 ## Layout
@@ -50,6 +52,14 @@ src/
 **1. Every route prerenders.** `output: 'static'`. There is no server at
 runtime, so no route may fetch on request. Data is fetched at build time in
 frontmatter or a prebuild script.
+
+The one exception is `/r/<code>`, the page a bike passport's QR code opens. A
+rider can revoke a passport at any time, so it can't be prerendered. It isn't an
+Astro route: `worker/report.ts` answers it, and `assets.run_worker_first` in
+`wrangler.jsonc` limits that code to `/r/*`. It loads no scripts and reads one
+public database function. Printed codes last for years, so this address must
+keep working through any rebuild of the site. Raise any new live route rather
+than adding it here.
 
 **2. `.astro` only — React is not installed.** Nothing on the site has ever
 needed an island: accordions and menus use `<details>`, the theme toggle is a
@@ -117,3 +127,5 @@ Related: never attach invented ratings or reviews to a **named real business**.
   and still describe a *web application*. They need legal review for the native
   pivot. Do not edit legal copy — flag it.
 - No og:image yet.
+- The Docker/nginx tester preview doesn't run the Worker, so `/r/*` is a 404
+  there. Use `pnpm wrangler dev` after `pnpm build` to try it locally.
