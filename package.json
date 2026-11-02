@@ -13,6 +13,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test 'worker/*.test.ts'",
     "tunnel": "cloudflared tunnel --url http://localhost:4321",
     "tunnel:docker": "cloudflared tunnel --url http://localhost:8080"
   },
