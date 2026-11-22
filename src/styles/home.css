@@ -59,6 +59,12 @@
   --site-header-gutter: clamp(1.25rem, 5vw, 6rem);
 }
 
+/* And the footer, so its columns end where the finale's content does. */
+.site-footer {
+  --site-footer-max: 112rem;
+  --site-footer-gutter: clamp(1.25rem, 5vw, 6rem);
+}
+
 /* Before the first measurement lands, a running page treats everything it
    measures as not yet reached. The script's inline --p overrides this from
    then on. */
@@ -3570,7 +3576,7 @@
 
 /* The footer is the same black: without its top hairline the finale's
    floor runs straight on into it, one dark ground to the end of the page. */
-main:has(.ask) + footer {
+main:has(.ask) + .site-footer {
   border-top-color: transparent;
 }
 

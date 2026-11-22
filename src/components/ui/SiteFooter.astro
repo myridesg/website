@@ -1,103 +1,313 @@
 ---
-// Every link here resolves to a real destination. The original draft used
-// href="#" placeholders throughout, including for the privacy policy and terms,
-// which cannot ship on a public site.
+import { Image } from 'astro:assets'
+import { NAV } from '@/consts'
+import appIcon from '@/assets/home/app-icon.png'
+
+/** A nav group's links, so the footer's labels never drift from the header's. */
+const navGroup = (label: string) =>
+  NAV.flatMap((item) => ('children' in item && item.label === label ? item.children : []))
+
+// Every link resolves to a page that is built or an id on the home page. Each
+// destination appears once; labels name what is there now, so nothing here
+// promises a section the site does not have.
 const COLUMNS = [
+  { heading: 'Features', links: navGroup('Features') },
   {
-    heading: 'Product',
+    heading: 'Tools & guides',
+    links: [...navGroup('Tools'), { label: 'Riding guides', href: '/guides/' }],
+  },
+  {
+    heading: 'The app',
     links: [
-      { label: 'Features', href: '/#never-miss' },
-      // There is no pricing section; "Is MyRideSG free to use?" is answered
-      // in the questions.
-      { label: 'Pricing', href: '/#detail' },
-      // Was 'Open the app' pointing at the web app, which is switched off.
+      { label: 'How it works', href: '/#how-it-works' },
+      // The FAQ, "Questions riders ask.", answers whether the app is free.
+      { label: 'Questions', href: '/#detail' },
+      // BaseLayout's platform script points this at the reader's own store on
+      // a phone, as it does the header's button.
       { label: 'Get the app', href: '/#download', storeLink: true },
     ],
   },
   {
-    // The six feature pages. They are the site's search-entry points, so they
-    // get a column of their own instead of competing with the in-page anchors.
-    heading: 'Features',
+    heading: 'Help',
     links: [
-      { label: 'Maintenance app', href: '/motorcycle-maintenance-app/' },
-      { label: 'Expense tracker', href: '/motorcycle-expense-tracker/' },
-      { label: 'Renewal reminders', href: '/motorcycle-renewal-reminders/' },
-      { label: 'Workshop directory', href: '/motorcycle-workshop-directory/' },
-      { label: 'COE calculator', href: '/motorcycle-coe-calculator/' },
-      { label: 'Rider tools', href: '/rider-tools/' },
-    ],
-  },
-  {
-    heading: 'Riding guides',
-    links: [
-      { label: 'All guides', href: '/guides/' },
-      { label: 'Workshops', href: '/motorcycle-workshop-directory/' },
-      { label: 'How it works', href: '/#how-it-works' },
-    ],
-  },
-  {
-    heading: 'Legal',
-    links: [
-      { label: 'Privacy policy', href: '/privacy/' },
-      { label: 'Terms of use', href: '/terms/' },
       { label: 'Support', href: '/support/' },
+      { label: 'Contact us', href: 'mailto:hello@myridesg.com' },
       { label: 'Delete account', href: '/delete-account/' },
-      { label: 'Contact', href: 'mailto:hello@myridesg.com' },
     ],
   },
 ]
 
+const LEGAL = [
+  { label: 'Privacy policy', href: '/privacy/' },
+  { label: 'Terms of use', href: '/terms/' },
+]
+
+// Its own subject line, so a listing request is not just another contact email.
+const GET_LISTED_HREF = `mailto:hello@myridesg.com?subject=${encodeURIComponent('Workshop listing')}`
+
 const year = new Date().getFullYear()
 ---
 
-<footer class="border-t border-white/8 bg-black pb-12 pt-16 md:pt-20">
-  <div class="shell">
-    <div class="grid gap-10 md:grid-cols-2 md:gap-8 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
-      <div>
-        <p class="font-display text-2xl font-700 text-on-dark">
-          MyRide<span class="text-ember-on-dark">SG</span>
-        </p>
-        <p class="mt-3 max-w-52 text-sm leading-relaxed text-white/55">
-          Made in Singapore, for Singapore riders.
-        </p>
-        <p class="mt-4 max-w-52 text-sm leading-relaxed text-white/55">
-          Own a workshop?{' '}
-          <a
-            href="mailto:hello@myridesg.com"
-            class="font-semibold text-ember-on-dark hover:underline"
-          >
-            Get listed
-          </a>
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__main">
+      <div class="site-footer__brand-block">
+        <a href="/" class="site-footer__brand">
+          <Image src={appIcon} alt="" width={96} height={96} class="site-footer__icon" />
+          <span>MyRide<span class="site-footer__sg">SG</span></span>
+        </a>
+        <p class="site-footer__line">Made in Singapore, for Singapore riders.</p>
+        <p class="site-footer__line">
+          Own a workshop? <a href={GET_LISTED_HREF} class="site-footer__listed">Get listed</a>
         </p>
       </div>
 
-      {
-        COLUMNS.map((col) => (
-          <nav aria-label={col.heading}>
-            <p class="eyebrow text-white/55">{col.heading}</p>
-            <ul class="mt-4 flex flex-col gap-2.5">
-              {col.links.map((link) => (
-                <li>
-                  <a
-                    href={link.href}
-                    data-store-link={'storeLink' in link ? '' : undefined}
-                    class="text-sm text-white/55 transition-colors hover:text-on-dark"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ))
-      }
+      <div class="site-footer__cols">
+        {
+          COLUMNS.map((col) => (
+            <nav aria-label={col.heading}>
+              <p class="site-footer__heading">{col.heading}</p>
+              <ul>
+                {col.links.map((link) => (
+                  <li>
+                    <a
+                      href={link.href}
+                      data-store-link={'storeLink' in link ? '' : undefined}
+                      class="site-footer__link"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))
+        }
+      </div>
     </div>
 
-    <div
-      class="mt-14 flex flex-col gap-2 border-t border-white/8 pt-6 text-sm text-white/50 sm:flex-row sm:justify-between"
-    >
+    <div class="site-footer__base">
       <p>© {year} MyRideSG. All rights reserved.</p>
-      <p>Singapore</p>
+      <nav aria-label="Legal">
+        <ul>
+          {
+            LEGAL.map((link) => (
+              <li>
+                <a href={link.href}>{link.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </div>
   </div>
 </footer>
+
+<style>
+  /* ── The footer ──────────────────────────────────────────────────────────
+     The site's black ground in both themes: under the home page's finale it
+     carries on that band's dark floor (home.css drops the top hairline
+     there), and under every other page it closes the page the same way.
+
+     It speaks the header's language: the app icon and wordmark, spaced-caps
+     labels, and condensed uppercase links with the header's underline on
+     hover. Pages line its content up with their own by setting
+     --site-footer-max and --site-footer-gutter (home.css does); the
+     fallbacks are the .shell utility's, which every other page uses. */
+  .site-footer {
+    --foot-ink: var(--color-on-dark);
+    --foot-link: rgb(255 255 255 / 0.74);
+    --foot-quiet: rgb(255 255 255 / 0.56);
+    --foot-rule: rgb(255 255 255 / 0.1);
+    --gutter: var(--site-footer-gutter, 1.25rem);
+
+    color-scheme: dark;
+    border-top: 1px solid var(--foot-rule);
+    background: var(--color-black);
+    color: var(--foot-quiet);
+  }
+
+  @media (width >= 48rem) {
+    .site-footer {
+      --gutter: var(--site-footer-gutter, 2rem);
+    }
+  }
+
+  .site-footer__inner {
+    max-inline-size: var(--site-footer-max, 80rem);
+    margin-inline: auto;
+    padding: clamp(3.5rem, 2.5rem + 3vw, 5.5rem) var(--gutter) 2rem;
+  }
+
+  .site-footer ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Brand block over the columns until there is room beside them. */
+  .site-footer__main {
+    display: grid;
+    gap: 2.75rem;
+  }
+
+  @media (width >= 64rem) {
+    .site-footer__main {
+      grid-template-columns: minmax(15rem, 1fr) 2.6fr;
+      gap: 3rem;
+    }
+  }
+
+  /* ── Brand ── */
+  .site-footer__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--font-display);
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.005em;
+    color: var(--foot-ink);
+  }
+
+  /* The app icon as it sits on a phone, with the header's hairline so the
+     black icon keeps its edge on black. */
+  .site-footer__icon {
+    flex: none;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border-radius: 22%;
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.2);
+  }
+
+  .site-footer__sg {
+    color: var(--color-ember-on-dark);
+  }
+
+  .site-footer__line {
+    max-inline-size: 17rem;
+    margin: 1rem 0 0;
+    font-size: var(--text-base);
+    line-height: 1.5;
+  }
+
+  .site-footer__line + .site-footer__line {
+    margin-top: 0.5rem;
+  }
+
+  .site-footer__listed {
+    font-weight: 700;
+    color: var(--color-ember-on-dark);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .site-footer__listed:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  /* ── Link columns: two by two on a phone, four across from 768px ── */
+  .site-footer__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 1.5rem;
+  }
+
+  @media (width >= 48rem) {
+    .site-footer__cols {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2rem;
+    }
+  }
+
+  .site-footer__heading {
+    margin: 0 0 0.5rem;
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--foot-quiet);
+  }
+
+  /* The header's dropdown labels, condensed and uppercase. A 44px-tall row
+     on a phone for the thumb; tighter on a pointer screen. */
+  .site-footer__link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    font-family: var(--font-display);
+    font-size: 1.1875rem;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--foot-link);
+    transition: color 160ms ease;
+  }
+
+  @media (width >= 64rem) {
+    .site-footer__link {
+      min-block-size: 2.25rem;
+    }
+  }
+
+  .site-footer__link::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0.4rem;
+    block-size: 2px;
+    background: currentColor;
+    scale: 0 1;
+    transform-origin: left center;
+    transition: scale 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .site-footer__link:hover {
+    color: var(--foot-ink);
+  }
+
+  .site-footer__link:hover::after {
+    scale: 1 1;
+  }
+
+  /* ── Base line: copyright, then the legal pages ── */
+  .site-footer__base {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-top: clamp(3rem, 2rem + 3vw, 4.5rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--foot-rule);
+    font-size: var(--text-sm);
+  }
+
+  .site-footer__base p {
+    margin: 0;
+  }
+
+  .site-footer__base ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+  }
+
+  .site-footer__base a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    color: var(--foot-quiet);
+    transition: color 160ms ease;
+  }
+
+  .site-footer__base a:hover {
+    color: var(--foot-ink);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>
