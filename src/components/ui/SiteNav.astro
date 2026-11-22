@@ -1,13 +1,15 @@
 ---
+import { Image } from 'astro:assets'
 import { NAV } from '@/consts'
 import type { NavItem } from '@/consts'
+import ThemeToggle from './ThemeToggle.astro'
+import appIcon from '@/assets/home/app-icon.png'
 
 // "Get the app" used to open the web app, which is switched off. It now aims
 // at the download block on the home page, and BaseLayout's platform script
 // rewrites it straight to the reader's own store on a phone — so a tap on a
 // phone installs, while a desktop click lands somewhere that shows both.
-const GET_THE_APP = '/#get'
-import ThemeToggle from './ThemeToggle.astro'
+const GET_THE_APP = '/#download'
 
 /**
  * The route being rendered, normalised the same way the anchor script below
@@ -45,26 +47,26 @@ const MOBILE_SECTIONS = NAV.map((item) =>
         links: [{ label: item.label, href: item.href, row: row++ }],
       },
 )
-const CTA_ROW = row
 ---
 
-<header class="fixed inset-x-0 top-4 z-50 px-4 md:top-6">
-  <nav
-    class="mx-auto flex max-w-4xl items-center justify-between gap-6 rounded-pill bg-paper/95 px-5 py-3 shadow-[0_4px_32px_rgba(8,8,8,0.18)] backdrop-blur-sm md:px-6"
-    aria-label="Primary"
-  >
-    <a
-      href="/"
-      data-home-link
-      class="font-display text-xl font-700 tracking-tight whitespace-nowrap"
-    >
-      MyRide<span class="text-red">SG</span>
+<header class="site-header" data-site-header>
+  <nav class="site-header__bar" aria-label="Primary">
+    <a href="/" data-home-link class="site-header__brand">
+      <Image
+        src={appIcon}
+        alt=""
+        width={96}
+        height={96}
+        loading="eager"
+        class="site-header__icon"
+      />
+      MyRide<span class="site-header__sg">SG</span>
     </a>
 
-    <ul class="hidden items-center gap-5 md:flex lg:gap-7">
+    <ul class="site-header__links">
       {
         NAV.map((item) => (
-          <li class="flex items-center">
+          <li>
             {'children' in item ? (
               <details class:list={['nav-drop', { 'nav-drop--current': groupIsCurrent(item) }]}>
                 <summary class="nav-top">
@@ -74,7 +76,7 @@ const CTA_ROW = row
                     viewBox="0 0 16 16"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="1.8"
+                    stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     aria-hidden="true"
@@ -114,18 +116,12 @@ const CTA_ROW = row
       }
     </ul>
 
-    <div class="flex items-center gap-1">
+    <div class="site-header__actions">
       <ThemeToggle />
 
-      <a
-        href={GET_THE_APP}
-        data-store-link
-        class="hidden min-h-10 items-center rounded-pill bg-ink px-5 text-sm font-semibold text-paper transition-opacity hover:opacity-85 sm:inline-flex"
-      >
-        Get the app
-      </a>
+      <a href={GET_THE_APP} data-store-link class="site-header__cta">Get the app</a>
 
-      <details class="site-menu md:hidden">
+      <details class="site-menu">
         <summary aria-label="Menu">
           <span class="site-menu__bars" aria-hidden="true">
             <i></i><i></i><i></i>
@@ -135,11 +131,9 @@ const CTA_ROW = row
         <div class="site-menu__panel">
           {
             MOBILE_SECTIONS.map((section) => (
-              <>
-                {section.eyebrow && (
-                  <p class="site-menu__eyebrow eyebrow">{section.eyebrow}</p>
-                )}
-                <ul class:list={{ 'site-menu__plain': !section.eyebrow }}>
+              <div class:list={['site-menu__group', { 'site-menu__group--plain': !section.eyebrow }]}>
+                {section.eyebrow && <p class="site-menu__eyebrow">{section.eyebrow}</p>}
+                <ul>
                   {section.links.map((link) => (
                     <li>
                       <a
@@ -152,18 +146,9 @@ const CTA_ROW = row
                     </li>
                   ))}
                 </ul>
-              </>
+              </div>
             ))
           }
-
-          <a
-            href={GET_THE_APP}
-            data-store-link
-            class="site-menu__cta"
-            style={`--i: ${CTA_ROW}`}
-          >
-            Get the app
-          </a>
         </div>
       </details>
     </div>
@@ -171,27 +156,210 @@ const CTA_ROW = row
 </header>
 
 <style>
-  /* ── Desktop top-level items ─────────────────────────────────────────────
-     Links and dropdown summaries share one treatment so the four entries read
-     as one row. 44px min height matches the toggle and the menu button: the
-     pill is already that tall, so this buys touch targets without growing it. */
+  /* ── The bar ─────────────────────────────────────────────────────────────
+     Two states, one element.
+
+       At rest      flat on the page: no ground of its own, no shadow, its
+                    content on the page's own side gutters.
+       Scrolled     pinned to the top edge, full width, slim, on the page
+                    colour with a hairline under it.
+
+     It is position:absolute by default, so with JavaScript off it is simply
+     the top of the page and scrolls away with it — never a transparent strip
+     left over moving content. BaseLayout's head script sets data-js before
+     first paint; only then is it fixed, and the script at the foot of this
+     file sets data-scrolled once the page has moved. Either way it is out of
+     flow, so changing state never moves the page: each page clears
+     --site-bar (global.css) at its top, and anchor jumps clear the slim bar
+     through scroll-padding-top.
+
+     Pages line the wordmark up with their own content by setting
+     --site-header-max and --site-header-gutter (home.css does); the
+     fallbacks are the .shell utility's. */
+  .site-header {
+    --bar-h: var(--site-bar);
+    --bar-ink: var(--color-ink);
+    --bar-label: --alpha(var(--color-ink) / 80%);
+    --bar-sg: var(--color-red);
+    --bar-cta-bg: var(--color-ink);
+    --bar-cta-ink: var(--color-paper);
+    /* The app icon is black: a hairline lets it read on a near-black bar. */
+    --bar-icon-ring: light-dark(transparent, rgb(255 255 255 / 0.2));
+    --gutter: var(--site-header-gutter, 1.25rem);
+
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    z-index: 50;
+    color: var(--bar-ink);
+  }
+
+  @media (width >= 48rem) {
+    .site-header {
+      --gutter: var(--site-header-gutter, 2rem);
+    }
+  }
+
+  :global(:root[data-js]) .site-header {
+    position: fixed;
+  }
+
+  .site-header[data-scrolled],
+  .site-header:has(.site-menu[open]) {
+    --bar-h: var(--site-bar-slim);
+    /* A shadow, not a border: the hairline adds nothing to the bar's height. */
+    box-shadow: 0 1px 0 --alpha(var(--color-ink) / 10%);
+    background: var(--color-paper);
+  }
+
+  .site-header__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    block-size: var(--bar-h);
+    max-inline-size: var(--site-header-max, 80rem);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .site-header {
+      transition:
+        background-color 220ms ease,
+        box-shadow 220ms ease;
+    }
+
+    .site-header__bar {
+      transition: block-size 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .site-header__brand {
+      transition: scale 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  }
+
+  /* ── Wordmark ── */
+  .site-header__brand {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    margin-inline-end: auto;
+    font-family: var(--font-display);
+    font-size: 1.625rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    color: var(--bar-ink);
+    transform-origin: left center;
+  }
+
+  @media (width >= 48rem) {
+    .site-header[data-scrolled] .site-header__brand {
+      scale: 0.8;
+    }
+  }
+
+  /* The full-size wordmark waits for the room: between 768px and 1024px the
+     four nav labels sit close, and the icon takes the space it would use. */
+  @media (width >= 64rem) {
+    .site-header__brand {
+      font-size: 1.875rem;
+    }
+  }
+
+  .site-header__sg {
+    color: var(--bar-sg);
+  }
+
+  /* The app icon, as it sits on a phone's home screen: a rounded square at
+     an app icon's corner (22% of its size). It stands before the wordmark
+     inside the same link, so the pair scales together when the bar slims. */
+  .site-header__icon {
+    flex: none;
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    margin-inline-end: 0.5rem;
+    border-radius: 22%;
+    box-shadow: 0 0 0 1px var(--bar-icon-ring);
+  }
+
+  /* Below 360px the bar holds the wordmark, the theme toggle, "Get the app"
+     and the menu button with nothing to spare; the icon goes rather than
+     squeeze the controls. */
+  @media (width < 22.5rem) {
+    .site-header__icon {
+      display: none;
+    }
+  }
+
+  @media (width >= 64rem) {
+    .site-header__icon {
+      inline-size: 2rem;
+      block-size: 2rem;
+      margin-inline-end: 0.625rem;
+    }
+  }
+
+  /* ── Top-level items (768px and up) ──────────────────────────────────────
+     Quiet spaced caps, the same voice as the page's small labels. Links and
+     dropdown summaries share one treatment so the four read as one row. A
+     rule under the item marks the page being read, and — through
+     .nav-drop--current — the group that holds it. */
+  .site-header__links {
+    display: none;
+    align-items: center;
+    gap: clamp(0.75rem, 2.2vw, 2rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (width >= 48rem) {
+    .site-header__links {
+      display: flex;
+    }
+  }
+
   .nav-top {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
     min-block-size: 2.75rem;
-    padding-inline: 0.25rem;
-    border-radius: 0.5rem;
-    font-size: var(--text-sm);
-    font-weight: 500;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     white-space: nowrap;
-    color: --alpha(var(--color-ink) / 70%);
-    transition: color 160ms ease;
+    color: var(--bar-label);
     cursor: pointer;
+    transition: color 160ms ease;
   }
 
-  .nav-top:hover {
-    color: var(--color-ink);
+  .nav-top::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0 0.12em;
+    bottom: 0.55rem;
+    block-size: 2px;
+    background: currentColor;
+    scale: 0 1;
+    transform-origin: left center;
+    transition: scale 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav-top:hover,
+  .nav-top[aria-current='page'],
+  .nav-drop--current > .nav-top,
+  .nav-drop[open] > .nav-top {
+    color: var(--bar-ink);
+  }
+
+  .nav-top:hover::after,
+  .nav-top[aria-current='page']::after,
+  .nav-drop--current > .nav-top::after {
+    scale: 1 1;
   }
 
   summary.nav-top {
@@ -202,48 +370,43 @@ const CTA_ROW = row
     display: none;
   }
 
-  /* The page being read, and — through .nav-drop--current — the group that
-     contains it (Tools lights up on the COE calculator, for instance). */
-  .nav-top[aria-current='page'],
-  .nav-drop--current > summary.nav-top {
-    color: var(--color-ink);
-    font-weight: 600;
-  }
-
   /* ── Desktop dropdown ────────────────────────────────────────────────────
      A bare <details>/<summary> pair: the open state is native semantics, so
-     there is no aria-expanded to fake and no JS needed to open it. The small
-     script below only adds dismissal. */
+     there is no aria-expanded to fake and no JS needed to open it. The script
+     below only adds dismissal. */
   .nav-drop {
     position: relative;
   }
 
   .nav-drop__chevron {
-    inline-size: 0.875rem;
-    block-size: 0.875rem;
+    inline-size: 0.8rem;
+    block-size: 0.8rem;
     flex-shrink: 0;
-    transition: transform 200ms ease;
+    transition: rotate 200ms ease;
   }
 
   .nav-drop[open] .nav-drop__chevron {
-    transform: rotate(180deg);
+    rotate: 180deg;
   }
 
   .nav-drop__panel {
     position: absolute;
-    top: calc(100% + 0.6rem);
-    inset-inline-start: 0;
+    top: calc(100% + 0.5rem);
+    inset-inline-start: -0.75rem;
     z-index: 20;
-    inline-size: 19rem;
-    padding: 0.5rem;
-    border: 1px solid --alpha(var(--color-ink) / 8%);
-    border-radius: 1.25rem;
+    inline-size: 20rem;
+    padding: 0.375rem;
+    border-radius: 0.75rem;
     background: var(--color-paper);
-    box-shadow: 0 18px 48px rgba(8, 8, 8, 0.22);
+    color: var(--color-ink);
+    box-shadow:
+      0 0 0 1px --alpha(var(--color-ink) / 9%),
+      0 24px 48px -16px rgb(8 8 8 / 0.3);
     transform-origin: top left;
   }
 
-  .nav-drop__panel ul {
+  .nav-drop__panel ul,
+  .site-menu__panel ul {
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -253,11 +416,9 @@ const CTA_ROW = row
 
   .nav-drop__panel a {
     display: block;
-    padding: 0.65rem 0.85rem;
-    border-radius: 0.75rem;
-    transition:
-      background-color 160ms ease,
-      color 160ms ease;
+    padding: 0.7rem 0.75rem;
+    border-radius: 0.5rem;
+    transition: background-color 160ms ease;
   }
 
   .nav-drop__panel a:hover,
@@ -267,56 +428,86 @@ const CTA_ROW = row
 
   .nav-drop__label {
     display: block;
-    font-size: var(--text-base);
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--color-ink);
-  }
-
-  .nav-drop__panel a[aria-current='page'] .nav-drop__label {
+    font-family: var(--font-display);
+    font-size: 1.1875rem;
     font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
   }
 
-  /* Descriptions run at ink/70 rather than the muted token: on the soft hover
-     fill, muted (#6f7178 on #f0f1f3) measures just under the 4.5:1 AA bar for
-     12px text, and this stays above it in both themes. */
+  /* ink/70 rather than the muted token: on the soft hover fill, muted
+     measures just under 4.5:1 for 12px text; this stays above it in both
+     themes. */
   .nav-drop__desc {
     display: block;
-    margin-top: 0.15rem;
+    margin-top: 0.2rem;
     font-size: var(--text-xs);
     line-height: 1.45;
     color: --alpha(var(--color-ink) / 70%);
   }
 
-  /* ── Mobile menu ───────────────────────────────────────────────────────── */
-
-  .site-menu {
-    position: relative;
+  /* ── Actions: theme, Get the app, menu ── */
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
   }
 
-  /* Wider than the old 13rem: the labelled sections need the room, and this
-     still clears a 360px viewport with the header's gutters to spare. */
-  .site-menu__panel {
-    inline-size: 17rem;
+  @media (width >= 48rem) {
+    .site-header__actions {
+      gap: 0.5rem;
+      margin-inline-start: clamp(0.5rem, 1.5vw, 1.5rem);
+    }
   }
 
-  .site-menu__eyebrow {
-    padding: 0.6rem 0.85rem 0.2rem;
-    color: var(--color-muted);
+  .site-header__actions :global(.theme-toggle) {
+    color: var(--bar-ink);
   }
 
-  .site-menu__panel > .site-menu__eyebrow:first-child {
-    padding-top: 0.3rem;
+  .site-header__cta {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    margin-inline-start: 0.25rem;
+    padding-inline: 0.75rem;
+    border-radius: 0.5rem;
+    background: var(--bar-cta-bg);
+    color: var(--bar-cta-ink);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: opacity 160ms ease;
   }
 
-  /* ── Trigger ──────────────────────────────────────────────────────────── */
+  .site-header__cta:hover {
+    opacity: 0.86;
+  }
+
+  @media (width >= 48rem) {
+    .site-header__cta {
+      padding-inline: 1.25rem;
+      font-size: 0.8125rem;
+      letter-spacing: 0.1em;
+    }
+  }
+
+  /* ── Phone menu (under 768px) ─────────────────────────────────────────── */
+  @media (width >= 48rem) {
+    .site-menu {
+      display: none;
+    }
+  }
 
   .site-menu > summary {
     display: grid;
     place-items: center;
-    inline-size: 2.75rem; /* 44px — full touch target */
+    inline-size: 2.75rem;
     block-size: 2.75rem;
-    border-radius: 9999px;
+    margin-inline-end: -0.625rem; /* the bars, not the target, meet the gutter */
+    border-radius: 0.5rem;
     cursor: pointer;
     list-style: none;
     transition: background-color 200ms ease;
@@ -326,27 +517,23 @@ const CTA_ROW = row
     display: none;
   }
 
-  .site-menu > summary:hover,
-  .site-menu[open] > summary {
+  .site-menu > summary:hover {
     background: --alpha(var(--color-ink) / 7%);
   }
 
-  /* Three bars that fold into a cross. The outer pair translate to the centre
-     and rotate; the middle one fades. Transform-only, so it stays on the
-     compositor. */
+  /* Three bars that fold into a cross. Transform-only. */
   .site-menu__bars {
     position: relative;
     display: block;
-    inline-size: 1.125rem;
+    inline-size: 1.25rem;
     block-size: 0.75rem;
   }
 
   .site-menu__bars i {
     position: absolute;
     inset-inline: 0;
-    block-size: 1.75px;
-    border-radius: 2px;
-    background: var(--color-ink);
+    block-size: 2px;
+    background: var(--bar-ink);
     transition:
       transform 340ms cubic-bezier(0.65, 0, 0.35, 1),
       opacity 180ms ease;
@@ -364,95 +551,85 @@ const CTA_ROW = row
   }
 
   .site-menu[open] .site-menu__bars i:nth-child(1) {
-    transform: translateY(0.365rem) rotate(45deg);
+    transform: translateY(0.3125rem) rotate(45deg);
   }
   .site-menu[open] .site-menu__bars i:nth-child(2) {
     opacity: 0;
     transform: scaleX(0.4);
   }
   .site-menu[open] .site-menu__bars i:nth-child(3) {
-    transform: translateY(-0.365rem) rotate(-45deg);
+    transform: translateY(-0.3125rem) rotate(-45deg);
   }
 
-  /* ── Panel ────────────────────────────────────────────────────────────── */
-
+  /* The panel hangs from the whole bar, edge to edge: .site-menu is not
+     positioned, so the header is its containing block. */
   .site-menu__panel {
     position: absolute;
-    inset-inline-end: 0;
-    top: calc(100% + 0.6rem);
-    padding: 0.5rem;
-    border: 1px solid --alpha(var(--color-ink) / 8%);
-    border-radius: 1.25rem;
+    inset-inline: 0;
+    top: 100%;
+    max-block-size: calc(100dvh - var(--bar-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.5rem var(--gutter) 1.75rem;
+    border-block: 1px solid --alpha(var(--color-ink) / 10%);
     background: var(--color-paper);
-    box-shadow: 0 18px 48px rgba(8, 8, 8, 0.22);
-    transform-origin: top right;
+    /* Dims the page below the panel, so the panel reads as on top of it in
+       both themes (in dark the two grounds are the same colour). The clip
+       keeps the dimming off the bar above. */
+    box-shadow: 0 0 0 100vmax rgb(8 8 8 / 0.4);
+    clip-path: inset(0 0 -100vmax 0);
   }
 
-  .site-menu__panel ul {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  .site-menu__group + .site-menu__group {
+    margin-top: 0.75rem;
   }
 
-  /* Guides and Support render without an eyebrow, so left alone they read as
-     the tail of the Tools group above them. A hairline — the panel's own
-     border colour — above the first of them sets the plain links apart; the
-     sibling rule keeps Guides and Support one block rather than two ruled
-     sections. */
-  .site-menu__panel ul.site-menu__plain {
-    margin-top: 0.45rem;
-    padding-top: 0.45rem;
-    border-top: 1px solid --alpha(var(--color-ink) / 8%);
+  /* Guides and Support carry no eyebrow; a hairline sets them apart from
+     the Tools group above, and the two of them read as one block. */
+  .site-menu__group--plain {
+    padding-top: 0.75rem;
+    border-top: 1px solid --alpha(var(--color-ink) / 10%);
   }
 
-  .site-menu__panel ul.site-menu__plain + ul.site-menu__plain {
+  .site-menu__group--plain + .site-menu__group--plain {
     margin-top: 0;
     padding-top: 0;
     border-top: 0;
   }
 
-  .site-menu__panel a {
-    display: block;
-    /* 0.75rem block padding keeps every row at 45px — a full 44px touch
-       target once line-height is included. */
-    padding: 0.75rem 0.85rem;
-    border-radius: 0.75rem;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: --alpha(var(--color-ink) / 78%);
-    transition:
-      background-color 160ms ease,
-      color 160ms ease;
+  .site-menu__eyebrow {
+    margin: 0;
+    padding-block: 0.75rem 0.25rem;
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: --alpha(var(--color-ink) / 66%);
   }
 
-  .site-menu__panel a:hover,
-  .site-menu__panel a[aria-current='page'] {
-    background: var(--color-soft);
+  .site-menu__panel a {
+    display: flex;
+    align-items: center;
+    min-block-size: 3rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
     color: var(--color-ink);
   }
 
-  .site-menu__cta {
-    margin-top: 0.35rem;
-    text-align: center;
-    background: var(--color-ink);
-    color: var(--color-paper) !important;
-    font-weight: 600 !important;
+  .site-menu__panel a:hover {
+    color: --alpha(var(--color-ink) / 72%);
   }
 
-  .site-menu__cta:hover {
-    background: var(--color-ink) !important;
-    opacity: 0.85;
+  .site-menu__panel a[aria-current='page'] {
+    color: light-dark(var(--color-red), var(--color-ember-on-dark));
   }
 
-  /* Entry animation. A keyframe on [open] is more reliable here than
-     transitioning ::details-content: a dropdown wants scale and lift, not a
-     height reveal, and the panel is absolutely positioned so its height never
-     affects layout. Each row is staggered slightly behind the panel so the
-     menu assembles rather than appearing all at once. The delay is a custom
-     property set per row in the markup, so it scales to however many rows a
-     panel ends up with — capped, so the tail never trails the open gesture. */
+  /* Entry: the panel drops a short way and each row follows a beat behind,
+     staggered by its --i and capped so the tail never trails the gesture. */
   @media (prefers-reduced-motion: no-preference) {
     .site-menu[open] .site-menu__panel,
     .nav-drop[open] .nav-drop__panel {
@@ -469,17 +646,17 @@ const CTA_ROW = row
   @keyframes menu-panel-in {
     from {
       opacity: 0;
-      transform: translateY(-0.5rem) scale(0.94);
+      transform: translateY(-0.5rem);
     }
     to {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translateY(0);
     }
   }
 
   @keyframes menu-row-in {
     from {
-      opacity: 0;
+      opacity: 0.35;
       transform: translateY(-0.35rem);
     }
     to {
@@ -488,6 +665,16 @@ const CTA_ROW = row
     }
   }
 </style>
+
+<script>
+  // The scrolled state. Without this script the header never pins (it is not
+  // fixed until data-js is set), so there is nothing to keep in step.
+  const header = document.querySelector<HTMLElement>('[data-site-header]')!
+  const syncScrolled = () => header.toggleAttribute('data-scrolled', window.scrollY > 8)
+
+  syncScrolled()
+  window.addEventListener('scroll', syncScrolled, { passive: true })
+</script>
 
 <script>
   // <details> has no notion of "click away to dismiss", which is the main thing
@@ -535,8 +722,8 @@ const CTA_ROW = row
   /* `scroll-behavior: smooth` in global.css only ever animates a scroll WITHIN
    * a document that is already loaded. Two of this nav's links are not that:
    *
-   *   /#features, /#faq  from any page other than the home page, these are full
-   *                      cross-document navigations. The new document is simply
+   *   /#download         from any page other than the home page, this is a full
+   *                      cross-document navigation. The new document is simply
    *                      rendered already scrolled to the target, so the reader
    *                      is deposited mid-page with no sense of having moved.
    *   /                  from the home page itself this is a same-page reload,
@@ -598,7 +785,7 @@ const CTA_ROW = row
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         // scrollIntoView rather than a computed offset: the header is fixed, and
-        // `:where([id]) { scroll-margin-top: 6rem }` in global.css already
+        // `scroll-padding-top: var(--site-bar-slim)` in global.css already
         // accounts for it. Measuring the header here would duplicate that number
         // and then drift from it.
         target.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -648,7 +835,7 @@ const CTA_ROW = row
       event.preventDefault()
       window.scrollTo({ top: 0, behavior: reduced() ? 'instant' : 'smooth' })
 
-      // A lingering #faq would otherwise send the next reload straight back down
+      // A lingering #detail would otherwise send the next reload straight back down
       // the page the reader just asked to leave.
       if (location.hash) {
         history.replaceState(history.state, '', location.pathname + location.search)

@@ -6,10 +6,12 @@ const COLUMNS = [
   {
     heading: 'Product',
     links: [
-      { label: 'Features', href: '/#features' },
-      { label: 'Pricing', href: '/#pricing' },
+      { label: 'Features', href: '/#never-miss' },
+      // There is no pricing section; "Is MyRideSG free to use?" is answered
+      // in the questions.
+      { label: 'Pricing', href: '/#detail' },
       // Was 'Open the app' pointing at the web app, which is switched off.
-      { label: 'Get the app', href: '/#get', storeLink: true },
+      { label: 'Get the app', href: '/#download', storeLink: true },
     ],
   },
   {
@@ -29,7 +31,7 @@ const COLUMNS = [
     heading: 'Riding guides',
     links: [
       { label: 'All guides', href: '/guides/' },
-      { label: 'Workshops', href: '/#workshops' },
+      { label: 'Workshops', href: '/motorcycle-workshop-directory/' },
       { label: 'How it works', href: '/#how-it-works' },
     ],
   },
@@ -57,6 +59,15 @@ const year = new Date().getFullYear()
         </p>
         <p class="mt-3 max-w-52 text-sm leading-relaxed text-white/55">
           Made in Singapore, for Singapore riders.
+        </p>
+        <p class="mt-4 max-w-52 text-sm leading-relaxed text-white/55">
+          Own a workshop?{' '}
+          <a
+            href="mailto:hello@myridesg.com"
+            class="font-semibold text-ember-on-dark hover:underline"
+          >
+            Get listed
+          </a>
         </p>
       </div>
 

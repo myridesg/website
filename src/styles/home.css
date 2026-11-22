@@ -1,0 +1,3603 @@
+/* ============================================================================
+ * The home page (src/pages/index.astro). Its one stylesheet.
+ *
+ * Every colour, font, size and radius is a token from the @theme block in
+ * global.css; nothing here is a brand value of its own. Dark mode comes from
+ * those tokens flipping, plus light-dark() where a surface has to change role
+ * rather than just shade.
+ *
+ * Tailwind writes a theme variable to the page only when a utility class
+ * somewhere uses it, and this file is not one of the places it looks. So
+ * --radius-sm and, in light mode, --color-charcoal do not exist at runtime;
+ * a var() of either is invalid and the property silently drops. Stick to
+ * tokens a utility already uses, and check a new one in the browser.
+ *
+ * Motion. scroll-progress.ts writes --p (0 to 1) on each section and sets
+ * data-seen once it is under way; the CSS below does the rest. Two rules hold
+ * everywhere on the page:
+ *
+ *   - At rest by default. A start state only applies under html.home-running,
+ *     which an inline script sets in <head> (BaseLayout's head slot, ahead of
+ *     the CSP <meta>) before anything paints, so the finished state never
+ *     paints first and then snaps back. The same script takes the class off
+ *     again at DOMContentLoaded if the page's module never mounted. With
+ *     JavaScript off every part renders finished.
+ *   - Reduced motion: the class is never set, so every part is finished
+ *     whether or not any script runs; the module also sets --p: 1 and
+ *     data-seen on everything at once.
+ * ==========================================================================*/
+
+/* ── Shared timing ──────────────────────────────────────────────────────────
+   Later parts build on these. --home-ease settles with a slight overshoot,
+   which is what gives a move its weight; --home-ease-out is the plain
+   deceleration for opacity and for things that should not bounce.
+
+   --home-accent is red for text and outlines: the brand red on light, the
+   lightened ember on dark, where the brand red is too dark to read. Fills
+   keep the brand red itself. */
+.home-part {
+  --home-ease: cubic-bezier(0.34, 1.32, 0.64, 1);
+  --home-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --home-fast: 180ms;
+  --home-base: 420ms;
+  --home-slow: 900ms;
+  --home-accent: light-dark(var(--color-red), var(--color-ember-on-dark));
+  /* The smallest text outside the app and passport drawings: spaced-caps
+     labels such as "Sample data". */
+  --home-label: var(--text-xs);
+}
+
+@media (width >= 64rem) {
+  .home-part {
+    --home-label: var(--text-sm);
+  }
+}
+
+/* The site header lines its wordmark up with the parts' own gutters. */
+.site-header {
+  --site-header-max: 112rem;
+  --site-header-gutter: clamp(1.25rem, 5vw, 6rem);
+}
+
+/* Before the first measurement lands, a running page treats everything it
+   measures as not yet reached. The script's inline --p overrides this from
+   then on. */
+.home-running [data-progress] {
+  --p: 0;
+}
+
+/* ── Entrance ───────────────────────────────────────────────────────────────
+   Rises 16px and comes up from 35% opacity, never from invisible. The
+   transition is declared on the seen state only, so entering the start state
+   (when html.home-running is added) is instant and only the arrival animates.
+   `translate` rather than `transform`, so a part can still transform an
+   element that also enters. --i staggers siblings.
+
+   Keyed on any [data-progress], not only the part, so a tall part can put
+   data-progress on an inner block and have that block enter when it is
+   reached. The start rule wins while any measured ancestor is unseen. */
+.home-running [data-progress]:not([data-seen]) .home-enter {
+  opacity: 0.35;
+  translate: 0 16px;
+}
+
+.home-running [data-progress][data-seen] .home-enter {
+  transition:
+    opacity var(--home-slow) var(--home-ease-out),
+    translate var(--home-slow) var(--home-ease);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+/* ============================================================================
+ * Part 1 · The promise
+ *
+ * A studio scene: a band of light grey studio wall and floor, the copy on it,
+ * and a stage of a phone, a row of four 3D things and the rider.
+ *
+ * Every size in the stage is a multiple of --w, the device's outer width, so
+ * the scene keeps its proportions at any size and the cut-outs never drift
+ * off the phone. --w follows the viewport's width and, side by side, its
+ * height too, so the phone always meets the band's foot with the app's
+ * shortcut grid showing above it.
+ * ==========================================================================*/
+
+/* Studio neutrals. Not brand colours: the cool grey of the wall the 3D
+   renders were lit against, and for the dark theme a near-black warmed a
+   touch toward the site's dark ground (ember-1), which the renders were also
+   checked on. Text greys clear 4.5:1 on the wall in both. Shared by every
+   part that stands on the studio. */
+.promise,
+.steps,
+.never,
+.costs,
+.sg,
+.history,
+.next,
+.detail {
+  --studio-wall-top: light-dark(#d9dbe0, #0f0c0c);
+  --studio-wall-mid: light-dark(#e4e6ea, #151111);
+  --studio-wall-low: light-dark(#e8eaed, #191414);
+  --studio-floor: light-dark(#eef0f2, #1d1817);
+  --studio-glow: light-dark(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.045));
+  --studio-vignette: light-dark(rgb(20 22 30 / 0.14), rgb(0 0 0 / 0.45));
+  --studio-horizon: light-dark(rgb(120 124 135 / 0.1), rgb(255 255 255 / 0.04));
+  --studio-shadow-far: light-dark(rgb(30 32 40 / 0.2), rgb(0 0 0 / 0.55));
+  --studio-shadow-near: light-dark(rgb(30 32 40 / 0.16), rgb(0 0 0 / 0.5));
+  --studio-contact: light-dark(rgb(30 32 40 / 0.45), rgb(0 0 0 / 0.75));
+  --studio-headline: light-dark(var(--color-black), var(--color-ink));
+  --studio-eyebrow: light-dark(#4a4d55, #a9acb4);
+  --studio-text: light-dark(#3a3c42, #cfd1d6);
+  --studio-note: light-dark(#5a5d66, #9fa2aa);
+  --studio-dot: light-dark(var(--color-ember), var(--color-ember-on-dark));
+}
+
+.promise {
+  /* The device: a dark bezel with a lit edge, the same in both themes. */
+  --device-bezel: linear-gradient(100deg, #2b2d33 0%, #0c0d10 18%, #17181c 60%, #3a3d45 100%);
+  --device-rim: #0b0b0d;
+  --rider-rim: light-dark(rgb(236 241 250 / 0.75), rgb(196 210 232 / 0.42));
+  --rider-rim-soft: light-dark(rgb(236 241 250 / 0.35), rgb(170 190 225 / 0.12));
+  --rider-rim-key: light-dark(transparent, rgb(235 230 225 / 0.2));
+
+  /* Stage geometry, stacked (phones and tablets held upright): the device is
+     nearly the screen's width, with the rider beside its lower-left edge. */
+  --w: min(71vw, 24rem);
+  /* How far the device sits in from the stage's left edge: room for the
+     rider, who stands across its edge. */
+  --ox: calc(var(--w) * 0.33);
+  /* The row of four, and the gap from it to the device. */
+  --row-h: calc(var(--w) * 0.22);
+  --row-gap: calc(var(--w) * 0.077);
+  --phone-top: calc(var(--row-h) + var(--row-gap));
+  /* How much of the device shows above the band's foot, as a multiple of
+     --w: the status bar down to the shortcut grid's labels. */
+  --shown: 1.16;
+  /* The rider, presenting the phone with an open hand. He is placed by that
+     hand: --rider-gap is the strip of wall between its fingertips and the
+     device's left edge (negative: over the bezel). Stacked there is no room
+     beside the device, so he stands across its bezel, the hand over the
+     bezel's lower-left, and the screen's glow lights his edge (see
+     .promise__pose) so a black helmet on the black bezel still reads as two
+     shapes. */
+  --rider-gap: calc(var(--w) * -0.085);
+  --rider-y: calc(var(--w) * 0.375);
+  --rider-h: calc(var(--w) * 0.75);
+
+  /* Entrance timing. One curve, exponential ease-out, for every move. */
+  --promise-ease: var(--home-ease-out);
+}
+
+.promise__band {
+  position: relative;
+  isolation: isolate;
+  /* The device runs off the band's foot on purpose, and the cut-outs fly in
+     from around the scene; neither may scroll the page. */
+  overflow: clip;
+  background:
+    radial-gradient(120% 70% at 60% 70%, var(--studio-glow) 0%, transparent 60%),
+    linear-gradient(
+      180deg,
+      var(--studio-wall-top) 0%,
+      var(--studio-wall-mid) 55%,
+      var(--studio-wall-low) 85%,
+      var(--studio-floor) 100%
+    );
+}
+
+/* Darkened corners, over everything, as a lens would. */
+.promise__band::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: radial-gradient(130% 110% at 55% 50%, transparent 58%, var(--studio-vignette) 100%);
+}
+
+.promise__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(1rem, 3vw, 2rem);
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  /* Clears the site header at rest. */
+  padding: calc(var(--site-bar) + clamp(1.75rem, 1rem + 2vw, 2.75rem)) clamp(1.25rem, 5vw, 6rem) 0;
+}
+
+/* ── Copy ── */
+.promise__eyebrow {
+  margin: 0 0 clamp(0.75rem, 0.5rem + 0.7vw, 1.25rem);
+  font-size: clamp(0.75rem, 0.6rem + 0.45vw, 0.875rem);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--studio-eyebrow);
+}
+
+.promise__title {
+  margin: 0;
+  font-size: clamp(2.75rem, min(16.9vw, 11svh), 7.5rem);
+  font-weight: 700;
+  line-height: 0.86;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  text-wrap: initial;
+  color: var(--studio-headline);
+}
+
+.promise__row {
+  display: block;
+}
+
+.promise__dot {
+  color: var(--studio-dot);
+}
+
+.promise__line {
+  margin-top: clamp(0.875rem, 0.5rem + 1.2vw, 1.75rem);
+  max-inline-size: 19.5em;
+  font-size: clamp(0.96875rem, 0.85rem + 0.45vw, 1.3125rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--studio-text);
+}
+
+.promise__ask {
+  margin-top: clamp(1rem, 0.6rem + 1.4vw, 2rem);
+}
+
+.promise__note {
+  margin-top: 0.75rem;
+  font-size: clamp(0.75rem, 0.7rem + 0.2vw, 0.875rem);
+  font-weight: 600;
+  color: var(--studio-note);
+}
+
+/* Under the band, on the page: a credit line for the picture. */
+.promise__caption {
+  max-inline-size: 112rem;
+  margin: 0 auto;
+  padding: 0.75rem clamp(1.25rem, 5vw, 6rem) 0;
+  text-align: end;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+
+/* ── Stage ── */
+.promise__stage {
+  position: relative;
+  justify-self: center;
+  inline-size: calc(var(--ox) + var(--w));
+  block-size: calc(var(--phone-top) + var(--w) * var(--shown));
+}
+
+.promise__props {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: var(--ox);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  inline-size: var(--w);
+  block-size: var(--row-h);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One optical size for four renders with different margins, as a share of
+   --w. The row's ends sit on the device's edges, the gaps between are even.
+   --cx is each one's centre across the row, for the drop into the phone.
+   Never drawn over 60% of the render's own width (pump 264, map 426,
+   receipt 232, chart 382 px): at the widest --w of 40rem that is 101, 167,
+   96 and 147 px. */
+.promise__prop {
+  flex: none;
+}
+
+.promise__prop--pump    { inline-size: calc(var(--w) * 0.1575); --cx: 0.0788; }
+.promise__prop--map     { inline-size: calc(var(--w) * 0.2617); --cx: 0.356; }
+.promise__prop--receipt { inline-size: calc(var(--w) * 0.1498); --cx: 0.629; }
+.promise__prop--chart   { inline-size: calc(var(--w) * 0.2298); --cx: 0.885; }
+
+.promise__fly {
+  display: block;
+}
+
+.promise__float {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  /* One shared soft shadow. */
+  filter: drop-shadow(0 calc(var(--w) * 0.02) calc(var(--w) * 0.02) var(--studio-shadow-near));
+}
+
+.promise__phone {
+  position: absolute;
+  z-index: 1;
+  top: var(--phone-top);
+  left: var(--ox);
+  inline-size: var(--w);
+}
+
+/* PhoneFrame, sized off --w rather than its fixed pixel width, with the
+   studio device's bezel: thicker, rounder, lit along its edge. */
+.promise .promise__phone .phone-frame {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: none;
+  border: calc(var(--w) * 0.0367) solid transparent;
+  border-radius: calc(var(--w) * 0.173);
+  background: var(--device-bezel) border-box;
+  box-shadow:
+    calc(var(--w) * 0.1) calc(var(--w) * 0.0625) calc(var(--w) * 0.146) var(--studio-shadow-far),
+    calc(var(--w) * 0.025) calc(var(--w) * 0.0167) calc(var(--w) * 0.042) var(--studio-shadow-near);
+}
+
+.promise .promise__phone .phone-frame__screen {
+  block-size: auto;
+  max-block-size: none;
+  aspect-ratio: 549 / 1194;
+  border-radius: calc(var(--w) * (0.173 - 0.0367));
+}
+
+/* The bezel's lit rim and the glass's glare, over the frame. */
+.promise__phone::before,
+.promise__phone::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.promise__phone::before {
+  inset: 0;
+  border-radius: calc(var(--w) * 0.173);
+  box-shadow:
+    inset 0 0 0 max(1px, calc(var(--w) * 0.004)) rgb(255 255 255 / 0.18),
+    inset 0 0 0 calc(var(--w) * 0.0125) var(--device-rim);
+}
+
+.promise__phone::after {
+  inset: calc(var(--w) * 0.0367) calc(var(--w) * 0.0367) auto;
+  aspect-ratio: 549 / 1194;
+  border-radius: calc(var(--w) * (0.173 - 0.0367));
+  background: linear-gradient(115deg, rgb(255 255 255 / 0.14) 0%, transparent 32%);
+}
+
+/* Placed by his feet, so capping his height (never over half the render's
+   1132 px) keeps him standing on the same line; and across by his hand's
+   fingertips, the right edge of the canvas. */
+.promise__rider {
+  --rider-shown: min(var(--rider-h), 35.375rem);
+
+  position: absolute;
+  z-index: 3;
+  left: calc(var(--ox) - var(--rider-gap) - var(--rider-shown) * 666 / 1132);
+  bottom: calc(var(--w) * var(--shown) - var(--rider-y) - var(--rider-h));
+  block-size: var(--rider-shown);
+  aspect-ratio: 666 / 1132;
+}
+
+/* The two poses, presenting and waving, are one canvas, stacked in one grid
+   cell. The wave is hidden unless the greeting plays (see Motion). The rim
+   light and the breathing are on the pair, not on each picture, so the two
+   stay exactly aligned while one fades into the other. */
+.promise__pose {
+  position: relative;
+  display: grid;
+  isolation: isolate;
+  block-size: 100%;
+  /* The phone screen's cool glow on the side of him that faces it: a hair
+     of light along his right-hand edges. On the light wall it is lost in
+     the wall; over the bezel, and on the dark wall, it is the edge that
+     keeps his black helmet and leathers from merging into the dark. On the
+     dark wall the studio's key light also picks out his top and left-hand
+     edges, fainter. */
+  filter: drop-shadow(max(1px, calc(var(--w) * 0.0035)) calc(var(--w) * -0.002) 0 var(--rider-rim))
+    drop-shadow(calc(var(--w) * 0.006) 0 calc(var(--w) * 0.012) var(--rider-rim-soft))
+    drop-shadow(calc(var(--w) * -0.0025) calc(var(--w) * -0.003) 0 var(--rider-rim-key));
+}
+
+.promise__pose-img {
+  grid-area: 1 / 1;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.promise__pose-img--wave {
+  opacity: 0;
+}
+
+/* Where the boots meet the floor: a tight contact shadow in a wide soft one,
+   under his feet, which stand left of the canvas's centre (his arm is out
+   to its right). */
+.promise__rider::before,
+.promise__rider::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.promise__rider::before {
+  left: -20%;
+  top: 91%;
+  inline-size: 131%;
+  block-size: 17.6%;
+  background: radial-gradient(closest-side, var(--studio-shadow-near), transparent);
+}
+
+.promise__rider::after {
+  left: -1%;
+  top: 96%;
+  inline-size: 93%;
+  block-size: 8.3%;
+  background: radial-gradient(closest-side, var(--studio-contact), transparent);
+}
+
+/* ── Side by side, from 640px ──
+   The copy is the left column and the stage stands on the band's foot on
+   the right. The band fills the first screen, but no taller than
+   three-quarters of the width, so a tall portrait tablet does not open a
+   gulf between the copy and the scene; if the copy needs more, the band
+   grows with it and the stage stays on its foot.
+
+   From 640 to 1024px the scene and the headline both scale off the width,
+   so line one of the headline always fits the column the stage leaves it,
+   and a gap keeps the copy clear of the rider. The rows never wrap: the
+   headline is three lines at every width from here up. */
+@media (width >= 40rem) {
+  .promise {
+    --w: min(31vw, 50svh, 40rem);
+    --ox: calc(var(--w) * 0.375);
+    --shown: 1.075;
+    /* Side by side there is room: he stands just clear of the device,
+       with a strip of wall between his fingertips and the bezel. Up to
+       1024px the copy is close on his other side, so he is a little
+       smaller and the strip narrower. --rider-y + --rider-h is where his
+       feet stand, below the device's top. */
+    --rider-gap: calc(var(--w) * 0.015);
+    --rider-y: calc(var(--w) * 0.2165);
+    --rider-h: calc(var(--w) * 0.8);
+  }
+
+  .promise__band {
+    background:
+      radial-gradient(120% 90% at 62% 40%, var(--studio-glow) 0%, transparent 60%),
+      linear-gradient(180deg, var(--studio-wall-top) 0%, var(--studio-wall-mid) 50%, var(--studio-wall-low) 100%);
+  }
+
+  /* The floor: lighter, on the stage's side only, with a faint horizon. */
+  .promise__band::before {
+    content: '';
+    position: absolute;
+    inset: 66.7% 0 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, transparent 33%, var(--studio-horizon) 33%, transparent 53%),
+      linear-gradient(180deg, transparent 0%, var(--studio-floor) 32%, var(--studio-floor) 75%, var(--studio-wall-mid) 100%);
+    mask-image: linear-gradient(90deg, transparent 39%, #000 57%);
+  }
+
+  .promise__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: clamp(1.5rem, 3vw, 2.5rem);
+    min-block-size: min(100svh, 75vw);
+    padding-top: 0;
+  }
+
+  .promise__copy {
+    align-self: start;
+    padding-top: clamp(7rem, 12svh, 8rem);
+    padding-bottom: 2rem;
+  }
+
+  .promise__title {
+    font-size: clamp(2.75rem, min(9.6vw, 15.3svh), 10rem);
+  }
+
+  .promise__row {
+    white-space: nowrap;
+  }
+
+  .promise__stage {
+    align-self: end;
+    justify-self: end;
+  }
+}
+
+/* From 1024px: the scene at the size of the approved look, as wide as a
+   third of the screen, and the copy free to run up to the stage. */
+@media (width >= 64rem) {
+  .promise {
+    --w: min(33.3vw, 53.3svh, 40rem);
+    --rider-gap: calc(var(--w) * 0.03);
+    --rider-y: calc(var(--w) * 0.1625);
+    --rider-h: calc(var(--w) * 0.854);
+  }
+
+  .promise__inner {
+    column-gap: 0;
+  }
+
+  .promise__copy {
+    padding-top: clamp(6.5rem, 14svh, 9rem);
+    padding-bottom: 0;
+  }
+}
+
+/* ── Motion ─────────────────────────────────────────────────────────────────
+   Start states only under html.home-running (see the top of this file), so
+   JavaScript off and reduced motion show the finished scene. The section is
+   marked seen on the first frame after the module mounts, since it opens on
+   screen; that is what starts the load sequence.
+
+   On load, about 1.4 s in all: the copy rises in line by line, the device
+   comes up from below, the four things fly in from scattered places around
+   the scene, each from its own side with a turn and a shrink, and settle
+   into their row one after another; the rider steps in last. */
+.home-running .promise:not([data-seen]) .promise__in {
+  opacity: 0.35;
+  translate: 0 1.25rem;
+}
+
+.home-running .promise:not([data-seen]) .promise__row {
+  translate: 0 0.3em;
+}
+
+.home-running .promise[data-seen] .promise__in {
+  transition:
+    opacity 700ms var(--promise-ease),
+    translate 900ms var(--promise-ease);
+  transition-delay: calc(var(--d) * 70ms);
+}
+
+.home-running .promise:not([data-seen]) .promise__phone {
+  opacity: 0.35;
+  translate: 0 calc(var(--w) * 0.3);
+}
+
+.home-running .promise[data-seen] .promise__phone {
+  transition:
+    opacity 800ms var(--promise-ease) 120ms,
+    translate 1000ms var(--promise-ease) 120ms;
+}
+
+/* Scattered: --fx/--fy in multiples of --w from the place in the row.
+   Stacked, the copy sits above the row, so nothing comes from far above. */
+.promise__prop--pump    { --fx: -0.3;  --fy: 0.45;  --fr: -20deg; }
+.promise__prop--map     { --fx: -0.06; --fy: -0.14; --fr: 14deg; }
+.promise__prop--receipt { --fx: 0.05;  --fy: 0.62;  --fr: -16deg; }
+.promise__prop--chart   { --fx: 0.05;  --fy: 0.3;   --fr: 18deg; }
+
+/* Side by side, the copy is to the left: the pump comes from the lower left,
+   where the rider will stand, never from over the sentence. */
+@media (width >= 40rem) {
+  .promise__prop--pump    { --fx: -0.3;  --fy: 0.5; }
+  .promise__prop--map     { --fx: -0.12; --fy: -0.3; }
+  .promise__prop--receipt { --fx: 0.1;   --fy: 0.7; }
+  .promise__prop--chart   { --fx: 0.12;  --fy: -0.1; }
+}
+
+@media (width >= 64rem) {
+  .promise__prop--pump    { --fx: -0.5;  --fy: 0.45; }
+  .promise__prop--map     { --fx: -0.16; --fy: -0.26; }
+  .promise__prop--receipt { --fx: 0.12;  --fy: 0.7; }
+  .promise__prop--chart   { --fx: 0.15;  --fy: -0.1; }
+}
+
+.home-running .promise:not([data-seen]) .promise__fly {
+  /* Half there, so the scattered state reads as a moment of its own while
+     the headline lands. */
+  opacity: 0.6;
+  translate: calc(var(--w) * var(--fx)) calc(var(--w) * var(--fy));
+  rotate: var(--fr);
+  scale: 0.8;
+}
+
+.home-running .promise[data-seen] .promise__fly {
+  transition:
+    opacity 600ms var(--promise-ease),
+    translate 800ms var(--promise-ease),
+    rotate 800ms var(--promise-ease),
+    scale 800ms var(--promise-ease);
+  transition-delay: calc(380ms + var(--k) * 80ms);
+}
+
+/* The rider waits below the band's foot, out of the picture (the band clips
+   him, so he is not a faint ghost over the scene for 0.7 s), and steps up
+   into it last, a little from the left. */
+.home-running .promise:not([data-seen]) .promise__rider {
+  opacity: 0.35;
+  translate: calc(var(--w) * -0.06) var(--w);
+}
+
+.home-running .promise[data-seen] .promise__rider {
+  transition:
+    opacity 500ms var(--promise-ease) 680ms,
+    translate 760ms var(--promise-ease) 680ms;
+}
+
+/* Idle. Each thing floats a few pixels on its own slow beat, and the rider
+   breathes. Running pages only, so reduced motion is still. */
+.promise__prop--pump    { --beat: 4.6s; --phase: -1.2s; }
+.promise__prop--map     { --beat: 6.2s; --phase: -3s; }
+.promise__prop--receipt { --beat: 5.3s; --phase: -0.4s; }
+.promise__prop--chart   { --beat: 6.8s; --phase: -2.2s; }
+
+.home-running .promise__float {
+  animation: promise-float var(--beat) ease-in-out var(--phase) infinite alternate;
+}
+
+@keyframes promise-float {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -6px;
+  }
+}
+
+.home-running .promise__pose {
+  /* Between his feet. */
+  transform-origin: 46% 100%;
+  animation: promise-breathe 3.8s ease-in-out infinite alternate;
+}
+
+@keyframes promise-breathe {
+  from {
+    scale: 1 1;
+  }
+  to {
+    scale: 1.006 1.012;
+  }
+}
+
+/* The greeting, once, after he has stepped in and settled: the wave fades
+   up over the presenting pose, holds about a second, and fades back out, so
+   presenting is where he ends. plus-lighter adds the two stills, so the
+   body, the same pixels in both, stays solid while the arm crosses over.
+   It starts with data-seen, on the same clock as the step-in, which is done
+   by 1.44 s. */
+.home-running .promise__pose-img {
+  mix-blend-mode: plus-lighter;
+}
+
+.home-running .promise[data-seen] .promise__pose-img--wave {
+  animation: promise-wave 1.5s linear 1.45s both;
+}
+
+.home-running .promise[data-seen] .promise__pose-img--present {
+  animation: promise-present 1.5s linear 1.45s both;
+}
+
+/* Short fades: the two arms are both half there while they cross, so the
+   less time that takes, the less it reads as a ghost. */
+@keyframes promise-wave {
+  0% { opacity: 0; }
+  8%, 92% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes promise-present {
+  0% { opacity: 1; }
+  8%, 92% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* On scroll. As the section leaves (--leave 0 to 1), the four drop into the
+   top of the phone one after another: toward its top centre, shrinking, and
+   gone as they cross the bezel. Each has its own window of --leave, done by
+   a third of the way, while the phone is still on screen. It is a pure
+   function of the scroll position, so it reverses on the way back up. */
+.home-running .promise__prop {
+  --t: clamp(0, (var(--leave, 0) - 0.02 - var(--k) * 0.05) / 0.16, 1);
+  /* Smoothstep, so each drop eases off the row and into the phone. */
+  --e: calc(var(--t) * var(--t) * (3 - 2 * var(--t)));
+
+  translate:
+    calc(var(--w) * (0.5 - var(--cx)) * var(--e))
+    calc((var(--row-h) / 2 + var(--row-gap) + var(--w) * 0.08) * var(--e));
+  scale: calc(1 - 0.6 * var(--e));
+  opacity: calc(1 - clamp(0, (var(--t) - 0.6) / 0.4, 1));
+}
+
+/* ============================================================================
+ * Part headlines (parts 2 to 8)
+ *
+ * Barlow Condensed 700 in capitals, tight, a step under part 1's h1 at every
+ * width. No ember full stop: that is part 1's and part 9's alone.
+ * ==========================================================================*/
+
+.home-title {
+  margin: 0;
+  font-size: clamp(2.5rem, 1.35rem + 4.4vw, 5.5rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--studio-headline);
+}
+
+/* ============================================================================
+ * Part 2 · Three steps to get sorted
+ *
+ * The bridge from the opening to the lead, on the page's own lighter ground
+ * (the opening's caption already sits on it, so the join is one surface).
+ * Three objects on one baseline at one optical size, each over a numeral and
+ * its label. Phone: three rows, picture left. From 640px: three columns under
+ * the headline. From 1280px: the headline beside them.
+ *
+ * --art is the height every picture shares; each object is sized off it.
+ * ==========================================================================*/
+
+.steps {
+  --art: clamp(7.5rem, 5rem + 7vw, 12.5rem);
+  --steps-num: light-dark(#c4c7cd, #5c5250);
+  --finder: light-dark(#5a5d66, #9fa2aa);
+  --notice-bg: light-dark(rgb(255 255 255 / 0.92), rgb(44 37 36 / 0.94));
+  --notice-ink: light-dark(var(--color-black), var(--color-ink));
+  --notice-soft: light-dark(#5a5d66, #a9acb4);
+  --object-shadow: drop-shadow(0 calc(var(--art) * 0.05) calc(var(--art) * 0.05) var(--studio-shadow-near));
+
+  padding-block: clamp(2.75rem, 1.5rem + 4vw, 5.5rem) clamp(3.5rem, 2rem + 5vw, 7rem);
+  background: var(--color-paper);
+}
+
+.steps__inner {
+  display: grid;
+  row-gap: clamp(2rem, 1rem + 3vw, 3.5rem);
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+.steps__title {
+  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.75rem);
+}
+
+.steps__list {
+  display: grid;
+  row-gap: clamp(1.75rem, 1rem + 2vw, 2.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Phone: picture left, numeral and label right. */
+.step {
+  display: grid;
+  grid-template-columns: calc(var(--art) * 1.45) minmax(0, 1fr);
+  align-items: end;
+  column-gap: 1.25rem;
+}
+
+.step__art {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  block-size: var(--art);
+}
+
+.step__object {
+  display: block;
+  filter: var(--object-shadow);
+}
+
+.step__bike {
+  block-size: 100%;
+  inline-size: auto;
+}
+
+/* 02: the receipt in a viewfinder's four corners. The receipt stands on the
+   shared baseline like the bike and the banner; the finder is a camera's
+   overlay, not an object, so its lower corners hang just under the floor
+   line, as far below the receipt's foot as the upper ones are above its
+   top. */
+.step__finder {
+  position: relative;
+  display: grid;
+  place-items: center;
+  block-size: calc(var(--art) * 0.92);
+  margin-block-end: calc(var(--art) * -0.06);
+  aspect-ratio: 0.8;
+}
+
+/* Sized off --art rather than the finder: a percentage height on a grid
+   item in an auto row does not resolve. */
+.step__receipt {
+  block-size: calc(var(--art) * 0.8);
+  inline-size: auto;
+}
+
+.step__corner {
+  position: absolute;
+  inline-size: 22%;
+  aspect-ratio: 1;
+  border: 0 solid var(--finder);
+  border-radius: 0;
+}
+
+.step__corner:nth-child(1) { top: 0; left: 0; border-width: 3px 0 0 3px; border-top-left-radius: 0.75rem; }
+.step__corner:nth-child(2) { top: 0; right: 0; border-width: 3px 3px 0 0; border-top-right-radius: 0.75rem; }
+.step__corner:nth-child(3) { bottom: 0; left: 0; border-width: 0 0 3px 3px; border-bottom-left-radius: 0.75rem; }
+.step__corner:nth-child(4) { bottom: 0; right: 0; border-width: 0 3px 3px 0; border-bottom-right-radius: 0.75rem; }
+
+/* The scan line, at the top of a box the receipt's height; only drawn while
+   it sweeps (running pages only), so the still picture has none. */
+.step__scan {
+  position: absolute;
+  inset: 6.5% 7%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.step__scan::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  block-size: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--home-accent);
+  box-shadow: 0 0 0.75rem 0.125rem color-mix(in oklab, var(--home-accent) 45%, transparent);
+}
+
+/* 03: the banner across the top of the picture, and the rider under it, cut
+   off at the waist, pointing up at it. The banner takes the height it needs
+   (two lines on a phone) and he fills the rest, so his finger always ends
+   just under it; the crown of his helmet, and the raised visor's edge, go
+   up behind it. The picture is taller than the other two, which are single
+   objects: the banner and the rider stack, and he should stay at about
+   their size. Its foot is still on the shared floor line. */
+.step--next .step__art {
+  block-size: calc(var(--art) * 1.55);
+}
+
+.step__remind {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  block-size: 100%;
+  inline-size: 100%;
+}
+
+/* A box from just behind the banner's foot (--tuck) to the floor line.
+   What shows of him below the banner, just under his crown to his waist,
+   is 0.06 to 0.665 of the render's height; the box cuts him off at the
+   waist, softly, as a shallow depth of field would, and his crown goes on
+   up behind the banner. */
+.step__pointer {
+  --tuck: 1rem;
+
+  position: relative;
+  z-index: 0;
+  flex: 1;
+  align-self: stretch;
+  min-block-size: 0;
+  margin-block-start: calc(var(--tuck) * -1);
+  container-type: size;
+  mask-image: linear-gradient(180deg, #000 88%, transparent);
+}
+
+.step__point {
+  --head-rim: light-dark(transparent, rgb(255 255 255 / 0.14));
+  --h: calc((100cqb - var(--tuck)) / 0.605);
+
+  position: absolute;
+  /* In from the box's edge, so the mask does not shave his helmet. */
+  left: 3cqi;
+  top: calc(var(--tuck) - var(--h) * 0.06);
+  block-size: var(--h);
+  inline-size: auto;
+  /* On the dark ground, light from above catches the crown and shoulders
+     of his black helmet, so its outline does not sink into the dark. */
+  filter: var(--object-shadow)
+    drop-shadow(calc(var(--art) * -0.004) calc(var(--art) * -0.005) 0 var(--head-rim))
+    drop-shadow(calc(var(--art) * 0.004) calc(var(--art) * -0.005) 0 var(--head-rim));
+}
+
+.notice {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  inline-size: min(100%, 17rem);
+  padding: 0.625rem 0.75rem;
+  border-radius: 1.125rem;
+  background: var(--notice-bg);
+  box-shadow:
+    0 calc(var(--art) * 0.05) calc(var(--art) * 0.1) var(--studio-shadow-near),
+    0 1px 2px var(--studio-shadow-near);
+  backdrop-filter: blur(12px);
+  line-height: 1.2;
+}
+
+/* The app icon is a black square: on the dark banner a hairline ring and a
+   faint lift keep its edge from sinking in. */
+.notice__icon {
+  flex: none;
+  inline-size: 2.125rem;
+  block-size: 2.125rem;
+  border-radius: 0.5rem;
+  box-shadow:
+    0 0 0 1px light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.26)),
+    0 0 0 3px light-dark(transparent, rgb(255 255 255 / 0.06));
+}
+
+.notice__body {
+  display: grid;
+  flex: 1;
+  min-inline-size: 0;
+  row-gap: 0.1875rem;
+}
+
+.notice__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: var(--home-label);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--notice-soft);
+}
+
+.notice__title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--notice-ink);
+}
+
+.step__name {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.step__num {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 2rem + 2vw, 4rem);
+  font-weight: 700;
+  line-height: 0.85;
+  font-variant-numeric: tabular-nums;
+  color: var(--steps-num);
+}
+
+.step__label {
+  margin-top: 0.375rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--studio-headline);
+}
+
+/* From 640px: three columns, the pictures on one baseline over their
+   numerals and labels. */
+@media (width >= 40rem) {
+  .steps__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(1.5rem, 3vw, 3.5rem);
+  }
+
+  .step {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: clamp(1.5rem, 0.75rem + 1.2vw, 2rem);
+  }
+
+  .step__art {
+    justify-content: flex-start;
+  }
+
+  .step__name {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .step__label {
+    margin-top: 0;
+  }
+
+  .step--next .step__art {
+    block-size: calc(var(--art) * 1.3);
+  }
+}
+
+/* From 1280px: the headline beside them, and the three objects a third
+   larger so they fill the wide band rather than float in it. */
+@media (width >= 80rem) {
+  .steps {
+    --art: clamp(13rem, 0.5rem + 15.8vw, 17rem);
+  }
+
+  .steps__inner {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 2.2fr);
+    align-items: end;
+    column-gap: clamp(2.5rem, 4vw, 5rem);
+  }
+
+  .steps__list {
+    column-gap: clamp(1.5rem, 2.5vw, 3rem);
+  }
+
+  .step__num {
+    font-size: clamp(4rem, 1rem + 3.4vw, 5.5rem);
+  }
+
+  .step__label {
+    font-size: clamp(1.75rem, 1rem + 0.9vw, 2.125rem);
+  }
+
+  .notice {
+    inline-size: min(100%, calc(var(--art) * 1.3));
+    padding: 0.75rem 0.875rem;
+    border-radius: 1.25rem;
+  }
+
+  .notice__icon {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+  }
+
+  .step--next .step__art {
+    block-size: calc(var(--art) * 1.12);
+  }
+
+  .notice__title {
+    font-size: var(--text-base);
+  }
+}
+
+/* ── Motion: one entrance, when the part is reached ──
+   The bike rolls up from the distance and settles, the receipt rises and
+   one scan line sweeps it, the banner drops in and the rider comes up
+   behind it. Numerals and labels rise with them. */
+.home-running .steps:not([data-seen]) .step__bike {
+  opacity: 0.35;
+  translate: 0 calc(var(--art) * 0.14);
+  scale: 0.86;
+}
+
+.home-running .steps:not([data-seen]) .step__finder {
+  opacity: 0.35;
+  translate: 0 calc(var(--art) * 0.12);
+}
+
+.home-running .steps:not([data-seen]) .notice {
+  opacity: 0.35;
+  translate: 0 calc(var(--art) * -0.18);
+}
+
+.home-running .steps:not([data-seen]) .step__point {
+  opacity: 0.35;
+  translate: 0 30%;
+}
+
+.home-running .steps:not([data-seen]) .step__name {
+  opacity: 0.35;
+  translate: 0 0.75rem;
+}
+
+.home-running .steps[data-seen] .step__bike {
+  transform-origin: 50% 100%;
+  transition:
+    opacity 700ms var(--home-ease-out),
+    translate 1100ms var(--home-ease-out),
+    scale 1100ms var(--home-ease-out);
+}
+
+.home-running .steps[data-seen] .step__finder {
+  transition:
+    opacity 700ms var(--home-ease-out) 140ms,
+    translate 900ms var(--home-ease-out) 140ms;
+}
+
+.home-running .steps[data-seen] .step__scan {
+  animation: steps-scan 1000ms cubic-bezier(0.45, 0, 0.25, 1) 650ms 1 both;
+}
+
+@keyframes steps-scan {
+  0% {
+    opacity: 0;
+    translate: 0 0;
+  }
+  12%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    translate: 0 100%;
+  }
+}
+
+.home-running .steps[data-seen] .notice {
+  transition:
+    opacity 600ms var(--home-ease-out) 300ms,
+    translate 900ms var(--home-ease-out) 300ms;
+}
+
+.home-running .steps[data-seen] .step__point {
+  transition:
+    opacity 600ms var(--home-ease-out) 620ms,
+    translate 900ms var(--home-ease-out) 620ms;
+}
+
+.home-running .steps[data-seen] .step__name {
+  transition:
+    opacity 700ms var(--home-ease-out),
+    translate 900ms var(--home-ease-out);
+  transition-delay: calc(200ms + var(--i) * 120ms);
+}
+
+/* ============================================================================
+ * Part 3 · Always know what your bike needs next (the lead)
+ *
+ * The studio again, and the bike side on, as large as its render stays sharp
+ * (680px; the render has about 1157px of true detail). What it needs next is
+ * pinned to it: each job a marker on the part, a leader and a label; the
+ * renewals a row of tags under it.
+ *
+ * Geometry. Everything on the bike is placed in the render's own pixels
+ * (1320 x 781), scaled by --s, from the bike's top-left corner (--bx, --by),
+ * in container units of .bike__frame. The component's SPOTS give each job
+ * --x/--y (its marker), --to (its label's near edge) and --a/--b (its leader,
+ * along one axis).
+ *
+ * The part ends on the renewal tags and the "Sample data" caption: the
+ * header carries "Get the app" on every screen, so no store buttons here.
+ * ==========================================================================*/
+
+.never {
+  --leader: light-dark(#2b2d33, #e4e6ea);
+  --leader-halo: light-dark(rgb(255 255 255 / 0.8), rgb(0 0 0 / 0.55));
+  --tag-bg: light-dark(rgb(255 255 255 / 0.62), rgb(255 255 255 / 0.06));
+  --mark-ring: #f4f5f7;
+  --mark-core: #1c1d21;
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem) clamp(3rem, 1.5rem + 3.5vw, 5rem);
+  background:
+    radial-gradient(75% 50% at 50% 60%, var(--studio-glow) 0%, transparent 70%),
+    linear-gradient(
+      180deg,
+      var(--studio-wall-top) 0%,
+      var(--studio-wall-mid) 40%,
+      var(--studio-wall-low) 70%,
+      var(--studio-floor) 100%
+    );
+}
+
+.never::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(130% 100% at 50% 45%, transparent 60%, var(--studio-vignette) 100%);
+}
+
+.never__inner {
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+.never__head {
+  display: grid;
+  row-gap: clamp(0.875rem, 0.5rem + 1vw, 1.5rem);
+  max-inline-size: 64rem;
+}
+
+.never__line {
+  max-inline-size: 30em;
+  font-size: clamp(0.96875rem, 0.85rem + 0.45vw, 1.3125rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--studio-text);
+}
+
+@media (width >= 64rem) {
+  /* Tighter above and under the headline, so the whole lead fits a laptop
+     screen; see --fit on .bike__frame. */
+  .never {
+    padding-block-start: clamp(3rem, 1rem + 3vw, 4.5rem);
+  }
+
+  .bike {
+    margin-block-start: 0.75rem;
+  }
+
+  .never__head {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: end;
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+    max-inline-size: 84rem;
+  }
+
+  .never__line {
+    padding-block-end: 0.375rem;
+  }
+}
+
+/* "job" and "renewal" in the line, each led by a small copy of its marker. */
+.never__key {
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--studio-headline);
+}
+
+.never__key-mark {
+  display: inline-block;
+  inline-size: 0.62em;
+  block-size: 0.62em;
+  margin-inline-end: 0.3em;
+  vertical-align: 0.04em;
+  border: 2px solid var(--studio-headline);
+}
+
+.never__key[data-kind='job'] .never__key-mark {
+  border-radius: var(--radius-pill);
+  background: var(--studio-headline);
+}
+
+.never__key[data-kind='renewal'] .never__key-mark {
+  border-radius: 2px;
+}
+
+/* ── The bike ── */
+.bike {
+  margin: clamp(1.75rem, 1rem + 2.5vw, 3rem) 0 0;
+}
+
+.bike__frame {
+  container-type: inline-size;
+  position: relative;
+
+  /* Phone and small tablet: the bike as wide as the column. */
+  --bw: min(100cqi, 680px);
+  --s: calc(var(--bw) / 1320);
+  --bx: calc((100cqi - var(--bw)) / 2);
+  --by: 0.5rem;
+  --stage: calc(var(--by) + 781 * var(--s) + 2.25rem);
+}
+
+.bike__stage {
+  position: absolute;
+  inset: 0 0 auto;
+  block-size: var(--stage);
+  pointer-events: none;
+}
+
+/* A pool of light on the wall behind the bike, so its black tyres and
+   engine never sink into a dark wall. */
+.bike__stage::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--bx) - var(--bw) * 0.15);
+  top: calc(var(--by) - var(--bw) * 0.05);
+  inline-size: calc(var(--bw) * 1.3);
+  block-size: calc(var(--bw) * 0.7);
+  background: radial-gradient(closest-side, light-dark(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.07)), transparent);
+}
+
+.bike__ride {
+  position: absolute;
+  left: var(--bx);
+  top: var(--by);
+  inline-size: var(--bw);
+  transform-origin: 84% 100%;
+}
+
+.bike__img {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* The floor under it: a wide soft shadow and a tight one under each tyre. */
+.bike__floor {
+  position: absolute;
+  left: -6%;
+  top: calc(735 * var(--s));
+  inline-size: 112%;
+  block-size: calc(90 * var(--s));
+  background:
+    radial-gradient(11% 42% at 15.8% 55%, var(--studio-contact), transparent),
+    radial-gradient(11% 42% at 84.2% 55%, var(--studio-contact), transparent),
+    radial-gradient(50% 50% at 50% 55%, var(--studio-shadow-far), transparent);
+}
+
+.needs {
+  counter-reset: need;
+  display: grid;
+  row-gap: 0.375rem;
+  margin: 0;
+  padding: var(--stage) 0 0;
+  list-style: none;
+}
+
+/* Phone and small tablet: a numbered list under the bike. */
+.need {
+  counter-increment: need;
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.875rem;
+  padding-block: 0.5rem;
+}
+
+.need::before {
+  content: counter(need);
+  display: grid;
+  place-items: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.need[data-kind='job']::before {
+  border-radius: var(--radius-pill);
+  background: var(--studio-headline);
+  color: light-dark(var(--color-paper), var(--color-black));
+}
+
+.need[data-kind='renewal']::before {
+  border: 2px solid var(--studio-headline);
+  border-radius: 0.3125rem;
+  color: var(--studio-headline);
+}
+
+.need[data-nearest]::before {
+  background: var(--color-red);
+  color: var(--color-on-dark);
+}
+
+.need__text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  column-gap: 0.75rem;
+}
+
+.need__label {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.625rem);
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--studio-headline);
+}
+
+.need__due {
+  font-size: var(--text-base);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--studio-text);
+}
+
+.need[data-nearest] .need__due {
+  font-weight: 700;
+  color: var(--home-accent);
+}
+
+/* A tablet held upright: the list is a column under the bike, not a
+   table stretched across the screen. */
+@media (width >= 40rem) and (width < 56.25rem) {
+  .needs {
+    max-inline-size: 30rem;
+    margin-inline: auto;
+  }
+}
+
+/* Markers on the bike. A job's is a light disc that reads on the black of a
+   tyre or the engine; the nearest one is the brand red. Here they carry the
+   item's number; with room for leaders, only a dot. */
+.need__mark {
+  position: absolute;
+  z-index: 1;
+  left: calc(var(--bx) + var(--x) * var(--s));
+  top: calc(var(--by) + var(--y) * var(--s));
+  display: grid;
+  place-items: center;
+  inline-size: 1.625rem;
+  block-size: 1.625rem;
+  border-radius: var(--radius-pill);
+  background: var(--mark-ring);
+  color: var(--mark-core);
+  box-shadow:
+    0 0 0 2px rgb(0 0 0 / 0.35),
+    0 4px 10px -2px rgb(0 0 0 / 0.5);
+  translate: -50% -50%;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.need[data-nearest] .need__mark {
+  background: var(--color-red);
+  color: var(--color-on-dark);
+  box-shadow:
+    0 0 0 2px var(--mark-ring),
+    0 4px 12px -2px rgb(0 0 0 / 0.55);
+}
+
+/* The once-only pulse, drawn by its own ring. */
+.need[data-nearest] .need__mark::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--color-red);
+  border-radius: inherit;
+  opacity: 0;
+}
+
+.need__mark--square,
+.need__leader {
+  display: none;
+}
+
+/* ── From 900px: callouts round the bike, renewals as tags under it ── */
+@media (width >= 56.25rem) {
+  .bike__frame {
+    /* As large as stays sharp, and no larger than lets the headline, the
+       bike with its callouts and the row of tags share one laptop screen
+       under the slim header (--fit: what the rest of the part takes). */
+    --fit: 28.5rem;
+    --bw: min(62cqi, clamp(520px, (100svh - var(--fit)) * 1.6, 680px));
+    --by: 0.75rem;
+    /* Down to the oil change label's foot, under the bike, and a breath
+       before the row of tags. */
+    --stage: calc(var(--by) + 820 * var(--s) + 4.75rem);
+  }
+
+  .needs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .need::before {
+    content: none;
+  }
+
+  /* A job's box covers the frame, so its parts place themselves in the
+     frame's coordinates; it takes no room in the row of tags. */
+  .need[data-kind='job'] {
+    position: absolute;
+    inset: 0;
+    display: block;
+    padding: 0;
+    pointer-events: none;
+  }
+
+  .need[data-kind='job'] .need__text {
+    position: absolute;
+    display: grid;
+    row-gap: 0.25rem;
+    pointer-events: auto;
+  }
+
+  .need[data-side='left'] .need__text {
+    right: calc(100% - var(--bx) - var(--to) * var(--s));
+    top: calc(var(--by) + var(--y) * var(--s));
+    justify-items: end;
+    text-align: end;
+    translate: 0 -50%;
+  }
+
+  .need[data-side='right'] .need__text {
+    left: calc(var(--bx) + var(--to) * var(--s));
+    top: calc(var(--by) + var(--y) * var(--s));
+    translate: 0 -50%;
+  }
+
+  .need[data-side='below'] .need__text {
+    left: calc(var(--bx) + var(--x) * var(--s));
+    top: calc(var(--by) + var(--to) * var(--s));
+    justify-items: center;
+    text-align: center;
+    translate: -50% 0;
+  }
+
+  .need__label {
+    font-size: clamp(1.375rem, 0.75rem + 1.1vw, 1.875rem);
+    line-height: 0.95;
+  }
+
+  .need__mark {
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+    background: radial-gradient(circle, var(--mark-core) 0 30%, var(--mark-ring) 33%);
+  }
+
+  .need[data-nearest] .need__mark {
+    inline-size: 1.375rem;
+    block-size: 1.375rem;
+    background: radial-gradient(circle, var(--color-on-dark) 0 24%, var(--color-red) 27%);
+  }
+
+  .need__num {
+    display: none;
+  }
+
+  .need__leader {
+    position: absolute;
+    display: block;
+    background: var(--leader);
+    box-shadow: 0 0 0 1px var(--leader-halo);
+    border-radius: var(--radius-pill);
+  }
+
+  .need[data-side='left'] .need__leader,
+  .need[data-side='right'] .need__leader {
+    left: calc(var(--bx) + var(--a) * var(--s));
+    top: calc(var(--by) + var(--y) * var(--s));
+    inline-size: calc((var(--b) - var(--a)) * var(--s));
+    block-size: 2px;
+    translate: 0 -50%;
+  }
+
+  .need[data-side='below'] .need__leader {
+    left: calc(var(--bx) + var(--x) * var(--s));
+    top: calc(var(--by) + var(--a) * var(--s));
+    inline-size: 2px;
+    block-size: calc((var(--b) - var(--a)) * var(--s));
+    translate: -50% 0;
+  }
+
+  .need[data-side='left'] .need__leader {
+    transform-origin: right;
+  }
+
+  .need[data-side='right'] .need__leader {
+    transform-origin: left;
+  }
+
+  .need[data-side='below'] .need__leader {
+    transform-origin: top;
+  }
+
+  /* Renewals: a row of tags, each led by its square. */
+  .need[data-kind='renewal'] {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 1.125rem 0.625rem 0.875rem;
+    border-radius: var(--radius-pill);
+    background: var(--tag-bg);
+  }
+
+  .need[data-kind='renewal'] .need__text {
+    column-gap: 0.5rem;
+  }
+
+  .need[data-kind='renewal'] .need__label {
+    font-size: clamp(1.125rem, 0.9rem + 0.4vw, 1.375rem);
+  }
+
+  .need__mark--square {
+    position: static;
+    display: block;
+    inline-size: 0.8125rem;
+    block-size: 0.8125rem;
+    border: 2px solid var(--studio-headline);
+    border-radius: 3px;
+    background: none;
+    box-shadow: none;
+    translate: none;
+  }
+}
+
+.bike__caption {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: var(--home-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--studio-note);
+}
+
+/* ── Motion: one entrance, when the bike is reached ──
+   The bike rolls in from the left and settles with a touch of brake dive,
+   its shadow under it. Then, in due order, each marker lands, its leader
+   draws out to the label, and the label follows; the renewals' tags come in
+   on the same count. The nearest pulses once, after it has settled. */
+.home-running .bike:not([data-seen]) .bike__ride {
+  opacity: 0.35;
+  translate: -30cqi 0;
+}
+
+.home-running .bike[data-seen] .bike__ride {
+  animation: bike-roll 1400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes bike-roll {
+  0% {
+    opacity: 0.35;
+    translate: -30cqi 0;
+    rotate: 0deg;
+  }
+  40% {
+    opacity: 1;
+  }
+  72% {
+    translate: 0 0;
+    rotate: 0.7deg;
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0;
+    rotate: 0deg;
+  }
+}
+
+.need {
+  --at: calc(750ms + var(--i) * 130ms);
+}
+
+.home-running .bike:not([data-seen]) .need__mark {
+  opacity: 0.35;
+  transform: translateY(-1rem) scale(0.4);
+}
+
+.home-running .bike:not([data-seen]) .need__leader {
+  scale: 0;
+}
+
+.home-running .bike:not([data-seen]) .need__text,
+.home-running .bike:not([data-seen]) .need::before {
+  opacity: 0.35;
+  transform: translateY(0.5rem);
+}
+
+.home-running .bike:not([data-seen]) .need[data-kind='renewal'] {
+  opacity: 0.35;
+  transform: translateY(0.5rem);
+}
+
+.home-running .bike[data-seen] .need__mark {
+  transition:
+    opacity 300ms var(--home-ease-out) var(--at),
+    transform 520ms var(--home-ease-out) var(--at);
+}
+
+.home-running .bike[data-seen] .need__leader {
+  transition: scale 420ms var(--home-ease-out) calc(var(--at) + 200ms);
+}
+
+.home-running .bike[data-seen] .need__text,
+.home-running .bike[data-seen] .need::before,
+.home-running .bike[data-seen] .need[data-kind='renewal'] {
+  transition:
+    opacity 500ms var(--home-ease-out) calc(var(--at) + 380ms),
+    transform 700ms var(--home-ease-out) calc(var(--at) + 380ms);
+}
+
+/* A tag's own text is already in with it. */
+.home-running .bike .need[data-kind='renewal'] .need__text {
+  opacity: 1;
+  transform: none;
+}
+
+.home-running .bike[data-seen] .need[data-nearest] .need__mark::after {
+  animation: need-pulse 1300ms var(--home-ease-out) calc(var(--at) + 900ms) 1;
+}
+
+@keyframes need-pulse {
+  from {
+    opacity: 0.9;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 2.6;
+  }
+}
+
+/* ============================================================================
+ * Part 4 · Know what your bike really costs
+ *
+ * The lighter ground again, so the parts read as steps. The chart is the
+ * hero: six pillars standing on the floor, in the family of the 3D chart
+ * icon (alternating charcoal and light neutral, the latest month brand red),
+ * each with its own contact shadow, and the key under it. Phone and
+ * tablet: the copy, then the chart. From 1024px the chart is the left column
+ * and the copy the right, the mirror of the opening.
+ *
+ * Pillar sizes are in container units of the figure: --col is one month's
+ * column, --pw a pillar's width, and every radius and shadow is a share of
+ * --pw, so a pillar keeps its shape at any size. Heights are --v (a share of
+ * the tallest month, from the component) of --chart-h.
+ * ==========================================================================*/
+
+.costs {
+  --chart-h: clamp(12rem, 8rem + 14vw, 21rem);
+  --name-h: 2.5rem;
+  --costs-floor: light-dark(rgb(30 32 40 / 0.075), rgb(255 255 255 / 0.04));
+
+  /* The pillars are objects, lit like the renders. The charcoal ones are a
+     step lighter on the dark ground, where the light-theme charcoal sank
+     into the band; the rim light below finishes the edge. */
+  --pillar-dark-hi: light-dark(#63666e, #8a8e97);
+  --pillar-dark: light-dark(#2f3137, #4a4d55);
+  --pillar-dark-lo: light-dark(#1a1b1f, #2c2e34);
+  --pillar-light-hi: #ffffff;
+  --pillar-light: #e3e5e9;
+  --pillar-light-lo: #b4b8c0;
+  --pillar-red-hi: color-mix(in oklab, var(--color-ember) 70%, #fff);
+  --pillar-red: color-mix(in oklab, var(--color-red) 60%, var(--color-ember));
+  --pillar-red-lo: color-mix(in oklab, var(--color-red) 75%, #000);
+
+  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem);
+  background: var(--color-paper);
+  /* The floor under the pillars runs 8% past the chart on each side; where
+     the chart fills a narrow screen that would widen the page. */
+  overflow-x: clip;
+}
+
+.costs__inner {
+  display: grid;
+  grid-template-areas:
+    'head'
+    'spend';
+  row-gap: clamp(2rem, 1.25rem + 2.5vw, 3.5rem);
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+.costs__head {
+  grid-area: head;
+  display: grid;
+  row-gap: clamp(0.875rem, 0.5rem + 1vw, 1.5rem);
+}
+
+.costs__line {
+  max-inline-size: 26em;
+  text-wrap: pretty;
+  font-size: clamp(0.96875rem, 0.85rem + 0.45vw, 1.3125rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--studio-text);
+}
+
+/* ── The chart ── */
+.spend {
+  grid-area: spend;
+  container-type: inline-size;
+  margin: 0;
+}
+
+.spend__bars {
+  --gap: 4cqi;
+  --col: calc((100cqi - 5 * var(--gap)) / 6);
+  --pw: calc(var(--col) * 0.78);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: var(--gap);
+  margin: 0;
+  /* Room over the tallest pillar for its amount. */
+  padding: 3.25rem 0 0;
+  list-style: none;
+}
+
+/* The floor: a soft pool round the pillars' feet, darkest at the line and
+   fading out in every direction, so it has no edge. */
+.spend__bars::before {
+  content: '';
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  bottom: calc(var(--name-h) - 2.25rem);
+  block-size: 4.5rem;
+  background: radial-gradient(closest-side, var(--costs-floor), transparent);
+  pointer-events: none;
+}
+
+.spend__month {
+  position: relative;
+  display: grid;
+  grid-template-rows: var(--chart-h) var(--name-h);
+  justify-items: center;
+}
+
+/* Contact shadow: a tight dark one in a wide soft one, at the pillar's foot. */
+.spend__month::before,
+.spend__month::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: var(--chart-h);
+  border-radius: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+.spend__month::before {
+  inline-size: calc(var(--pw) * 1.9);
+  block-size: calc(var(--pw) * 0.5);
+  background: radial-gradient(closest-side, var(--studio-shadow-near), transparent);
+}
+
+.spend__month::after {
+  inline-size: calc(var(--pw) * 1.18);
+  block-size: calc(var(--pw) * 0.16);
+  background: radial-gradient(closest-side, var(--studio-contact), transparent);
+}
+
+.spend__name {
+  grid-row: 2;
+  align-self: end;
+  font-family: var(--font-display);
+  font-size: clamp(0.9375rem, 0.8rem + 0.4vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--studio-note);
+}
+
+.spend__month[data-latest] .spend__name {
+  color: var(--studio-headline);
+}
+
+/* The slot is the pillar's column above the floor. It clips at the floor
+   only, so a pillar can rise out of it and its amount can sit above it. */
+.spend__slot {
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  inline-size: 100%;
+  block-size: 100%;
+  clip-path: inset(-100vh -100vw 0 -100vw);
+}
+
+.spend__pillar {
+  --hi: var(--pillar-dark-hi);
+  --body: var(--pillar-dark);
+  --lo: var(--pillar-dark-lo);
+
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  inline-size: var(--pw);
+  block-size: calc(var(--v) * 100%);
+  margin-inline-start: calc(var(--pw) / -2);
+  border-radius: calc(var(--pw) * 0.24) calc(var(--pw) * 0.24) calc(var(--pw) * 0.07) calc(var(--pw) * 0.07);
+  background:
+    /* Lit from the upper left: a soft sheen down the left, shade down the right. */
+    linear-gradient(
+      90deg,
+      rgb(255 255 255 / 0.3) 0%,
+      rgb(255 255 255 / 0.12) 14%,
+      transparent 34%,
+      transparent 66%,
+      rgb(0 0 0 / 0.18) 88%,
+      rgb(0 0 0 / 0.08) 100%
+    ),
+    /* The rounded top catches the light; the foot sits in its own shade. */
+    linear-gradient(180deg, var(--hi) 0, var(--body) calc(var(--pw) * 0.42), var(--body) calc(100% - var(--pw) * 0.4), var(--lo) 100%);
+  box-shadow:
+    inset 0 calc(var(--pw) * 0.03) calc(var(--pw) * 0.02) rgb(255 255 255 / 0.4),
+    inset calc(var(--pw) * -0.04) 0 calc(var(--pw) * 0.06) rgb(0 0 0 / 0.12),
+    /* On the dark ground, a rim light down the lit side and round the top,
+       so a charcoal pillar keeps its edge. */
+    inset calc(var(--pw) * 0.03) calc(var(--pw) * 0.02) 0 light-dark(transparent, rgb(255 255 255 / 0.16)),
+    inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / 0.12));
+}
+
+.spend__month:nth-child(even) .spend__pillar {
+  --hi: var(--pillar-light-hi);
+  --body: var(--pillar-light);
+  --lo: var(--pillar-light-lo);
+}
+
+.spend__month[data-latest] .spend__pillar {
+  --hi: var(--pillar-red-hi);
+  --body: var(--pillar-red);
+  --lo: var(--pillar-red-lo);
+}
+
+/* The latest month's amount, over its pillar. The rest are for screen
+   readers only. */
+.spend__value:not(.sr-only) {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: calc(var(--name-h) + var(--v) * var(--chart-h) + 0.625rem);
+  translate: -50% 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 1rem + 1.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--studio-headline);
+}
+
+/* Under the chart: the key, a small pillar and what one month adds up, in
+   the line's own words joined by plus signs; then the sample-data note. */
+.spend__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.spend__key {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.spend__swatch {
+  flex: none;
+  inline-size: 0.625rem;
+  block-size: 1.125rem;
+  border-radius: 0.25rem 0.25rem 0.125rem 0.125rem;
+  background: light-dark(
+    linear-gradient(90deg, var(--pillar-dark-hi), var(--pillar-dark) 45%, var(--pillar-dark-lo)),
+    linear-gradient(90deg, var(--pillar-light-hi), var(--pillar-light) 45%, var(--pillar-light-lo))
+  );
+}
+
+.spend__counted {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--studio-text);
+}
+
+.spend__counted li + li::before {
+  content: '+' / '';
+  margin-inline-end: 0.4rem;
+  color: var(--studio-note);
+}
+
+.spend__sample {
+  font-size: var(--home-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--studio-note);
+}
+
+@media (width >= 64rem) {
+  .costs__inner {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-areas: 'spend head';
+    column-gap: clamp(3rem, 6vw, 7rem);
+    align-items: center;
+  }
+}
+
+/* ── Motion: the pillars rise out of the floor, one after another ──
+   From a stub (four tenths showing, half opacity) to full height, on the
+   settle curve, so each one lands with a little weight. The latest month's
+   amount rides up on top of its pillar. */
+.home-running .spend:not([data-seen]) .spend__pillar {
+  opacity: 0.5;
+  translate: 0 60%;
+}
+
+.home-running .spend[data-seen] .spend__pillar {
+  transition:
+    opacity 500ms var(--home-ease-out),
+    translate 1000ms var(--home-ease);
+  transition-delay: calc(120ms + var(--i) * 110ms);
+}
+
+.home-running .spend:not([data-seen]) .spend__month::before,
+.home-running .spend:not([data-seen]) .spend__month::after {
+  opacity: 0.4;
+  scale: 0.7;
+}
+
+.home-running .spend[data-seen] .spend__month::before,
+.home-running .spend[data-seen] .spend__month::after {
+  transition:
+    opacity 700ms var(--home-ease-out),
+    scale 1000ms var(--home-ease-out);
+  transition-delay: calc(120ms + var(--i) * 110ms);
+}
+
+/* The amount rides up on top of its pillar, on the same clock. */
+.home-running .spend:not([data-seen]) .spend__value:not(.sr-only) {
+  opacity: 0.35;
+  translate: -50% calc(var(--v) * var(--chart-h) * 0.6);
+}
+
+.home-running .spend[data-seen] .spend__value:not(.sr-only) {
+  transition:
+    opacity 700ms var(--home-ease-out),
+    translate 1000ms var(--home-ease);
+  transition-delay: calc(120ms + var(--i) * 110ms);
+}
+
+/* ============================================================================
+ * Part 5 · Made for riding in Singapore
+ *
+ * The studio wall again. Four glossy objects from the opening's family for
+ * the local tools: one optical size (--icon, times each object's --k), one
+ * baseline on the floor, one shared soft shadow, upright and evenly spaced:
+ * four columns from 768px, two by two below. Each whole tile is the link;
+ * the label is its text. --icon tops out at 168px, which keeps every render
+ * at or under half its native height (the shortest, the camera, is 334px
+ * tall and drawn at 0.9 of --icon).
+ * ==========================================================================*/
+
+.sg {
+  --icon: clamp(8rem, 5.6rem + 6vw, 10.5rem);
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem);
+  background:
+    radial-gradient(80% 60% at 50% 75%, var(--studio-glow) 0%, transparent 70%),
+    linear-gradient(
+      180deg,
+      var(--studio-wall-top) 0%,
+      var(--studio-wall-mid) 45%,
+      var(--studio-wall-low) 75%,
+      var(--studio-floor) 100%
+    );
+}
+
+.sg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(130% 100% at 50% 45%, transparent 60%, var(--studio-vignette) 100%);
+}
+
+.sg__inner {
+  display: grid;
+  row-gap: clamp(2.25rem, 1.25rem + 3vw, 4rem);
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+/* The one centred part: a short beat between two left-led ones. */
+.sg__title {
+  justify-self: center;
+  text-align: center;
+}
+
+.sg__tools {
+  display: grid;
+  justify-self: center;
+  inline-size: min(100%, 72rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 1rem + 3vw, 3rem) clamp(0.75rem, 3vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tool {
+  display: grid;
+  justify-items: center;
+  row-gap: clamp(1rem, 0.75rem + 0.8vw, 1.5rem);
+  padding: 0.5rem 0.25rem 0.75rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  text-decoration: none;
+  color: var(--studio-headline);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tool:focus-visible {
+  outline: 2px solid var(--studio-headline);
+  outline-offset: 4px;
+}
+
+.tool__art {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  inline-size: calc(var(--icon) * var(--k) * var(--ratio));
+  block-size: var(--icon);
+}
+
+/* The floor under each: a wide soft shadow round a tight contact one, on
+   the shared baseline, as wide as the object over it. */
+.tool__art::before,
+.tool__art::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(100% - var(--icon) * 0.01);
+  border-radius: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
+  transition: scale var(--home-base) var(--home-ease-out), opacity var(--home-base) var(--home-ease-out);
+}
+
+.tool__art::before {
+  inline-size: calc(100% + var(--icon) * 0.3);
+  block-size: calc(var(--icon) * 0.16);
+  background: radial-gradient(closest-side, var(--studio-shadow-near), transparent);
+}
+
+.tool__art::after {
+  inline-size: calc(100% - var(--icon) * 0.06);
+  block-size: calc(var(--icon) * 0.05);
+  background: radial-gradient(closest-side, var(--studio-contact), transparent);
+}
+
+.tool__drop {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.tool__icon {
+  display: block;
+  block-size: calc(var(--icon) * var(--k));
+  inline-size: auto;
+  filter: drop-shadow(0 calc(var(--icon) * 0.03) calc(var(--icon) * 0.03) var(--studio-shadow-near));
+  transition: translate var(--home-base) var(--home-ease-out);
+}
+
+.tool__label {
+  /* Two lines tall whether it wraps or not, so the four labels make one
+     even row at every width. */
+  min-block-size: 2lh;
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 0.95rem + 0.6vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.tool__label::after {
+  content: '\2192' / '';
+  display: inline-block;
+  margin-inline-start: 0.3em;
+  color: var(--studio-note);
+  transition: translate var(--home-base) var(--home-ease-out);
+}
+
+@media (hover: hover) {
+  .tool:hover .tool__icon {
+    translate: 0 -0.5rem;
+  }
+
+  .tool:hover .tool__art::before {
+    scale: 0.85;
+    opacity: 0.7;
+  }
+
+  .tool:hover .tool__label::after {
+    translate: 0.2em 0;
+  }
+}
+
+.tool:focus-visible .tool__icon {
+  translate: 0 -0.5rem;
+}
+
+@media (width >= 48rem) {
+  .sg__tools {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ── Motion: the icons drop in and settle, one after another ── */
+.home-running .sg:not([data-seen]) .tool__drop {
+  opacity: 0.35;
+  /* Short enough that a raised icon never reaches the text above it. */
+  translate: 0 calc(var(--icon) * -0.28);
+}
+
+.home-running .sg[data-seen] .tool__drop {
+  transition:
+    opacity 500ms var(--home-ease-out),
+    translate 900ms var(--home-ease);
+  transition-delay: calc(200ms + var(--i) * 120ms);
+}
+
+.home-running .sg:not([data-seen]) .tool__art::before,
+.home-running .sg:not([data-seen]) .tool__art::after {
+  opacity: 0.35;
+  scale: 0.55;
+}
+
+.home-running .sg[data-seen] .tool__art::before,
+.home-running .sg[data-seen] .tool__art::after {
+  transition:
+    opacity 700ms var(--home-ease-out),
+    scale 900ms var(--home-ease-out);
+  transition-delay: calc(200ms + var(--i) * 120ms);
+}
+
+.home-running .sg:not([data-seen]) .tool__label {
+  opacity: 0.35;
+  translate: 0 0.5rem;
+}
+
+.home-running .sg[data-seen] .tool__label {
+  transition:
+    opacity 600ms var(--home-ease-out),
+    translate 800ms var(--home-ease-out);
+  transition-delay: calc(450ms + var(--i) * 120ms);
+}
+
+/* ============================================================================
+ * Part 6 · A history a buyer can check
+ *
+ * The lighter ground. The passport page is the hero, large and in front; the
+ * bike from behind stands back on its left and the buyer looks on from its
+ * right, both smaller and both behind it. Everything in the stage is in
+ * container units of the stage (cqi), so the group keeps its proportions.
+ * Phone and tablet: the copy, then the stage. From 1024px the copy is the
+ * left column and the stage the right.
+ * ==========================================================================*/
+
+.history {
+  --history-floor: light-dark(rgb(30 32 40 / 0.07), rgb(255 255 255 / 0.035));
+
+  overflow: clip;
+  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem) clamp(3rem, 2rem + 4vw, 6rem);
+  background: var(--color-paper);
+}
+
+.history__inner {
+  display: grid;
+  row-gap: clamp(2rem, 1rem + 3vw, 3.5rem);
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+.history__head {
+  display: grid;
+  row-gap: clamp(0.875rem, 0.5rem + 1vw, 1.5rem);
+  align-content: center;
+}
+
+.history__line {
+  max-inline-size: 24em;
+  text-wrap: pretty;
+  font-size: clamp(0.96875rem, 0.85rem + 0.45vw, 1.3125rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--studio-text);
+}
+
+.history__stage {
+  container-type: inline-size;
+  position: relative;
+  justify-self: center;
+  inline-size: min(100%, 36rem);
+  /* Its own cqi cannot size it, so its height is a ratio: the page's foot
+     is at about 85cqi, the floor a little under it. */
+  aspect-ratio: 100 / 92;
+  /* A soft pool behind the group, with no edge: on the light ground a shade
+     darker, so the white page stands off it and is the first thing seen; on
+     the dark ground a shade lighter, so the black of the tyres and the
+     rider's suit does not sink into it. */
+  background: radial-gradient(
+    closest-side,
+    light-dark(rgb(30 32 40 / 0.1), rgb(255 255 255 / 0.07)) 0%,
+    light-dark(rgb(30 32 40 / 0.05), rgb(255 255 255 / 0.035)) 55%,
+    transparent 100%
+  );
+}
+
+/* The floor all three stand on. */
+.history__stage::before {
+  content: '';
+  position: absolute;
+  inset: auto -10% 0;
+  block-size: 22cqi;
+  background: radial-gradient(50% 60% at 50% 45%, var(--history-floor), transparent);
+  pointer-events: none;
+}
+
+.history__bike,
+.history__buyer {
+  position: absolute;
+  z-index: 0;
+  bottom: 6cqi;
+}
+
+.history__bike {
+  left: 1cqi;
+  inline-size: 30cqi;
+}
+
+.history__buyer {
+  /* Out past the stage's edge a little: he leans in toward the page, and
+     his face should clear it. */
+  right: -2.5cqi;
+  inline-size: 19.7cqi;
+}
+
+.history__img {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* Contact shadows at their feet. */
+.history__bike::before,
+.history__buyer::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  border-radius: 50%;
+  translate: -50% 50%;
+  background: radial-gradient(closest-side, var(--studio-contact), transparent);
+}
+
+.history__bike::before {
+  inline-size: 44%;
+  block-size: 5cqi;
+}
+
+.history__buyer::before {
+  /* Under his feet, right of centre: he leans the other way. */
+  left: 60%;
+  inline-size: 80%;
+  block-size: 3.5cqi;
+}
+
+.history__page {
+  position: absolute;
+  z-index: 1;
+  left: 23cqi;
+  top: 0;
+  inline-size: 60cqi;
+  rotate: -2deg;
+  filter:
+    drop-shadow(0 3cqi 4cqi var(--studio-shadow-far))
+    drop-shadow(0 0.4cqi 0.6cqi var(--studio-shadow-near))
+    drop-shadow(0 0 0.15cqi var(--studio-shadow-near));
+}
+
+@media (width >= 64rem) {
+  .history__stage {
+    inline-size: min(100%, 54rem);
+  }
+
+  /* The page is wider than he is here: further out, so both eyes clear it. */
+  .history__buyer {
+    right: -5cqi;
+  }
+
+  .history__inner {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.25fr);
+    column-gap: clamp(2.5rem, 5vw, 6rem);
+    align-items: center;
+  }
+}
+
+/* ── The passport page ──
+   Its own palette is the printed document's (the app's styles.ts), so it is
+   the same sheet of paper in both themes. Sizes in cqi of the page. */
+.passport {
+  --pp-paper: #fdfbf6;
+  --pp-ink: #23231f;
+  --pp-sub: #6e6c64;
+  --pp-label: #8a887e;
+  --pp-rule: #dddbd2;
+  --pp-rule-soft: #edebe3;
+  --pp-tile: #f4f2eb;
+  --pp-stripe: #faf9f5;
+  --pp-ember: var(--color-ember);
+
+  container-type: inline-size;
+}
+
+.passport__sheet {
+  padding: 6cqi 6cqi 6.5cqi;
+  border-radius: 1.2cqi;
+  background: var(--pp-paper);
+  color: var(--pp-ink);
+  font-size: 2.4cqi;
+  line-height: 1.3;
+}
+
+:where(.passport__sheet p) {
+  margin: 0;
+}
+
+.passport__mast {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 3cqi;
+  padding-block-end: 1.8cqi;
+  border-block-end: 0.8cqi solid var(--pp-ember);
+}
+
+.passport__title {
+  font-family: var(--font-display);
+  font-size: 7.4cqi;
+  font-weight: 700;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.passport__sub {
+  margin-top: 1cqi;
+  font-size: 1.8cqi;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pp-sub);
+}
+
+.passport__code {
+  text-align: end;
+  font-size: 1.8cqi;
+  line-height: 1.45;
+  color: var(--pp-sub);
+}
+
+.passport__code b {
+  display: block;
+  font-size: 3cqi;
+  letter-spacing: 0.06em;
+  color: var(--pp-ink);
+}
+
+.passport__bike {
+  margin-top: 3.4cqi;
+  font-size: 4.4cqi;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.passport__year {
+  font-size: 2.2cqi;
+  color: var(--pp-sub);
+}
+
+.passport__fields {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 2.6cqi 0 0;
+  border-block: 0.25cqi solid var(--pp-rule);
+}
+
+.passport__fields div {
+  padding: 1.8cqi 1.4cqi 1.8cqi 0;
+}
+
+.passport__fields div + div {
+  padding-inline-start: 1.4cqi;
+  border-inline-start: 0.25cqi solid var(--pp-rule-soft);
+}
+
+.passport__fields dt {
+  font-size: 1.55cqi;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pp-label);
+  white-space: nowrap;
+}
+
+.passport__fields dd {
+  margin: 0.5cqi 0 0;
+  font-size: 2.4cqi;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.passport__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.6cqi;
+  margin-top: 2.6cqi;
+}
+
+.passport__stat {
+  display: grid;
+  row-gap: 0.6cqi;
+  padding: 1.8cqi 2cqi;
+  border-radius: 1.2cqi;
+  background: var(--pp-tile);
+}
+
+.passport__stat--accent {
+  background: var(--pp-ember);
+  color: #fff;
+}
+
+.passport__n {
+  font-size: 4.2cqi;
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.passport__l {
+  font-size: 1.55cqi;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--pp-label);
+}
+
+.passport__stat--accent .passport__l {
+  color: #f6c9c1;
+}
+
+.passport__sec {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 3.2cqi;
+  padding-block-end: 0.8cqi;
+  border-block-end: 0.25cqi solid var(--pp-ink);
+  font-size: 1.9cqi;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.passport__sec span {
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--pp-label);
+}
+
+.passport__chart {
+  display: block;
+  inline-size: 100%;
+  block-size: 9cqi;
+  margin-top: 1.4cqi;
+}
+
+.passport__area {
+  fill: var(--pp-ember);
+  fill-opacity: 0.07;
+}
+
+.passport__line {
+  fill: none;
+  stroke: var(--pp-ember);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.passport__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: 2.2cqi;
+}
+
+.passport__table td {
+  padding: 1.3cqi 1.2cqi 1.3cqi 0;
+  border-block-start: 0.2cqi solid var(--pp-rule-soft);
+  white-space: nowrap;
+}
+
+.passport__table tr:nth-child(even) td {
+  background: var(--pp-stripe);
+}
+
+.passport__table td:first-child {
+  inline-size: 16%;
+  color: var(--pp-sub);
+}
+
+.passport__table td:nth-child(2) {
+  font-weight: 600;
+}
+
+.passport__table td:nth-child(3) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.passport__table td:last-child {
+  inline-size: 6%;
+  text-align: center;
+  color: var(--pp-ember);
+  font-weight: 700;
+}
+
+.passport__verify {
+  display: flex;
+  align-items: center;
+  gap: 3cqi;
+  margin-top: 3.4cqi;
+  padding-top: 3cqi;
+  border-block-start: 0.25cqi solid var(--pp-rule);
+}
+
+/* The placeholder QR: a regular pattern that encodes nothing, washed back,
+   with SAMPLE across it so nobody takes it for a real code. */
+.passport__qr {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 17cqi;
+  aspect-ratio: 1;
+}
+
+.passport__qr svg {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  fill: var(--pp-ink);
+  opacity: 0.5;
+}
+
+.passport__qr-ground {
+  fill: var(--pp-paper);
+}
+
+.passport__qr-ring {
+  fill: none;
+  stroke: var(--pp-ink);
+  stroke-width: 1;
+}
+
+.passport__qr-sample {
+  position: relative;
+  padding: 0.6cqi 1.4cqi;
+  border-radius: 0.6cqi;
+  background: var(--pp-ink);
+  color: var(--pp-paper);
+  font-size: 1.9cqi;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.passport__verify-title {
+  font-size: 3cqi;
+  font-weight: 700;
+}
+
+.passport__chip {
+  display: inline-block;
+  margin-top: 1.2cqi;
+  padding: 0.8cqi 1.6cqi;
+  border-radius: 99cqi;
+  background: var(--pp-tile);
+  font-size: 1.9cqi;
+  color: var(--pp-sub);
+}
+
+.passport__chip b {
+  color: var(--pp-ink);
+}
+
+/* ── Motion: the page slides up into place and settles ──
+   The bike and the buyer ease in behind it, a beat earlier, so the page is
+   the last thing to land and the one the eye follows. */
+/* The page travels rather than fades: a see-through sheet would show the
+   bike through it. */
+.home-running .history__stage:not([data-seen]) .history__page {
+  translate: 0 18cqi;
+  rotate: 2deg;
+}
+
+.home-running .history__stage[data-seen] .history__page {
+  transition:
+    translate 1100ms var(--home-ease) 250ms,
+    rotate 1100ms var(--home-ease-out) 250ms;
+}
+
+.home-running .history__stage:not([data-seen]) .history__bike {
+  opacity: 0.35;
+  translate: -6cqi 0;
+}
+
+.home-running .history__stage:not([data-seen]) .history__buyer {
+  opacity: 0.35;
+  translate: 6cqi 0;
+}
+
+.home-running .history__stage[data-seen] :is(.history__bike, .history__buyer) {
+  transition:
+    opacity 700ms var(--home-ease-out),
+    translate 900ms var(--home-ease-out);
+}
+
+/* ============================================================================
+ * Part 7 · And we're not done
+ *
+ * The studio wall again. The headline alone, then four soft panels, no
+ * border, each with its own object on its own floor, all four always in
+ * view: two by two on a phone and a tablet, one row of four from 1100px.
+ * Map, Guides and Weather are single objects from one icon set, one camera:
+ * each is sized by its own --ow so the three read at one optical size, and
+ * all stand on the same floor line under the same soft shadow. Community is
+ * a group, three riders a touch taller than the objects, as people would
+ * be.
+ *
+ * --next-art is the art's height. On a phone it is 6.5rem, small enough that
+ * the headline and all four panels fit about one 390 x 844 screen; in the
+ * row of four it follows the viewport, so the riders, who fill the panel's
+ * width, stay a touch taller than the objects; it never passes 216px, where
+ * the map is half its 426 pixels.
+ *
+ * The riders are one picture: the delivery rider and the main rider bump
+ * fists in the middle of the panel, the commuter waves on the right.
+ * ==========================================================================*/
+
+.next {
+  --next-art: 6.5rem;
+  --next-panel: light-dark(rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.04));
+  --next-badge: light-dark(rgb(30 32 40 / 0.07), rgb(255 255 255 / 0.08));
+  --soon-pad: 0.75rem;
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding-block: clamp(3rem, 1.5rem + 5vw, 6rem);
+  background:
+    radial-gradient(80% 60% at 50% 70%, var(--studio-glow) 0%, transparent 70%),
+    linear-gradient(
+      180deg,
+      var(--studio-wall-top) 0%,
+      var(--studio-wall-mid) 45%,
+      var(--studio-wall-low) 75%,
+      var(--studio-floor) 100%
+    );
+}
+
+.next::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(130% 100% at 50% 45%, transparent 60%, var(--studio-vignette) 100%);
+}
+
+.next__inner {
+  display: grid;
+  row-gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+.next__cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* --stagger holds each card a beat behind the one before it in reading
+   order: on a phone that is all four, left to right and down. */
+.soon {
+  --stagger: calc(var(--i) * 110ms);
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+  row-gap: 0.75rem;
+  padding: var(--soon-pad);
+  border-radius: var(--radius-md);
+  background: var(--next-panel);
+  overflow: clip;
+}
+
+.soon__art {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  block-size: var(--next-art);
+}
+
+/* The floor: a wide soft shadow round a tight contact one, on the line the
+   object stands on, under its middle unless --floor-x moves it. Its width
+   follows the object's, so every object casts the same shadow. */
+.soon__art::before,
+.soon__art::after {
+  content: '';
+  position: absolute;
+  left: calc(50% + var(--floor-x, 0px));
+  bottom: 0;
+  border-radius: 50%;
+  translate: -50% 50%;
+  pointer-events: none;
+}
+
+.soon__art::before {
+  inline-size: var(--floor-wide);
+  block-size: calc(var(--next-art) * 0.14);
+  background: radial-gradient(closest-side, var(--studio-shadow-near), transparent);
+}
+
+.soon__art::after {
+  inline-size: var(--floor-contact);
+  block-size: calc(var(--next-art) * 0.045);
+  background: radial-gradient(closest-side, var(--studio-contact), transparent);
+}
+
+.soon__img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* The single objects. --ow is each one's width, set by eye so they weigh the
+   same: the wide, pale, open map at the art's full width; the dense dark
+   book much narrower; the cloud between. The foot of each render is its
+   lowest point, so each stands on the floor line. Never wider than half
+   their pixels: map 213px of 426, book 136px of 469, cloud 179px of 556. */
+.soon__art--map { --ow: calc(var(--next-art) * 0.986); }
+.soon__art--guides { --ow: calc(var(--next-art) * 0.63); }
+.soon__art--weather { --ow: calc(var(--next-art) * 0.83); }
+
+.soon__art--map,
+.soon__art--guides,
+.soon__art--weather {
+  --floor-wide: calc(var(--ow) * 1.35);
+  --floor-contact: calc(var(--ow) * 0.9);
+}
+
+/* On the dark wall the light from above catches the top edges, as it does
+   the main rider's helmet: without it the black book and raindrops sink
+   into the panel. */
+.soon__obj {
+  position: relative;
+  z-index: 1;
+  inline-size: var(--ow);
+  filter:
+    drop-shadow(0 calc(var(--next-art) * 0.02) calc(var(--next-art) * 0.025) var(--studio-shadow-near))
+    drop-shadow(0 calc(var(--next-art) * -0.004) 0 light-dark(transparent, rgb(255 255 255 / 0.16)));
+}
+
+/* The riders. --tw is the picture's width. On a phone the picture fills the
+   panel's inside, centred: any smaller and they stop reading as three
+   riders. From 640px it is never taller than the art nor wider than half its
+   1105 px, nor than the panel's inside plus one padding, and --ts moves it
+   right so the fist bump (0.337 of its width) is on the panel's centre line,
+   as far as it can go and keep the commuter well inside the panel. The floor
+   goes under their feet, which run from 0.12 to 0.94 of it. */
+.soon__art--group {
+  --tw: 100cqi;
+  --ts: 0px;
+  --floor-x: calc(var(--ts) + var(--tw) * 0.03);
+  --floor-wide: calc(var(--tw) * 1.05);
+  --floor-contact: calc(var(--tw) * 0.86);
+
+  container-type: inline-size;
+}
+
+.soon__group {
+  position: relative;
+  z-index: 1;
+  left: var(--ts);
+  inline-size: var(--tw);
+  aspect-ratio: 1105 / 660;
+}
+
+/* The picture three times over, each copy clipped to one rider so each can
+   move on its own; at rest they line up. The cut between the delivery rider
+   and the main rider runs through the two fists, so the left copy is on top
+   and the middle one runs a hair under it: no seam. */
+.soon__rider {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(0 calc(var(--tw) * 0.007) calc(var(--tw) * 0.007) var(--studio-shadow-near));
+}
+
+.soon__rider--left {
+  z-index: 1;
+  clip-path: inset(0 66.3% 0 0);
+}
+
+/* On the dark wall the light from above catches the crown of his black
+   helmet. */
+.soon__rider--mid {
+  clip-path: inset(0 32.5% 0 33%);
+  filter:
+    drop-shadow(0 calc(var(--tw) * 0.007) calc(var(--tw) * 0.007) var(--studio-shadow-near))
+    drop-shadow(0 calc(var(--tw) * -0.002) 0 light-dark(transparent, rgb(255 255 255 / 0.16)));
+}
+
+.soon__rider--right {
+  clip-path: inset(0 0 0 67.5%);
+}
+
+.soon__copy {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  row-gap: 0.375rem;
+}
+
+/* "In the works": a small neutral pill led by a half-filled disc. On a phone
+   its tracking and padding close up so it fits a half-width panel at 12px. */
+.soon__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0;
+  padding: 0.25rem 0.5rem 0.25rem 0.4375rem;
+  border-radius: var(--radius-pill);
+  background: var(--next-badge);
+  font-size: var(--home-label);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: var(--studio-eyebrow);
+}
+
+.soon__badge::before {
+  content: '';
+  flex: none;
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+}
+
+.soon__title {
+  margin: 0.125rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: var(--studio-headline);
+}
+
+.soon__line {
+  margin: 0;
+  max-inline-size: 24em;
+  text-wrap: pretty;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--studio-text);
+}
+
+/* Tablets: still two by two, roomier; the right-hand card of a row a beat
+   after the left. */
+@media (width >= 40rem) {
+  .next {
+    --next-art: 9.5rem;
+    --soon-pad: clamp(1.25rem, 0.5rem + 2vw, 2rem);
+  }
+
+  .next__cards {
+    gap: clamp(0.75rem, 0.25rem + 1.25vw, 1.5rem);
+  }
+
+  .soon {
+    --stagger: calc(var(--col) * 220ms);
+
+    row-gap: clamp(1rem, 0.5rem + 1vw, 1.5rem);
+    border-radius: var(--radius-3xl);
+  }
+
+  .soon__art--group {
+    --tw: min(var(--next-art) * 1105 / 660, 34.5rem, 100cqi + var(--soon-pad));
+    --ts: min(var(--tw) * 0.163, (100cqi - var(--tw)) / 2 + var(--soon-pad) * 0.3);
+  }
+
+  .soon__copy {
+    row-gap: 0.5rem;
+  }
+
+  .soon__badge {
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem 0.375rem 0.625rem;
+    letter-spacing: var(--tracking-eyebrow);
+  }
+
+  .soon__title {
+    margin-block-start: 0.25rem;
+    font-size: clamp(1.75rem, 1rem + 1.6vw, 2.5rem);
+  }
+
+  .soon__line {
+    font-size: clamp(0.9375rem, 0.875rem + 0.25vw, 1.0625rem);
+    line-height: 1.45;
+  }
+}
+
+/* One row of four, left to right. */
+@media (width >= 68.75rem) {
+  .next {
+    --next-art: clamp(8rem, 11.5vw, 13.5rem);
+    --soon-pad: clamp(1.5rem, 0.5rem + 1.5vw, 2.5rem);
+  }
+
+  .next__cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .soon {
+    --stagger: calc(var(--i) * 160ms);
+  }
+
+  .soon__title {
+    font-size: clamp(1.875rem, 0.75rem + 1.7vw, 2.75rem);
+  }
+}
+
+/* ── Motion: the objects drop onto their floors; the riders gather ──
+   Each object comes down from above and lands with a little weight while
+   its shadow tightens under it. The main rider comes up into place, then
+   the two others walk in from either side, and the fists close. Each panel
+   is measured on its own, so on a phone, where they stack, each moves as it
+   is reached; side by side, the right one follows the left by --stagger. */
+.home-running .soon:not([data-seen]) .soon__obj {
+  opacity: 0.35;
+  translate: 0 calc(var(--next-art) * -0.2);
+}
+
+.home-running .soon[data-seen] .soon__obj {
+  transition:
+    opacity 600ms var(--home-ease-out),
+    translate 1100ms var(--home-ease);
+  transition-delay: calc(150ms + var(--stagger));
+}
+
+.home-running .soon:not([data-seen]) .soon__art::before,
+.home-running .soon:not([data-seen]) .soon__art::after {
+  opacity: 0.35;
+  scale: 0.6;
+}
+
+.home-running .soon[data-seen] .soon__art::before,
+.home-running .soon[data-seen] .soon__art::after {
+  transition:
+    opacity 800ms var(--home-ease-out),
+    scale 1100ms var(--home-ease-out);
+  transition-delay: calc(150ms + var(--stagger));
+}
+
+.home-running .soon:not([data-seen]) .soon__rider {
+  opacity: 0.35;
+}
+
+.home-running .soon:not([data-seen]) .soon__rider--mid {
+  translate: 0 calc(var(--tw) * 0.05);
+}
+
+.home-running .soon:not([data-seen]) .soon__rider--left {
+  translate: calc(var(--tw) * -0.22) 0;
+}
+
+.home-running .soon:not([data-seen]) .soon__rider--right {
+  translate: calc(var(--tw) * 0.22) 0;
+}
+
+.home-running .soon[data-seen] .soon__rider {
+  transition:
+    opacity 600ms var(--home-ease-out),
+    translate 1000ms var(--home-ease);
+}
+
+.home-running .soon[data-seen] .soon__rider--mid {
+  transition-delay: calc(400ms + var(--stagger));
+}
+
+.home-running .soon[data-seen] .soon__rider--left {
+  transition-delay: calc(600ms + var(--stagger));
+}
+
+.home-running .soon[data-seen] .soon__rider--right {
+  transition-delay: calc(720ms + var(--stagger));
+}
+
+.home-running .soon:not([data-seen]) .soon__copy {
+  opacity: 0.35;
+  translate: 0 0.75rem;
+}
+
+.home-running .soon[data-seen] .soon__copy {
+  transition:
+    opacity 700ms var(--home-ease-out),
+    translate 900ms var(--home-ease-out);
+  transition-delay: calc(300ms + var(--stagger));
+}
+
+/* ============================================================================
+ * Part 8 · The detail
+ *
+ * For whoever wants all of it: the questions, on the page's lighter ground
+ * (the ground part 6 stands on), between the studio wall of part 7 and the
+ * dark finale. One native <details> each, sharing one name so one is open at
+ * a time; each is a whole-width row with a round plus that turns to a minus
+ * when open. From 1024px the headline sits beside the list and stays in view.
+ *
+ * The first row opens on everything in the app today: six small groups in a
+ * grid that follows the answer's own width (container units), three columns
+ * where it is wide, two on a tablet, one on a phone.
+ * ==========================================================================*/
+
+.detail {
+  --detail-rule: light-dark(rgb(30 32 40 / 0.16), rgb(255 255 255 / 0.12));
+
+  padding-block: clamp(3.5rem, 2rem + 4vw, 6rem);
+  background: var(--color-paper);
+}
+
+.detail__inner {
+  display: grid;
+  row-gap: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+.detail__title {
+  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.75rem);
+}
+
+@media (width >= 64rem) {
+  .detail__inner {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 2.2fr);
+    align-items: start;
+    column-gap: clamp(2.5rem, 4vw, 5rem);
+  }
+
+  /* The headline stays in view beside a long open answer. */
+  .detail__title {
+    position: sticky;
+    top: calc(var(--site-bar-slim) + 1.5rem);
+  }
+}
+
+.faqs {
+  container: faqs / inline-size;
+  border-block-end: 1px solid var(--detail-rule);
+}
+
+.faq {
+  border-block-start: 1px solid var(--detail-rule);
+}
+
+.faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  min-block-size: 3rem;
+  /* Room round the row for the focus ring, with the text still on the
+     page's left edge. */
+  margin-inline: -0.75rem;
+  padding: clamp(0.875rem, 0.7rem + 0.5vw, 1.125rem) 0.75rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  list-style: none;
+  font-size: clamp(1rem, 0.92rem + 0.3vw, 1.1875rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--studio-headline);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.faq__q::-webkit-details-marker {
+  display: none;
+}
+
+.faq__q:focus-visible {
+  outline: 2px solid var(--studio-headline);
+  outline-offset: 2px;
+}
+
+.faq__text {
+  max-inline-size: 36em;
+  text-wrap: pretty;
+}
+
+/* The open/closed mark: a ring with a plus; open, a filled disc with a
+   minus. */
+.faq__mark {
+  position: relative;
+  flex: none;
+  inline-size: 2rem;
+  aspect-ratio: 1;
+  border: 2px solid var(--studio-headline);
+  border-radius: 50%;
+  color: var(--studio-headline);
+  transition:
+    background-color var(--home-fast) var(--home-ease-out),
+    color var(--home-fast) var(--home-ease-out),
+    scale var(--home-base) var(--home-ease-out);
+}
+
+.faq__mark::before,
+.faq__mark::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  inline-size: 0.75rem;
+  block-size: 2px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  translate: -50% -50%;
+  transition: rotate var(--home-base) var(--home-ease-out);
+}
+
+.faq__mark::after {
+  rotate: 90deg;
+}
+
+.faq[open] .faq__mark {
+  background: var(--studio-headline);
+  color: light-dark(var(--color-paper), var(--color-black));
+}
+
+.faq[open] .faq__mark::after {
+  rotate: 0deg;
+}
+
+@media (hover: hover) {
+  .faq__q:hover .faq__mark {
+    scale: 1.1;
+  }
+}
+
+.faq__a {
+  max-inline-size: 38em;
+  margin: 0;
+  padding-block: 0 clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+/* "What can the app do today?": the six groups, wider than an answer's
+   measure so the columns fit. */
+.faq__a.features {
+  display: grid;
+  gap: clamp(1.5rem, 1.25rem + 1vw, 2rem) clamp(1.5rem, 3vw, 3rem);
+  max-inline-size: none;
+}
+
+/* Columns by the list's own width (.faqs is the container). */
+@container faqs (width >= 30rem) {
+  .faq__a.features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container faqs (width >= 46rem) {
+  .faq__a.features {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* No rule of its own: the accordion's hairlines are the only lines. */
+.features__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--studio-headline);
+}
+
+.features__items {
+  display: grid;
+  /* Wider than a wrapped line's leading, so two items never read as one. */
+  row-gap: 0.5rem;
+  margin: 0.625rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-base);
+  line-height: 1.35;
+  color: var(--studio-text);
+}
+
+/* The answer settles in as it opens; running pages only, so reduced motion
+   just shows it. */
+.home-running .faq[open] .faq__a {
+  animation: faq-open 420ms var(--home-ease-out) both;
+}
+
+@keyframes faq-open {
+  from {
+    opacity: 0.35;
+    translate: 0 -0.375rem;
+  }
+}
+
+/* ============================================================================
+ * Part 9 · Ride more. Worry less.
+ *
+ * The finale and the page's one dark band, in both themes: a near-black
+ * studio lit by one soft spotlight from above, a glossy floor, and on it the
+ * main rider on his bike, side on. The floor gives back a faint mirror of
+ * it. The band's foot is the footer's black, so the two run on as one dark
+ * ground.
+ *
+ * The stage is a container, and the picture is in its units (cqi): --bw is
+ * its width, capped by --ride-max for sharpness; --below is the floor's
+ * depth under the tyres, room for the reflection. The picture is in the
+ * stage's flow, so the stage is as tall as it needs.
+ * ==========================================================================*/
+
+.ask {
+  --ask-ink: #f3f1ec;
+  --ask-sub: #a7a29c;
+  --ask-wall-top: #050404;
+  --ask-wall: #0d0a0a;
+  --ask-ground: #080808;
+  --ask-beam: rgb(255 244 230 / 0.17);
+  --ask-pool: rgb(255 244 230 / 0.16);
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding-block-start: clamp(3.5rem, 2rem + 4vw, 6rem);
+  color-scheme: dark;
+  background:
+    /* The spotlight's beam, falling from above the headline to the floor. */
+    radial-gradient(ellipse 30% 100% at 50% -14%, var(--ask-beam), transparent 74%),
+    linear-gradient(180deg, var(--ask-wall-top) 0%, var(--ask-wall) 58%, var(--ask-ground) 100%);
+}
+
+.ask__inner {
+  display: grid;
+  justify-items: center;
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+.ask__head {
+  display: grid;
+  justify-items: center;
+  row-gap: clamp(1.5rem, 1rem + 1.2vw, 2.25rem);
+  text-align: center;
+}
+
+.ask__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3.25rem, 1.75rem + 6vw, 8rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--ask-ink);
+}
+
+.ask__lines {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.25em;
+}
+
+.ask__row {
+  white-space: nowrap;
+}
+
+.ask__dot {
+  color: var(--color-ember-on-dark);
+}
+
+/* One quiet line under the buttons: smaller and greyer than either, so the
+   headline reads first and the buttons second. */
+.ask__note {
+  --i: 2;
+
+  margin: calc(clamp(1.5rem, 1rem + 1.2vw, 2.25rem) * -0.5) 0 0;
+  font-size: clamp(0.8125rem, 0.75rem + 0.25vw, 0.9375rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ask-sub);
+}
+
+/* The badges on black: the Play badge is black on black, so both get a
+   hairline ring that keeps their edge. */
+.ask__stores a {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.3);
+}
+
+.ask__stage {
+  /* The render is 830 px wide, so 415 px is sharp at 2x. The finale is the
+     one picture allowed past that, up to 544 px (1.31x, a little soft at
+     2x), and only where the screen is tall enough to show the whole scene,
+     floor and reflection, under the headline: on a 1440 x 900 screen that
+     leaves room for about 400 px, on 1920 x 1080 for the full 544. */
+  --ride-max: clamp(22rem, (100svh - 33rem) * 830 / 778, 34rem);
+  --bw: min(78cqi, var(--ride-max));
+  --below: 14cqi;
+
+  container-type: inline-size;
+  position: relative;
+  display: grid;
+  justify-items: center;
+  /* On a phone, out to the screen's edges: the bike is the picture. */
+  inline-size: calc(100% + 2.5rem);
+  margin-inline: -1.25rem;
+  margin-block-start: clamp(1rem, 0.5rem + 2vw, 2.5rem);
+}
+
+/* A soft pool of the spotlight on the wall behind the bike, and the lit
+   patch of glossy floor under it with a bright sheen at the floor line. */
+.ask__stage::before,
+.ask__stage::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.ask__stage::before {
+  inset: -6cqi -10cqi var(--below);
+  background: radial-gradient(48% 62% at 50% 62%, rgb(255 255 255 / 0.075), transparent 72%);
+}
+
+.ask__stage::after {
+  left: -30cqi;
+  right: -30cqi;
+  top: calc(100% - var(--below) - 3cqi);
+  /* Down to the band's foot and no further: the pool has faded out by
+     about half way. */
+  block-size: calc(var(--below) + 3cqi);
+  background:
+    radial-gradient(42% 7% at 50% 10%, rgb(255 255 255 / 0.11), transparent),
+    radial-gradient(34% 55% at 50% 12%, var(--ask-pool), transparent 75%);
+}
+
+.ask__ride {
+  position: relative;
+  z-index: 1;
+  inline-size: var(--bw);
+  margin-block: 4cqi var(--below);
+}
+
+/* Contact shadows where the tyres meet the floor. */
+.ask__ride::after {
+  content: '';
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  bottom: 0;
+  block-size: 3cqi;
+  border-radius: 50%;
+  translate: 0 50%;
+  background:
+    radial-gradient(11% 50% at 16% 50%, rgb(0 0 0 / 0.9), transparent),
+    radial-gradient(11% 50% at 84% 50%, rgb(0 0 0 / 0.9), transparent),
+    radial-gradient(closest-side, rgb(0 0 0 / 0.6), transparent);
+}
+
+/* He is black helmet and black leather on a black stage. The spotlight,
+   above and to his left, catches the top and left-hand edges in a hair of
+   warm light, and a soft glow on the wall behind his helmet keeps its
+   outline from sinking into the dark. */
+.ask__ride::before {
+  content: '';
+  position: absolute;
+  left: 22%;
+  top: -12%;
+  inline-size: 54%;
+  block-size: 58%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 244 230 / 0.16), rgb(255 244 230 / 0.06) 55%, transparent);
+  pointer-events: none;
+}
+
+.ask__ride .ask__img {
+  filter:
+    drop-shadow(-0.06cqi -0.14cqi 0 rgb(255 244 230 / 0.3))
+    drop-shadow(-0.1cqi -0.3cqi 0.5cqi rgb(255 244 230 / 0.06));
+}
+
+.ask__img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* The reflection: the picture again, upside down from the floor line,
+   faint and fading out a short way down, as on a glossy floor. */
+.ask__mirror {
+  position: absolute;
+  z-index: 0;
+  top: calc(100% - var(--below));
+  left: 50%;
+  inline-size: var(--bw);
+  margin-inline-start: calc(var(--bw) / -2);
+  /* Flipped in place: its box hangs from the floor line, so the picture's
+     foot meets the real one's. */
+  scale: 1 -1;
+  opacity: 0.16;
+  /* Gone before the band's foot, so the band does not cut it off. */
+  mask-image: linear-gradient(0deg, #000 0, rgb(0 0 0 / 0.4) calc(var(--below) * 0.45), transparent calc(var(--below) * 0.95));
+}
+
+@media (width >= 48rem) {
+  .ask__stage {
+    --bw: min(70cqi, var(--ride-max));
+    --below: 12cqi;
+
+    inline-size: min(100%, 56rem);
+    margin-inline: auto;
+  }
+}
+
+/* The footer is the same black: without its top hairline the finale's
+   floor runs straight on into it, one dark ground to the end of the page. */
+main:has(.ask) + footer {
+  border-top-color: transparent;
+}
+
+/* ── Motion: the light comes up, the bike rolls in with him on it ──
+   The picture and its reflection travel together from the left and settle
+   on the weighted curve. */
+.home-running .ask__stage:not([data-seen]) :is(.ask__ride, .ask__mirror) {
+  opacity: 0.35;
+  translate: -16cqi 0;
+}
+
+.home-running .ask__stage:not([data-seen]) .ask__mirror {
+  opacity: 0.06;
+}
+
+.home-running .ask__stage:not([data-seen])::before,
+.home-running .ask__stage:not([data-seen])::after {
+  opacity: 0.35;
+}
+
+.home-running .ask__stage[data-seen] :is(.ask__ride, .ask__mirror) {
+  transition:
+    opacity 700ms var(--home-ease-out) 150ms,
+    translate 1300ms var(--home-ease) 150ms;
+}
+
+.home-running .ask__stage[data-seen]::before,
+.home-running .ask__stage[data-seen]::after {
+  transition: opacity 1400ms var(--home-ease-out);
+}

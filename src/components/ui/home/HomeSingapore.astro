@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets'
+import { SECTION_IDS, SINGAPORE } from '@/lib/home-content'
+import petrol from '@/assets/home/tool-petrol.png'
+import cams from '@/assets/home/tool-cams.png'
+import coe from '@/assets/home/tool-coe.png'
+import workshops from '@/assets/home/tool-workshops.png'
+
+/**
+ * Part 5, made for Singapore: the four local tools as four large links, each
+ * with a glossy object from the opening's family standing on the studio
+ * floor and its label as the link text. One even row from 768px, two by two
+ * below it.
+ *
+ * The renders are cropped to their objects, so every foot is the image's
+ * foot and they share one baseline as they are. --k evens out their optical
+ * size: the camera and the workshop are broad and read larger than the tall,
+ * narrow tag at one height, so they stand a little shorter. home.css caps
+ * the shared height (--icon) so the tallest is never drawn over half its
+ * native pixels, and stays sharp at 2x.
+ *
+ * Motion is in home.css: the objects drop in and settle one after another,
+ * and lift a little on hover or focus.
+ */
+const ICONS: Record<string, { image: ImageMetadata; k: number }> = {
+  'fuel-prices': { image: petrol, k: 1 },
+  'causeway-cams': { image: cams, k: 0.9 },
+  'coe-calculator': { image: coe, k: 1 },
+  workshops: { image: workshops, k: 0.96 },
+}
+
+// The largest --icon in home.css, in CSS px.
+const MAX_ICON = 168
+---
+
+<section id={SECTION_IDS[4]} data-progress class="home-part sg">
+  <div class="sg__inner">
+    <h2 class="home-title sg__title home-enter">{SINGAPORE.headline}</h2>
+
+    <ul class="sg__tools" role="list">
+      {
+        SINGAPORE.tools.map((tool, i) => {
+          const { image, k } = ICONS[tool.icon]
+          const ratio = image.width / image.height
+          return (
+            <li class="sg__tool" style={`--i: ${i}; --k: ${k}; --ratio: ${ratio.toFixed(4)}`}>
+              <a class="tool" href={tool.href}>
+                <span class="tool__art">
+                  <span class="tool__drop">
+                    <Image
+                      src={image}
+                      alt=""
+                      widths={[Math.round(image.width / 2), image.width]}
+                      sizes={`${Math.ceil(MAX_ICON * k * ratio)}px`}
+                      class="tool__icon"
+                      loading="lazy"
+                    />
+                  </span>
+                </span>
+                <span class="tool__label">{tool.label}</span>
+              </a>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </div>
+</section>

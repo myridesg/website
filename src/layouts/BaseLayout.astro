@@ -291,6 +291,12 @@ const bingSiteVerification = envVar('BING_SITE_VERIFICATION')
         })
       })()
     </script>
+
+    {/* Page-specific head content, for the few things that must run before
+        first paint. Astro writes the CSP <meta> after everything here, and a
+        meta policy only governs what follows it, so an inline script in this
+        slot runs the same way the three above do. */}
+    <slot name="head" />
   </head>
 
   <body class="flex min-h-dvh flex-col">

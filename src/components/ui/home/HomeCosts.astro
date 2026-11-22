@@ -1,0 +1,74 @@
+---
+import { COSTS, NEVER_MISS, SECTION_IDS } from '@/lib/home-content'
+
+/**
+ * Part 4, costs: six months of spend as chunky rounded pillars standing on
+ * the floor, drawn in CSS in the family of the 3D chart icon (charcoal and
+ * light neutral pillars, the latest month in brand red).
+ *
+ * The chart is the hero and comes first on wide screens, with the copy to its
+ * right; on a phone the copy leads. The key under the chart is a little
+ * pillar and what one month's pillar adds up, in the words of COSTS.line,
+ * joined by plus signs drawn in CSS.
+ *
+ * Every value is sample data, said in the caption. The pillars' heights are
+ * shares of the tallest month, so the drawing and the numbers always agree.
+ *
+ * Motion is in home.css: the pillars rise out of the floor one after another
+ * and settle, the latest month's amount riding up on top of its pillar.
+ */
+const MONTHS = [
+  { label: 'Jun', sgd: 182 },
+  { label: 'Jul', sgd: 236 },
+  { label: 'Aug', sgd: 168 },
+  { label: 'Sep', sgd: 214 },
+  { label: 'Oct', sgd: 197 },
+  { label: 'Nov', sgd: 251 },
+] as const
+
+const tallest = Math.max(...MONTHS.map((m) => m.sgd))
+const latest = MONTHS.length - 1
+
+// "Fuel, Johor fill-ups, parts and everything else, by month." → the four
+// things counted, in the line's own words.
+const COUNTED = COSTS.line.replace(/, by month\.$/, '').split(/, | and /)
+---
+
+<section id={SECTION_IDS[3]} data-progress class="home-part costs">
+  <div class="costs__inner">
+    <header class="costs__head">
+      <h2 class="home-title costs__title home-enter">{COSTS.headline}</h2>
+      <p class="costs__line home-enter" style="--i: 1">{COSTS.line}</p>
+    </header>
+
+    <figure class="spend" data-progress>
+      <ol class="spend__bars" role="list">
+        {
+          MONTHS.map((month, i) => (
+            <li
+              class="spend__month"
+              data-month={month.label}
+              data-latest={i === latest ? '' : undefined}
+              style={`--i: ${i}; --v: ${(month.sgd / tallest).toFixed(3)}`}
+            >
+              <span class="spend__name">{month.label}</span>{' '}
+              <span class:list={['spend__value', i !== latest && 'sr-only']}>S${month.sgd}</span>
+              <span class="spend__slot" aria-hidden="true">
+                <span class="spend__pillar" />
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+      <figcaption class="spend__caption">
+        <span class="spend__key">
+          <span class="spend__swatch" aria-hidden="true" />
+          <ul class="spend__counted" role="list">
+            {COUNTED.map((thing) => <li>{thing}</li>)}
+          </ul>
+        </span>
+        <span class="spend__sample">{NEVER_MISS.caption}</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>

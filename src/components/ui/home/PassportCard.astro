@@ -1,0 +1,138 @@
+---
+/**
+ * A page of the bike passport, drawn in HTML: the first page of the A4 sheet
+ * the app prints, cut down to what reads at this size.
+ *
+ * Section names and labels are the app's own, from
+ * apps/mobile/features/reports/passport/sections.ts and buildPassportHtml.ts
+ * on myridesg-v2 origin/main; so is the paper palette (styles.ts), which is
+ * the printed document's, not the site's. Every value is sample data. The
+ * workshop column is left out so no business is named.
+ *
+ * The QR is a placeholder and cannot scan: three finder squares round a
+ * regular pattern that encodes nothing, with no timing or format modules,
+ * and SAMPLE across the middle.
+ *
+ * Sized in container units of its own box, so the page scales as one drawing.
+ * It is one image to assistive tech; the label says what it is.
+ */
+const FIELDS = [
+  ['Plate', 'FB •••• K'],
+  ['Odometer', '18,420 km'],
+  ['COE expiry', 'Mar 2031'],
+  ['Road tax', 'Jun 2027'],
+  ['Tracked since', 'Jan 2024'],
+] as const
+
+const STATS = [
+  ['14', 'Services logged'],
+  ['9,200', 'km per year'],
+  ['31.5', 'km / litre avg'],
+  ['S$2,940', 'Lifetime upkeep'],
+] as const
+
+const SERVICES = [
+  ['12 Oct', 'Chain lube & adjust', '18,120 km'],
+  ['3 Aug', 'Oil change', '16,940 km'],
+  ['18 May', 'Brake pads, front', '15,380 km'],
+] as const
+
+// A regular 21 x 21 pattern that encodes nothing, outside the finder squares
+// and the quiet middle where SAMPLE sits.
+const N = 21
+const inFinder = (x: number, y: number) => (x < 8 && y < 8) || (x > 12 && y < 8) || (x < 8 && y > 12)
+const inMiddle = (x: number, y: number) => x > 4 && x < 16 && y > 8 && y < 12
+const MODULES: [number, number][] = []
+for (let y = 0; y < N; y++) {
+  for (let x = 0; x < N; x++) {
+    if (inFinder(x, y) || inMiddle(x, y)) continue
+    if ((x * 3 + y * 5) % 7 < 3) MODULES.push([x, y])
+  }
+}
+const FINDERS = [
+  [0, 0],
+  [14, 0],
+  [0, 14],
+] as const
+---
+
+<div class="passport" data-passport role="img" aria-label="A sample bike passport page with a placeholder QR code">
+  <div class="passport__sheet" aria-hidden="true">
+    <div class="passport__mast">
+      <div>
+        <p class="passport__title">Bike Passport</p>
+        <p class="passport__sub">MyRideSG · Owner-logged ownership record</p>
+      </div>
+      <p class="passport__code">Passport no.<b>SAMPLE</b>Issued 22 Nov 2026</p>
+    </div>
+
+    <p class="passport__bike">Sample naked 400</p>
+    <p class="passport__year">2021</p>
+
+    <dl class="passport__fields">
+      {
+        FIELDS.map(([k, v]) => (
+          <div>
+            <dt>{k}</dt>
+            <dd>{v}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <div class="passport__stats">
+      {
+        STATS.map(([n, l], i) => (
+          <div class:list={['passport__stat', i === STATS.length - 1 && 'passport__stat--accent']}>
+            <span class="passport__n">{n}</span>
+            <span class="passport__l">{l}</span>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="passport__sec">Odometer timeline <span>12 readings</span></p>
+    <svg class="passport__chart" viewBox="0 0 300 60" preserveAspectRatio="none">
+      <path d="M0 56 L40 50 L80 45 L120 38 L160 33 L200 24 L240 18 L300 6 L300 60 L0 60 Z" class="passport__area" />
+      <polyline points="0,56 40,50 80,45 120,38 160,33 200,24 240,18 300,6" class="passport__line" />
+    </svg>
+
+    <p class="passport__sec">Recent service history <span>3 most recent of 14</span></p>
+    <table class="passport__table">
+      <tbody>
+        {
+          SERVICES.map(([date, service, odo]) => (
+            <tr>
+              <td>{date}</td>
+              <td>{service}</td>
+              <td>{odo}</td>
+              <td>✓</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+
+    <div class="passport__verify">
+      <span class="passport__qr">
+        <svg viewBox="-1 -1 23 23">
+          <rect x="-1" y="-1" width="23" height="23" class="passport__qr-ground" />
+          {
+            FINDERS.map(([x, y]) => (
+              <g>
+                <rect x={x + 0.5} y={y + 0.5} width="6" height="6" class="passport__qr-ring" />
+                <rect x={x + 2} y={y + 2} width="3" height="3" />
+              </g>
+            ))
+          }
+          {MODULES.map(([x, y]) => <rect x={x} y={y} width="1" height="1" />)}
+        </svg>
+        <span class="passport__qr-sample">Sample</span>
+      </span>
+      <div>
+        <p class="passport__verify-title">Verify this passport</p>
+        <p class="passport__chip"><b>Owner-logged</b> · entered by the rider</p>
+      </div>
+    </div>
+  </div>
+</div>

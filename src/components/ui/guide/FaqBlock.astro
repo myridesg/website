@@ -2,14 +2,13 @@
 /**
  * `faq` block from the Sanity article body.
  *
- * Native <details>, reusing the `faq-item` utility from global.css so a guide
- * FAQ looks identical to the one on the home page. The open/close ANIMATION is
- * driven by the script in components/ui/Faq.astro, which is not on this page —
- * so these disclose instantly rather than sliding. That is the same degraded
- * state global.css already documents for JavaScript-off, and it is cosmetic.
+ * Native <details>, styled by the `faq-item` utility in global.css. They
+ * disclose instantly rather than sliding; the `+` to `x` rotation is the only
+ * motion.
  *
- * Also emits FAQPage structured data, matching Faq.astro: these guides exist to
- * be found, and it is the cleanest format for search and AI crawlers to extract.
+ * Also emits FAQPage structured data, as the home page does: these guides exist
+ * to be found, and it is the cleanest format for search and AI crawlers to
+ * extract.
  */
 import { PortableText } from 'astro-portabletext'
 import type { PortableTextProps } from 'astro-portabletext/types'

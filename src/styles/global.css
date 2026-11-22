@@ -43,7 +43,7 @@
   --color-ember-on-dark: #f57c67;
 
   /* Text sitting on a PERMANENTLY dark or brand-coloured surface — the black
-     feature bands, the red ticker, an ember button. Identical in both themes,
+     feature bands, an ember button. Identical in both themes,
      and deliberately not --color-paper: paper is the page ground, so it flips
      to near-black in dark mode and would render this text invisible on black.
      Use --color-paper only where the surface flips with it. */
@@ -235,6 +235,8 @@
   --app-fg: light-dark(hsl(0 0% 3.9%), hsl(0 0% 98%));
   --app-card: hsl(0 0% 100%);
   --app-card: light-dark(hsl(0 0% 100%), hsl(9 14% 15%));
+  --app-popover: hsl(0 0% 100%);
+  --app-popover: light-dark(hsl(0 0% 100%), hsl(9 11% 20%));
   --app-muted: hsl(0 14% 96%);
   --app-muted: light-dark(hsl(0 14% 96%), hsl(9 9% 22%));
   --app-muted-fg: hsl(9 3% 45%);
@@ -248,6 +250,11 @@
 
   /* brandCharcoal — the feature header band, scheme-invariant by design. */
   --app-charcoal: #393939;
+
+  /* brandEmber — the app's accent red (the Home saved button), set in
+     packages/tokens/src/colors.ts as one value for both schemes. Not
+     --color-ember, which the site's dark theme remaps. */
+  --app-ember: #d6321c;
 
   /* GLASS, from features/home/glass.ts: the translucent hero card that lets
      the glow read through. Text flips with the scheme, the fill does not. */
@@ -299,9 +306,25 @@
  * ==========================================================================*/
 
 @layer base {
+  /* The site header's two heights (SiteNav.astro): --site-bar at the top of
+     a page, --site-bar-slim once it has scrolled and pinned itself. On a
+     phone the bar is slim from the start. Pages clear --site-bar at their
+     top; anchor jumps clear the slim bar, which is the one showing once the
+     page has moved. */
+  :root {
+    --site-bar: 3.5rem;
+    --site-bar-slim: 3.5rem;
+
+    @media (width >= 48rem) {
+      --site-bar: 5rem;
+      --site-bar-slim: 3.75rem;
+    }
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
+    scroll-padding-top: var(--site-bar-slim);
   }
 
   body {
@@ -329,10 +352,11 @@
     text-decoration: none;
   }
 
-  /* The nav is fixed, so an anchor jump would otherwise land with the heading
-     hidden underneath it. */
-  :where([id]) {
-    scroll-margin-top: 6rem;
+  /* scroll-padding-top above stops an anchor jump under the pinned header, so
+     a section lands flush against it. A heading inside running text gets a
+     little air on top of that. */
+  :where(h1, h2, h3, h4)[id] {
+    scroll-margin-top: 1.5rem;
   }
 
   /* Keyboard focus must stay visible everywhere. */
@@ -378,25 +402,6 @@
   }
 }
 
-/* ── Ticker ────────────────────────────────────────────────────────────────
-   Two identical spans scroll left; translating by -50% lands the second exactly
-   where the first began, so the loop is seamless. Paused under reduced motion
-   by the global rule in @layer base. */
-@keyframes ticker-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@utility ticker-track {
-  display: flex;
-  width: max-content;
-  animation: ticker-scroll 42s linear infinite;
-}
-
 /* ── FAQ disclosure ────────────────────────────────────────────────────────
    Native <details>, so the accordion costs zero JavaScript. */
 @utility faq-item {
@@ -417,8 +422,7 @@
     display: none;
   }
 
-  /* Plus sign that rotates into a cross when open. Shares the panel's timing
-     so the two motions read as one gesture. */
+  /* Plus sign that rotates into a cross when open. */
   & > summary::after {
     content: '+';
     flex-shrink: 0;
@@ -433,24 +437,3 @@
     transform: rotate(45deg);
   }
 }
-
-/* The FAQ open/close motion is driven from Faq.astro, not from here.
- *
- * A pure-CSS route via ::details-content + interpolate-size was tried first and
- * abandoned, because measured against real browsers it only ever half-worked:
- *
- *   Chromium 151  opened smoothly, but closed in a single 8ms frame.
- *   Firefox 153   ships ::details-content and transition-behavior but NOT
- *                 interpolate-size, so it could not transition to `auto` at
- *                 all, and worse, held the collapsed value for the full
- *                 duration before snapping.
- *   Safari        untested here, so unknown either way.
- *
- * Feature-detecting around that produced two divergent code paths, each broken
- * in a different direction. Scripting it instead gives one predictable path
- * that behaves identically everywhere, at the cost of roughly 800 bytes inline
- * and no animation when JavaScript is off. The accordion still opens and
- * closes natively in that case, so the degraded state is cosmetic only.
- *
- * The `+` to `x` rotation stays in CSS below, since that transition works
- * everywhere. */

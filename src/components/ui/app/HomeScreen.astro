@@ -1,0 +1,628 @@
+---
+import { Image } from 'astro:assets'
+import AppStatusBar from './AppStatusBar.astro'
+import AppTabBar from './AppTabBar.astro'
+import fuel from '@/assets/app/icon-fuel.webp'
+import mileage from '@/assets/app/icon-mileage.webp'
+import service from '@/assets/app/icon-service.webp'
+import expenses from '@/assets/app/icon-expenses.webp'
+import cams from '@/assets/app/icon-causeway-cams.webp'
+import fuelPrices from '@/assets/app/icon-fuel-prices.webp'
+import workshops from '@/assets/app/icon-workshops.webp'
+
+/**
+ * The app's Home tab, rebuilt as HTML so it renders live in a PhoneFrame.
+ *
+ * Place it directly inside PhoneFrame. Its root is the `.app-screen` and
+ * carries role="img", so do not wrap it in another `.app-screen` the way
+ * callers wrap BikeScreen, FuelScreen and WorkshopsScreen. A wrapper would
+ * scale it twice and nest two role="img".
+ *
+ * Ported from myridesg-v2/apps/mobile:
+ *   app/(app)/(tabs)/index.tsx            → the ember root, the curved sheet
+ *                                           (SHEET_OVERLAP 26, SHEET_RADIUS 28)
+ *                                           and the order of what sits on it
+ *   features/home/HomeHeader.tsx          → wordmark, member-code button, hero line
+ *   features/home/heroHeadline.ts         → which line the header shows
+ *   features/home/HomeSearchBar.tsx       → the search bar
+ *   features/home/SavedButton.tsx         → the ember heart beside it
+ *   features/home/floatingShadow.ts       → the plane both of those float on
+ *   features/categories/registry.ts       → HOME_CATEGORIES, labels and icons
+ *   features/categories/CategoryGrid.tsx  → the two-row launcher and its sizing
+ *   features/categories/MoreIcon.tsx      → the "More" tile glyph
+ *
+ * and from myridesg-v2/packages:
+ *   tokens/src/brand.ts                             → homeHeader
+ *   tokens/src/colors.ts                            → brandEmber (--app-ember)
+ *   domain/src/maintenance/lib/formatNextService.ts → the headline's wording
+ *   domain/src/maintenance/lib/maintenanceTypes.ts  → "Chain Lube & Adjust"
+ *
+ * The Search and Heart glyphs are lucide's, with path data copied from
+ * lucide-react-native 0.468.0, the version the app pins.
+ *
+ *   features/events/EventRail.tsx         → "What's on", the rail under the grid
+ *   features/events/components/EventCard.tsx → poster, calendar tile, title, venue
+ *
+ * Left out: SetupChecklistCard, which only a new rider's first bike shows, and
+ * PosterCarousel, which carries partner offers. RewardReadyBanner and
+ * ChopQueueStrip render nothing on an ordinary day, so they are absent too.
+ * With the carousel out, EventRail follows the grid directly, as it does in
+ * the app whenever there is no live offer.
+ *
+ * The app's body face is Manrope, which this site does not ship; body text
+ * here uses the site's Barlow instead. The display faces are Barlow in both.
+ *
+ * Sample data. One bike and no document due within URGENT_DOC_DAYS (30), so
+ * heroHeadlines() returns the rotating pool and its head — the next service —
+ * is what the header shows. formatNextService() words a km-led service as
+ * "<TYPE> DUE" / "<n> km left" / a pace estimate, and chain_lube's label in
+ * maintenanceTypes.ts is "Chain Lube & Adjust". The headline must agree with
+ * the first item in NEVER_MISS (src/lib/home-content.ts).
+ */
+
+const HEADLINE = {
+  label: 'CHAIN LUBE & ADJUST DUE',
+  value: '300 km left',
+  trailing: '~1 wk',
+}
+
+// HOME_CATEGORIES, column-major as CategoryGrid lays it out: each pair is one
+// column [top, bottom], so the top row reads Fuel · Mileage · Service ·
+// Expenses and the bottom row Cams · Fuel Prices · Workshops · More.
+const TILES = [
+  { label: 'Fuel', icon: fuel },
+  { label: 'Cams', icon: cams },
+  { label: 'Mileage', icon: mileage },
+  { label: 'Fuel Prices', icon: fuelPrices },
+  { label: 'Service', icon: service },
+  { label: 'Workshops', icon: workshops },
+  { label: 'Expenses', icon: expenses },
+]
+
+// MoreIcon's geometry as fractions of its size, in a 100-unit box:
+// pad 0.14, gap 0.1, square (1 − 2·0.14 − 0.1) / 2 = 0.31, radius 0.3 of that.
+// EventRail sample events. In the app each poster is a partner's flyer; here
+// each is drawn in markup with neutral wording, so no real event, organiser
+// or venue is shown. month/day are formatEventWhenParts' tile values.
+const EVENTS = [
+  { title: 'Sunday breakfast ride', venue: 'East Coast Park', month: 'NOV', day: '29', poster: 'ember', kicker: 'Group ride', headline: 'Breakfast ride' },
+  { title: 'Wet-weather riding basics', venue: 'Online talk', month: 'DEC', day: '6', poster: 'charcoal', kicker: 'Talk', headline: 'Riding in the rain' },
+  { title: 'Chain care clinic', venue: 'West side', month: 'DEC', day: '13', poster: 'muted', kicker: 'Clinic', headline: 'Chain care' },
+]
+
+const MORE_SQUARES = [
+  { x: 14, y: 14, fill: 'deep' },
+  { x: 55, y: 14, fill: 'coral' },
+  { x: 14, y: 55, fill: 'coral' },
+  { x: 55, y: 55, fill: 'deep' },
+]
+---
+
+<div
+  class="app-screen home"
+  role="img"
+  aria-label="Illustrative MyRideSG home screen with sample data: chain lube due in 300 km, a search bar, and shortcuts to fuel, mileage, service, expenses, Causeway cameras, fuel prices and workshops, and upcoming rider events"
+>
+  <AppStatusBar time="8:15" />
+
+  {/* HomeHeader. Flat homeHeader.surface — the gradient is the Bike tab's. */}
+  <header class="home__header">
+    <div class="home__brand">
+      <span class="home__wordmark">MyRide<b>SG</b></span>
+
+      {/* The member-code button, drawn exactly as HomeHeader's inline Svg. */}
+      <span class="home__code">
+        <svg viewBox="0 0 16 16">
+          {
+            [
+              [1, 1],
+              [9.5, 1],
+              [1, 9.5],
+            ].map(([x, y]) => (
+              <g>
+                <rect x={x} y={y} width="5.5" height="5.5" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <rect x={x + 1.9} y={y + 1.9} width="1.7" height="1.7" fill="currentColor" />
+              </g>
+            ))
+          }
+          <rect x="9.5" y="9.5" width="2.2" height="2.2" fill="currentColor"></rect>
+          <rect x="12.8" y="9.5" width="2.2" height="2.2" fill="currentColor"></rect>
+          <rect x="9.5" y="12.8" width="2.2" height="2.2" fill="currentColor"></rect>
+          <rect x="12.8" y="12.8" width="2.2" height="2.2" fill="currentColor"></rect>
+        </svg>
+      </span>
+    </div>
+
+    <div class="home__hero">
+      <p class="home__label">{HEADLINE.label}</p>
+      <p class="home__line">
+        <span class="home__value">{HEADLINE.value}</span>
+        <span class="home__trailing">{HEADLINE.trailing}</span>
+      </p>
+    </div>
+  </header>
+
+  <div class="home__sheet">
+    {/* Search + saved straddle the header/sheet seam as one row. */}
+    <div class="home__search-row">
+      <span class="home__search">
+        <svg viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        Find a workshop or service
+      </span>
+
+      <span class="home__saved">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+          ></path>
+        </svg>
+      </span>
+    </div>
+
+    <div class="home__grid">
+      {
+        TILES.map((tile) => (
+          <span class="home__tile">
+            <Image
+              src={tile.icon}
+              alt=""
+              width={56}
+              height={56}
+              densities={[1, 2, 3]}
+              loading="eager"
+              class="home__icon"
+            />
+            <span class="home__tile-label">{tile.label}</span>
+          </span>
+        ))
+      }
+
+      <span class="home__tile">
+        <span class="home__icon">
+          <svg class="home__more" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="home-more-deep" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#EB5236"></stop>
+                <stop offset="1" stop-color="#C42C17"></stop>
+              </linearGradient>
+              <linearGradient id="home-more-coral" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#F6866A"></stop>
+                <stop offset="1" stop-color="#EE5F3B"></stop>
+              </linearGradient>
+            </defs>
+            {
+              MORE_SQUARES.map((sq) => (
+                <rect x={sq.x} y={sq.y} width="31" height="31" rx="9.3" fill={`url(#home-more-${sq.fill})`} />
+              ))
+            }
+          </svg>
+        </span>
+        <span class="home__tile-label">More</span>
+      </span>
+    </div>
+
+    {/* EventRail: a header row, then 150-wide portrait cards in a row that
+        runs off the right edge. */}
+    <section class="home__events">
+      <div class="home__events-head">
+        <span class="home__events-title">What's on</span>
+        <span class="home__events-all">See all</span>
+      </div>
+
+      <div class="home__rail">
+        {
+          EVENTS.map((event) => (
+            <span class="home__event">
+              <span class={`home__poster home__poster--${event.poster}`}>
+                <span class="home__poster-kicker">{event.kicker}</span>
+                <span class="home__poster-headline">{event.headline}</span>
+                <span class="home__poster-date">
+                  {event.day} {event.month}
+                </span>
+              </span>
+              <span class="home__event-meta">
+                <span class="home__cal">
+                  <span class="home__cal-month">{event.month}</span>
+                  <span class="home__cal-day">{event.day}</span>
+                </span>
+                <span class="home__event-text">
+                  <span class="home__event-title">{event.title}</span>
+                  <span class="home__event-venue">{event.venue}</span>
+                </span>
+              </span>
+            </span>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <AppTabBar active="home" />
+</div>
+
+<style>
+  /* The screen's root is homeHeader.surface (#9B0F06), the same red as the
+     site's --color-red. The sheet's corners and the seam show it through. */
+  .home {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #9b0f06;
+  }
+
+  /* ── HomeHeader ─────────────────────────────────────────────────────────
+     paddingTop insets.top + 2 (2.9em is the status-bar safe area, as on the
+     other screens), paddingHorizontal 20, paddingBottom 4. Every colour is
+     homeHeader's and identical in both schemes. */
+  .home__header {
+    padding: calc(2.9em + 2px) 1.25em 0.25em;
+    color: #ffffff; /* homeHeader.wordmark / value */
+  }
+
+  .home__brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.25em;
+  }
+
+  /* font-display (Barlow SemiBold) then font-display-bold, text-2xl 24/32. */
+  .home__wordmark {
+    font-family: var(--font-sans);
+    font-size: 1.5em;
+    font-weight: 600;
+    line-height: 1.3333;
+    letter-spacing: -0.3px;
+  }
+
+  .home__wordmark b {
+    font-weight: 700;
+  }
+
+  .home__code {
+    display: grid;
+    place-items: center;
+    inline-size: 2.25em;
+    block-size: 2.25em;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .home__code svg {
+    inline-size: 1.125em;
+    block-size: 1.125em;
+  }
+
+  /* ROTATOR_MIN_H 56 reserves the eyebrow + value rows. */
+  .home__hero {
+    min-block-size: 3.5em;
+  }
+
+  /* font-body text-2xs (11/14) uppercase tracking-widest, marginBottom 2. */
+  .home__label {
+    margin-bottom: 2px;
+    font-size: 0.6875em;
+    line-height: 1.2727;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6); /* homeHeader.label */
+  }
+
+  .home__line {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+    white-space: nowrap;
+  }
+
+  /* font-display-bold text-3xl (30/36), tabularNums. Not urgent, so the calm
+     homeHeader.value rather than the amber homeHeader.urgent. */
+  .home__value {
+    font-family: var(--font-sans);
+    font-size: 1.875em;
+    font-weight: 700;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* font-body text-xs (12/16). */
+  .home__trailing {
+    font-size: 0.75em;
+    line-height: 1.3333;
+    color: rgba(255, 255, 255, 0.58); /* homeHeader.context */
+  }
+
+  /* ── The sheet ──────────────────────────────────────────────────────────
+     marginTop SHEET_OVERLAP 26, top corners SHEET_RADIUS 28, bg-background.
+     The search row pulls back up by the same 26 so it straddles the seam. */
+  .home__sheet {
+    flex: 1;
+    margin-top: 1.625em;
+    border-radius: 1.75em 1.75em 0 0;
+    background: var(--app-bg);
+  }
+
+  .home__search-row {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.625em;
+    margin-top: -1.625em;
+    padding-inline: 1em;
+  }
+
+  /* floatingPlane(): brandCharcoal shadow (0.22, radius 16, y 8) in both
+     schemes, plus a `border` hairline in dark where the shadow disappears. */
+  .home__search,
+  .home__saved {
+    block-size: 2.875em; /* 46 */
+    box-shadow: 0 0.5em 1em rgba(57, 57, 57, 0.22);
+    border: 1px solid light-dark(transparent, var(--app-border));
+  }
+
+  /* rounded-xl (12), px-4, gap 10, popover fill, Search 18 muted. */
+  .home__search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.625em;
+    padding-inline: 1em;
+    border-radius: 0.75em;
+    background: var(--app-popover);
+    font-size: 0.9375em; /* text-[15px] */
+    color: var(--app-muted-fg);
+  }
+
+  .home__search svg {
+    inline-size: 1.2em; /* 18 at 15px */
+    block-size: 1.2em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .home__saved {
+    display: grid;
+    place-items: center;
+    inline-size: 2.875em;
+    border-radius: 999px;
+    background: var(--app-ember); /* brandEmber, the same in both schemes */
+  }
+
+  .home__saved svg {
+    inline-size: 1.125em;
+    block-size: 1.125em;
+    fill: #ffffff;
+    stroke: #ffffff;
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+
+  /* ── CategoryGrid ───────────────────────────────────────────────────────
+     px-4 pt-6. Eight cells make four columns, which is under VISIBLE_COLUMNS
+     4.5, so tiles size off the real count:
+       tile = clamp((390 − 2·16) / 4 − 8, 76, 96) = 81.5
+       icon = clamp(81.5 · 0.68, 48, 60)          = 55.42
+     Columns gap 8 (gap-x-2), the two tiles in a column gap 16 (gap-y-4). */
+  .home__grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(2, auto);
+    grid-auto-columns: 5.09375em;
+    column-gap: 0.5em;
+    row-gap: 1em;
+    padding: 1.5em 1em 0;
+  }
+
+  /* TileButton: items-center gap-1 px-1. */
+  .home__tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25em;
+    padding-inline: 0.25em;
+  }
+
+  /* IconBox: a chrome-free square the 3D icon sits in directly. */
+  .home__icon {
+    display: grid;
+    place-items: center;
+    inline-size: 3.46375em;
+    block-size: 3.46375em;
+    object-fit: contain;
+  }
+
+  /* MoreIcon at iconSize · 0.72. */
+  .home__more {
+    inline-size: 72%;
+    block-size: 72%;
+  }
+
+  /* text-center font-body text-xs text-foreground, numberOfLines 2. */
+  .home__tile-label {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-size: 0.75em;
+    line-height: 1.3333;
+    text-align: center;
+    color: var(--app-fg);
+  }
+
+  /* ── EventRail ──────────────────────────────────────────────────────────
+     px-4 pt-5; a 30-high header row, items-baseline justify-between. The
+     rail clips at the screen edge, so the third card peeks. */
+  .home__events {
+    padding: 1.25em 0 0 1em;
+  }
+
+  .home__events-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    block-size: 1.875em;
+    padding-right: 1em;
+  }
+
+  /* font-body-semibold text-base (16/24). */
+  .home__events-title {
+    font-size: 1em;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  /* font-body-semibold text-sm (14/20) text-ember-11. */
+  .home__events-all {
+    font-size: 0.875em;
+    font-weight: 600;
+    line-height: 1.4286;
+    color: var(--app-primary);
+  }
+
+  /* FlatList, horizontal, gap 12. */
+  .home__rail {
+    display: flex;
+    gap: 0.75em;
+  }
+
+  /* EVENT_CARD_W 150, gap-2 between poster and meta. */
+  .home__event {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    flex: 0 0 9.375em;
+  }
+
+  /* POSTER_ASPECT 4:5 → 188 high, rounded-xl. A flyer drawn in markup. */
+  .home__poster {
+    display: flex;
+    flex-direction: column;
+    block-size: 11.75em;
+    padding: 0.875em 0.75em;
+    border-radius: 0.75em;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .home__poster--ember {
+    background:
+      radial-gradient(120% 80% at 100% 0%, rgba(255, 255, 255, 0.22), transparent 60%),
+      var(--app-ember);
+    color: #ffffff;
+  }
+
+  .home__poster--charcoal {
+    background:
+      radial-gradient(110% 70% at 0% 100%, rgba(214, 50, 28, 0.45), transparent 60%),
+      var(--app-charcoal);
+    color: #ffffff;
+  }
+
+  .home__poster--muted {
+    border: 1px solid var(--app-border);
+    background: var(--app-muted);
+    color: var(--app-fg);
+  }
+
+  .home__poster-kicker {
+    font-size: 0.625em;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .home__poster-headline {
+    margin-top: auto;
+    font-family: var(--font-display);
+    font-size: 1.625em;
+    font-weight: 700;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .home__poster-date {
+    margin-top: 0.5em;
+    font-size: 0.6875em;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .home__poster--muted .home__poster-kicker,
+  .home__poster--muted .home__poster-date {
+    color: var(--app-primary);
+    opacity: 1;
+  }
+
+  .home__event-meta {
+    display: flex;
+    gap: 0.5em;
+  }
+
+  /* The month-over-day tile: 36 x 40, rounded-lg, border, bg-card. */
+  .home__cal {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.25em;
+    block-size: 2.5em;
+    border: 1px solid var(--app-border);
+    border-radius: 0.5em;
+    box-sizing: border-box;
+    background: var(--app-card);
+  }
+
+  /* font-body-bold text-[8px] tracking-wider text-ember-11. */
+  .home__cal-month {
+    font-size: 0.5em;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--app-primary);
+  }
+
+  /* font-body-bold text-[15px] leading-[18px]. */
+  .home__cal-day {
+    font-size: 0.9375em;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .home__event-text {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  /* font-body-bold text-xs leading-4, numberOfLines 2. */
+  .home__event-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1.3333;
+  }
+
+  /* mt-0.5 font-body text-[10px] text-muted-foreground, numberOfLines 1. */
+  .home__event-venue {
+    margin-top: 2px;
+    overflow: hidden;
+    font-size: 0.625em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--app-muted-fg);
+  }
+</style>

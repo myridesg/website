@@ -109,8 +109,8 @@ export type NavItem = { label: string; href: string } | {
 }
 
 /**
- * Primary navigation, page links only. The scroll anchors (/#features,
- * /#faq) live in the footer, and every feature page is reachable from the
+ * Primary navigation, page links only. The scroll anchors (/#never-miss,
+ * /#detail) live in the footer, and every feature page is reachable from the
  * Features group.
  */
 // TODO: add these back as each page lands — linking before then ships nav items

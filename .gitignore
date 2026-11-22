@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # wrangler local state
 .wrangler/
+
+# raw art and archived prototypes (about 50 MB), kept local only
+design/

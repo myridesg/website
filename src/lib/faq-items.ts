@@ -1,15 +1,17 @@
 /**
  * The home page FAQ — one array, two consumers.
  *
- * Faq.astro renders the visible accordion from these items, and index.astro
- * passes buildFaqPageEntity(site, '/', FAQ_ITEMS) into BaseLayout's
+ * HomeDetail.astro renders the visible accordion from these items, and index.astro
+ * passes faqPageEntity(site, '/', FAQ_ITEMS) into BaseLayout's
  * structuredData prop, so the FAQPage schema lands inside the page's single
  * @graph instead of in a second JSON-LD script. Because both come from this
  * one array, the visible text and the schema cannot drift.
  *
  * Feature claims here are kept in step with what the app actually does (see
- * AGENTS.md rule 6): export/share of the bike report is live, import is not,
- * and push reminders are live — renewal reminders follow the ladder in
+ * AGENTS.md rule 6): export/share of the bike report is live, import of old
+ * records (photos of a service book or receipts, another app, a CSV or PDF)
+ * is live, the workshop directory is browsed on a map or by name, area or
+ * service, and push reminders are live — renewal reminders follow the ladder in
  * myridesg-v2 apps/mobile/lib/notifications/reminderTriggers.ts.
  */
 export interface FaqItem {
@@ -36,7 +38,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'Is there an app to find motorcycle workshops in Singapore?',
-    a: 'Yes. MyRideSG includes a workshop directory for Singapore riders: browse by region and speciality, review the services each workshop offers, and call, message or get directions with a tap. MyRideSG does not book appointments for you — the directory helps you compare workshops and make contact yourself.',
+    a: 'Yes. MyRideSG includes a workshop directory for Singapore riders: browse on a map, by name, area or service, review the services each workshop offers, and call, message or get directions with a tap. MyRideSG does not book appointments for you — the directory helps you compare workshops and make contact yourself.',
   },
   {
     q: 'How do I check when my motorcycle COE expires?',
@@ -52,7 +54,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'Can I import existing records from a spreadsheet?',
-    a: 'Not yet. CSV import is planned for a future release. In the meantime, records are added manually — a service entry, fill-up or expense takes about two minutes per entry once your bike is set up. Exporting your history is available today.',
+    a: 'Yes. Photograph a service book or receipts, bring in records from another app, or upload a CSV or PDF, and MyRideSG adds them to your history.',
   },
   {
     q: 'Can workshops see my data?',
