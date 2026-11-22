@@ -29,7 +29,8 @@ pnpm dev        # dev server
 pnpm build      # static build → dist/
 pnpm preview    # serve dist/
 pnpm check      # astro check — must be 0 errors before you finish
-pnpm test       # tests for worker/
+pnpm test       # unit tests: worker/, src/, scripts/ (never reads dist/)
+pnpm test:page  # builds, then tests the built home page in dist/
 ```
 
 ## Layout
@@ -40,10 +41,13 @@ src/
   layouts/      BaseLayout (html + head/SEO) · ProseLayout (long-form)
   components/
     ui/         .astro — zero JS. Default choice.
+      home/     the home page's nine parts (copy in lib/home-content.ts)
     islands/    .tsx — React, hydrated. Exception, not default.
   content/      vendored data layer from myridesg-v2 (see below)
+  lib/          home-content.ts (every home page string), faq-items.ts, seo.ts
+  scripts/      client modules; scroll-progress.ts drives the home page motion
   assets/       images processed by astro:assets
-  styles/       global.css — Tailwind entry + @theme tokens
+  styles/       global.css — Tailwind entry + @theme tokens · home.css
   consts.ts     site config, store URLs, nav
 ```
 

@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets'
+import PassportCard from '@/components/ui/home/PassportCard.astro'
+import { HISTORY, SECTION_IDS } from '@/lib/home-content'
+import bikeRear from '@/assets/home/bike-rear.png'
+import buyer from '@/assets/home/commuter-buyer-reading.png'
+
+/**
+ * Part 6, a history a buyer can check: the bike passport page is the hero,
+ * large and at the front. The bike, from behind, stands back on its left, and
+ * the commuter in his red open-face helmet, the buyer, stands on its right,
+ * hand on his chin, leaning in to read it. Both are smaller and further back than the page, so it is the one
+ * thing the eye lands on.
+ *
+ * Motion is in home.css: the page slides up into place and settles, with the
+ * bike and the buyer easing in behind it.
+ */
+---
+
+<section id={SECTION_IDS[5]} data-progress class="home-part history">
+  <div class="history__inner">
+    <header class="history__head">
+      <h2 class="home-title history__title home-enter">{HISTORY.headline}</h2>
+      <p class="history__line home-enter" style="--i: 1">{HISTORY.line}</p>
+    </header>
+
+    <div class="history__stage" data-progress>
+      <span class="history__bike" aria-hidden="true">
+        <Image
+          src={bikeRear}
+          alt=""
+          widths={[Math.round(bikeRear.width / 2), bikeRear.width]}
+          sizes="(min-width: 64rem) 17rem, 36vw"
+          class="history__img"
+        />
+      </span>
+      <span class="history__buyer" aria-hidden="true">
+        <Image
+          src={buyer}
+          alt=""
+          widths={[Math.round(buyer.width / 2), buyer.width]}
+          sizes="(min-width: 64rem) 11rem, 22vw"
+          class="history__img"
+        />
+      </span>
+      <div class="history__page">
+        <PassportCard />
+      </div>
+    </div>
+  </div>
+</section>

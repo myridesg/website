@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets'
+import { NEXT, SECTION_IDS } from '@/lib/home-content'
+import map from '@/assets/home/map.png'
+import guides from '@/assets/home/next-guides.png'
+import weather from '@/assets/home/next-weather.png'
+import trio from '@/assets/home/trio-fist-bump-wave-visor-up.png'
+
+/**
+ * Part 7, and we're not done: four things in the works, each a soft panel
+ * with its own object. Map, Guides and Weather are single objects from the
+ * one icon set, seen from one three-quarter camera, at one optical size on
+ * one floor line: the folded map with its pin, a book with a play button, a
+ * rain cloud with an umbrella. Community is a group: three riders on one
+ * floor, one picture: the delivery rider and the main rider bump fists, the
+ * commuter waves. On a wide panel the fist bump is its centre; on a phone
+ * the three fill the panel's width.
+ *
+ * Promises, not features: the only claims are the four card lines in NEXT,
+ * and nothing here carries a date.
+ *
+ * The headline stands alone over the cards. The four are one even grid at
+ * every width, so all four stay in view: two by two on a phone and a
+ * tablet, one row of four from 1100px. No carousel: it would hide three of
+ * them and move unasked.
+ *
+ * Motion is in home.css: each object drops onto its floor and settles, left
+ * to right (in reading order on a phone); the main rider comes up and the
+ * two others walk in from either side to meet him, so the fists close as
+ * they arrive. For that the picture is drawn three times, each copy clipped
+ * to one rider (the same file, fetched once); at rest the three line up into
+ * the one picture.
+ */
+const OBJECTS = {
+  Map: { src: map, key: 'map', sizes: '13.5rem' },
+  Guides: { src: guides, key: 'guides', sizes: '9.25rem' },
+  Weather: { src: weather, key: 'weather', sizes: '11.75rem' },
+} as const
+const RIDERS = ['left', 'mid', 'right'] as const
+const trioWidths = [Math.round(trio.width / 2), trio.width]
+const trioSizes = '(min-width: 68.75rem) 21rem, (min-width: 40rem) 23.5rem, 45vw'
+---
+
+<section id={SECTION_IDS[6]} data-progress class="home-part next">
+  <div class="next__inner">
+    <h2 class="home-title next__title home-enter">{NEXT.headline}</h2>
+
+    <ul class="next__cards" role="list">
+      {
+        NEXT.cards.map((card, i) => {
+          const object = card.title === 'Community' ? undefined : OBJECTS[card.title]
+          return (
+            <li class="soon" data-card={card.title} data-progress style={`--i: ${i}; --col: ${i % 2}`}>
+              <div class={`soon__art soon__art--${object ? object.key : 'group'}`} aria-hidden="true">
+                {object ? (
+                  <span class="soon__obj">
+                    <Image
+                      src={object.src}
+                      alt=""
+                      widths={[Math.round(object.src.width / 2), object.src.width]}
+                      sizes={object.sizes}
+                      class="soon__img"
+                      loading="lazy"
+                    />
+                  </span>
+                ) : (
+                  <span class="soon__group">
+                    {RIDERS.map((key) => (
+                      <span class={`soon__rider soon__rider--${key}`}>
+                        <Image src={trio} alt="" widths={trioWidths} sizes={trioSizes} class="soon__img" loading="lazy" />
+                      </span>
+                    ))}
+                  </span>
+                )}
+              </div>
+              <div class="soon__copy">
+                <p class="soon__badge">{NEXT.badge}</p>
+                <h3 class="soon__title">{card.title}</h3>
+                <p class="soon__line">{card.line}</p>
+              </div>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </div>
+</section>

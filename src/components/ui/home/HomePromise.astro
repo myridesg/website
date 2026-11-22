@@ -1,0 +1,137 @@
+---
+import { Image } from 'astro:assets'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import PhoneFrame from '@/components/ui/PhoneFrame.astro'
+import HomeScreen from '@/components/ui/app/HomeScreen.astro'
+import { PROMISE, SECTION_IDS } from '@/lib/home-content'
+import pump from '@/assets/home/pump.png'
+import map from '@/assets/home/map.png'
+import receipt from '@/assets/home/receipt.png'
+import chart from '@/assets/home/chart.png'
+import present from '@/assets/home/main-opening-present-visor-up.png'
+import wave from '@/assets/home/main-opening-wave-visor-up.png'
+
+/**
+ * Part 1, the promise: a studio scene. The copy on the left (above, on a
+ * phone); on the right a large phone showing the app's Home tab, cropped by
+ * the section's foot, four 3D things a rider keeps track of in a row over it,
+ * and the rider in his black full-face helmet standing just off its
+ * lower-left edge, his open hand held out toward it.
+ *
+ * The copy comes first in the markup, so on a phone the store buttons sit
+ * above the picture and inside the first screen.
+ *
+ * Motion is all in home.css; the story is "scattered things, gathered into
+ * one place". On load the copy rises in, the phone comes up, the four things
+ * fly in from around the scene into their row and the rider steps in last,
+ * waves once and settles back into presenting the phone. While the page
+ * rests they float. As the section scrolls away (--leave,
+ * written by scroll-progress.ts because of data-leave) they drop one by one
+ * into the top of the phone. With JavaScript off or reduced motion, all of
+ * that is skipped and the scene is the still picture.
+ */
+
+// The headline's line breaks are presentation: "One app for / Singapore /
+// riders", the full stop drawn separately in ember. The sentence itself stays
+// in one piece for screen readers and the built-page test.
+const words = PROMISE.headline.replace(/\.$/, '').split(' ')
+const LINES = [words.slice(0, 3), words.slice(3, 4), words.slice(4)].map((line) => line.join(' '))
+
+// In row order; home.css sizes each one as a share of the device's width.
+// Served at the native size and half of it: they are small renders, and
+// the native size is the sharpest there is.
+const PROPS = [
+  { image: pump, key: 'pump' },
+  { image: map, key: 'map' },
+  { image: receipt, key: 'receipt' },
+  { image: chart, key: 'chart' },
+]
+
+// The two poses share one canvas, so one set of widths serves both.
+const POSE_WIDTHS = [Math.round(present.width / 2), present.width]
+const POSE_SIZES = '(min-width: 64rem) 17rem, (min-width: 40rem) 10rem, 8rem'
+---
+
+<section id={SECTION_IDS[0]} data-progress data-leave class="home-part promise">
+  <div class="promise__band">
+    <div class="promise__inner">
+      <div class="promise__copy">
+        <p class="promise__eyebrow promise__in" style="--d: 0">{PROMISE.eyebrow}</p>
+        <h1 class="promise__title">
+          <span class="sr-only">{PROMISE.headline}</span>
+          <span class="promise__lines" aria-hidden="true">
+            {
+              LINES.map((line, i) => (
+                <span class="promise__row promise__in" style={`--d: ${i + 1}`}>
+                  {line}
+                  {i === LINES.length - 1 && <span class="promise__dot">.</span>}
+                </span>
+              ))
+            }
+          </span>
+        </h1>
+        <p class="promise__line promise__in" style="--d: 4">{PROMISE.line}</p>
+
+        <div class="promise__ask promise__in" style="--d: 5">
+          <StoreButtons />
+          <p class="promise__note">{PROMISE.note}</p>
+        </div>
+      </div>
+
+      <div class="promise__stage" data-stage>
+        <ul class="promise__props" role="list" aria-hidden="true">
+          {
+            PROPS.map(({ image, key }, i) => (
+              <li class={`promise__prop promise__prop--${key}`} style={`--k: ${i}`}>
+                <span class="promise__fly">
+                  <Image
+                    src={image}
+                    alt=""
+                    widths={[Math.round(image.width / 2), image.width]}
+                    sizes="(min-width: 64rem) 8rem, 4.5rem"
+                    loading="eager"
+                    class="promise__float"
+                  />
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="promise__phone">
+          <PhoneFrame chrome={false}>
+            <HomeScreen />
+          </PhoneFrame>
+        </div>
+
+        <div class="promise__rider">
+          {/* Two stills on one canvas, stacked: presenting, and the one-time
+              wave over it, hidden unless the greeting plays. Presenting is
+              the largest picture in the first screen, so the LCP candidate
+              among the images. */}
+          <span class="promise__pose">
+            <Image
+              src={present}
+              alt=""
+              widths={POSE_WIDTHS}
+              sizes={POSE_SIZES}
+              loading="eager"
+              fetchpriority="high"
+              class="promise__pose-img promise__pose-img--present"
+            />
+            <Image
+              src={wave}
+              alt=""
+              widths={POSE_WIDTHS}
+              sizes={POSE_SIZES}
+              loading="eager"
+              class="promise__pose-img promise__pose-img--wave"
+            />
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="promise__caption">Illustrative app preview with sample data.</p>
+</section>

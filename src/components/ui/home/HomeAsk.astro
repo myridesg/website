@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import { ASK, SECTION_IDS } from '@/lib/home-content'
+import ride from '@/assets/home/main-on-bike-visor-up.png'
+
+/**
+ * Part 9, the finale: the page's one dark band, in both themes. A near-black
+ * studio under one soft overhead spotlight, a glossy floor, and on it the
+ * main rider on his bike, side on, face to us. The floor gives back a faint
+ * mirror image.
+ *
+ * The headline is off-white with the ember-on-dark full stop, part 1's mark
+ * at the close. The sentence stays in one piece for screen readers; the two
+ * lines and the coloured stop are presentation.
+ *
+ * Under the store buttons, one quiet line, kept where the decision is made. The app icon is not
+ * repeated here: the header carries it and stays on screen.
+ *
+ * Motion is in home.css: the spotlight comes up and the bike rolls in from
+ * the left with him on it, and settles on the floor with its reflection.
+ */
+const [first, second] = ASK.headline.replace(/\.$/, '').split(/(?<=\.) /)
+
+// Drawn twice, the second time as the floor's reflection; the same source,
+// so the browser fetches it once.
+const rideWidths = [Math.round(ride.width / 2), ride.width]
+const rideSizes = '(min-width: 48rem) 34rem, 80vw'
+---
+
+<section id={SECTION_IDS[8]} data-progress class="home-part ask">
+  <div class="ask__inner">
+    <header class="ask__head">
+      <h2 class="ask__title home-enter">
+        <span class="sr-only">{ASK.headline}</span>
+        <span class="ask__lines" aria-hidden="true">
+          <span class="ask__row">{first}</span>
+          <span class="ask__row">{second}<span class="ask__dot">.</span></span>
+        </span>
+      </h2>
+      <StoreButtons tone="light" center class="ask__stores home-enter" />
+      <p class="ask__note home-enter">{ASK.note}</p>
+    </header>
+
+    <div class="ask__stage" data-progress aria-hidden="true">
+      <span class="ask__mirror">
+        <Image src={ride} alt="" widths={rideWidths} sizes={rideSizes} class="ask__img" loading="lazy" />
+      </span>
+      <span class="ask__ride">
+        <Image src={ride} alt="" widths={rideWidths} sizes={rideSizes} class="ask__img" loading="lazy" />
+      </span>
+    </div>
+  </div>
+</section>

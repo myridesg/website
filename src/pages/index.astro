@@ -1,24 +1,22 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import SiteNav from '@/components/ui/SiteNav.astro'
-import Hero from '@/components/ui/Hero.astro'
-import Ticker from '@/components/ui/Ticker.astro'
-import SingaporeOwnership from '@/components/ui/SingaporeOwnership.astro'
-import Product from '@/components/ui/Product.astro'
-import HowItWorks from '@/components/ui/HowItWorks.astro'
-import Workshops from '@/components/ui/Workshops.astro'
-import RiderTools from '@/components/ui/RiderTools.astro'
-import Pricing from '@/components/ui/Pricing.astro'
-import Privacy from '@/components/ui/Privacy.astro'
-import Faq from '@/components/ui/Faq.astro'
-import FinalCta from '@/components/ui/FinalCta.astro'
 import SiteFooter from '@/components/ui/SiteFooter.astro'
-import FeaturedGuides from '@/components/ui/FeaturedGuides.astro'
+import HomePromise from '@/components/ui/home/HomePromise.astro'
+import HomeSteps from '@/components/ui/home/HomeSteps.astro'
+import HomeNeverMiss from '@/components/ui/home/HomeNeverMiss.astro'
+import HomeCosts from '@/components/ui/home/HomeCosts.astro'
+import HomeSingapore from '@/components/ui/home/HomeSingapore.astro'
+import HomeHistory from '@/components/ui/home/HomeHistory.astro'
+import HomeNext from '@/components/ui/home/HomeNext.astro'
+import HomeDetail from '@/components/ui/home/HomeDetail.astro'
+import HomeAsk from '@/components/ui/home/HomeAsk.astro'
 import { getImage } from 'astro:assets'
 import heroDesktop from '@/assets/hero-carpark-desktop.jpg'
 import { FAQ_ITEMS } from '@/lib/faq-items'
 import { entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
 import { SITE } from '@/consts'
+import '@/styles/home.css'
 
 const title = 'Motorcycle App Singapore | Service, Fuel & COE'
 const pagePath = '/'
@@ -40,28 +38,57 @@ const structuredData = [
       height: 630,
     },
   }),
-  // The same array Faq.astro renders below, so schema and visible text agree.
+  // The same array HomeDetail.astro renders below, so schema and visible text agree.
   faqPageEntity(Astro.site!, pagePath, FAQ_ITEMS),
 ]
 ---
 
 <BaseLayout title={title} structuredData={structuredData}>
+  {/* Marks the page as animated before anything is painted. Blocking, inline
+      and in <head> because the module script below is deferred: had it added
+      the class, a slow load could paint every part finished, snap to the
+      start states, then animate. Entrance start states in home.css are
+      scoped under this class. (In <body> it would come after Astro's CSP
+      <meta> and be refused; see the head slot in BaseLayout.)
+
+      Two guards keep the finished state from depending on the module:
+        - Reduced motion never gets the class, so it is finished with no
+          script at all.
+        - Module scripts run before DOMContentLoaded. If the module did not
+          get as far as mounting (failed to load, or threw), it never set
+          data-home-mounted, and the class comes off again, so nothing is
+          left held at its start state. */}
+  <script is:inline slot="head">
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const root = document.documentElement
+      root.classList.add('home-running')
+      addEventListener('DOMContentLoaded', () => {
+        if (!('homeMounted' in root.dataset)) root.classList.remove('home-running')
+      })
+    }
+  </script>
+
   <SiteNav />
 
   <main>
-    <Hero />
-    <Ticker />
-    <SingaporeOwnership />
-    <Product />
-    <HowItWorks />
-    <Workshops />
-    <RiderTools />
-    <FeaturedGuides />
-    <Pricing />
-    <Privacy />
-    <Faq />
-    <FinalCta />
+    <HomePromise />
+    <HomeSteps />
+    <HomeNeverMiss />
+    <HomeCosts />
+    <HomeSingapore />
+    <HomeHistory />
+    <HomeNext />
+    <HomeDetail />
+    <HomeAsk />
   </main>
 
   <SiteFooter />
 </BaseLayout>
+
+<script>
+  import { mountScrollProgress } from '@/scripts/scroll-progress'
+
+  mountScrollProgress()
+  // Tells the head script the parts are being measured; see there.
+  document.documentElement.dataset.homeMounted = ''
+</script>

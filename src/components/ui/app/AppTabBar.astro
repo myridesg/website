@@ -1,59 +1,97 @@
 ---
 /**
- * The app's bottom tab bar, from
- * myridesg-v2/apps/mobile/app/(app)/(tabs)/_layout.tsx.
+ * The app's bottom tab bar.
  *
- * Only the Bike screen renders it: fuel and workshops are pushed destinations,
- * which is why neither of those captures showed one either.
+ * Ported from myridesg-v2/apps/mobile:
+ *   app/(app)/(tabs)/_layout.tsx    → the five slots, their order, the raised
+ *                                     camera button (FAB_R 28, Camera 26)
+ *   components/TabBarBackground.tsx → the fill and the top edge that arcs over
+ *                                     the camera button
+ *   lib/theme/screenOptions.ts      → tabBarLabelStyle (10px, medium)
+ *
+ * Icons are the lucide glyphs the layout names — House, Bike, Camera, Gift,
+ * User — with their path data copied from lucide-react-native 0.468.0, the
+ * version the app pins.
+ *
+ * The screens that show it (Home, Bike) are tabs; fuel and workshops are pushed
+ * destinations, which is why neither of those screens renders one.
  */
 
-const TABS = [
-  {
-    label: 'Home',
-    path: 'M4 10.4 12 4l8 6.4V19a1.2 1.2 0 0 1-1.2 1.2h-3.4v-5.4H8.6v5.4H5.2A1.2 1.2 0 0 1 4 19Z',
-  },
-  {
-    label: 'Bike',
-    active: true,
-    path: 'M5.6 18.4a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Zm12.8 0a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Zm-12.8-3.2h5l3-5.6h4M12.6 9.6 11 6.4H8.4m8.4 3.2 1.6 5.6',
-  },
-  {
-    label: 'Profile',
-    path: 'M12 11.6a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2Zm-6.4 8.4a6.4 6.4 0 0 1 12.8 0',
-  },
-  { label: 'ride', path: 'm7 9.5 5 6 5-6Z' },
+interface Props {
+  active?: 'home' | 'bike' | 'rewards' | 'profile'
+}
+
+const { active = 'bike' } = Astro.props
+
+// Inner markup of each glyph, rendered with set:html into a 24x24 viewBox.
+const HOUSE =
+  '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>' +
+  '<path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'
+
+const BIKE =
+  '<circle cx="18.5" cy="17.5" r="3.5"/>' +
+  '<circle cx="5.5" cy="17.5" r="3.5"/>' +
+  '<circle cx="15" cy="5" r="1"/>' +
+  '<path d="M12 17.5V14l-3-3 4-3 2 3h2"/>'
+
+const GIFT =
+  '<rect x="3" y="8" width="18" height="4" rx="1"/>' +
+  '<path d="M12 8v13"/>' +
+  '<path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/>' +
+  '<path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/>'
+
+const USER =
+  '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>' +
+  '<circle cx="12" cy="7" r="4"/>'
+
+const LEFT = [
+  { key: 'home', label: 'Home', glyph: HOUSE },
+  { key: 'bike', label: 'Bike', glyph: BIKE },
+]
+
+const RIGHT = [
+  { key: 'rewards', label: 'Rewards', glyph: GIFT },
+  { key: 'profile', label: 'Profile', glyph: USER },
 ]
 ---
 
 <nav class="tabs" aria-hidden="true">
-  {
-    TABS.slice(0, 2).map((tab) => (
-      <span class:list={['tabs__item', tab.active && 'tabs__item--active']}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-          <path d={tab.path} stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        {tab.label}
-      </span>
-    ))
-  }
+  {/* TabBarBackground evaluated at width 390: FAB_R 28 + RING 10 = r 38,
+      centred FAB_LIFT 6 above the 49px row's middle, so cy = 18.5 below the
+      baseline; dx = sqrt(38² − 18.5²) = 33.19; ext = ceil(38 − 18.5) + 2 = 22.
+      The bar under the baseline is BAR_CONTENT_H 49 + a 34px bottom inset. */}
+  <svg class="tabs__bg" viewBox="0 0 390 105">
+    <path class="tabs__fill" d="M0 22 H161.81 A38 38 0 0 1 228.19 22 H390 V105 H0 Z"></path>
+    <path class="tabs__edge" d="M0 22 H161.81 A38 38 0 0 1 228.19 22 H390"></path>
+  </svg>
 
-  {/* The log button. Overlaps the bar's top edge, as in the app. */}
-  <span class="tabs__log">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
-      <path d="M12 5v14M5 12h14" stroke-linecap="round"></path>
-    </svg>
-  </span>
+  <div class="tabs__row">
+    {
+      LEFT.map((tab) => (
+        <span class:list={['tabs__item', tab.key === active && 'tabs__item--active']}>
+          <svg viewBox="0 0 24 24" set:html={tab.glyph} />
+          {tab.label}
+        </span>
+      ))
+    }
 
-  {
-    TABS.slice(2).map((tab) => (
-      <span class="tabs__item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-          <path d={tab.path} stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        {tab.label}
-      </span>
-    ))
-  }
+    {/* The centre "log" slot: no label, opens the camera. */}
+    <span class="tabs__camera">
+      <svg viewBox="0 0 24 24">
+        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
+        <circle cx="12" cy="13" r="3"></circle>
+      </svg>
+    </span>
+
+    {
+      RIGHT.map((tab) => (
+        <span class:list={['tabs__item', tab.key === active && 'tabs__item--active']}>
+          <svg viewBox="0 0 24 24" set:html={tab.glyph} />
+          {tab.label}
+        </span>
+      ))
+    }
+  </div>
 
   <span class="tabs__home-indicator"></span>
 </nav>
@@ -63,59 +101,100 @@ const TABS = [
     position: absolute;
     inset-inline: 0;
     bottom: 0;
+    block-size: 6.5625em; /* 105: ext 22 + bar 49 + inset 34 */
+  }
+
+  .tabs__bg {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* TabBarBackground fills with `background`, not `card`. */
+  .tabs__fill {
+    fill: var(--app-bg);
+  }
+
+  .tabs__edge {
+    fill: none;
+    stroke: var(--app-border);
+    stroke-width: 1;
+  }
+
+  .tabs__row {
+    position: absolute;
+    inset-inline: 0;
+    top: 1.375em; /* the baseline, ext 22 */
+    block-size: 3.0625em; /* BAR_CONTENT_H 49 */
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     align-items: center;
-    padding: 0.7em 0.4em 1.1em;
-    border-top: 1px solid var(--app-border);
-    background: var(--app-card);
   }
 
   .tabs__item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25em;
-    font-size: 0.8em;
+    gap: 0.2em;
+    font-size: 0.625em; /* tabBarLabelStyle.fontSize 10 */
+    font-weight: 500; /* bodyMedium */
+    line-height: 1.2;
     color: var(--app-muted-fg);
   }
 
+  /* Lucide's defaults: 24 box, stroke 2, round caps and joins. Sized against
+     the item's 10px label, so 2.4em is the 24px icon. */
   .tabs__item svg {
-    inline-size: 1.6em;
-    block-size: 1.6em;
+    inline-size: 2.4em;
+    block-size: 2.4em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   .tabs__item--active {
-    /* --app-primary is 4.93:1 on the card in light but 3.17:1 in dark — under
-       AA for the 0.8em label. Foreground (14.69:1 there) keeps the active tab
-       readable in dark; light keeps the brand red. */
+    /* --app-primary is 4.93:1 on the bar in light but 3.17:1 in dark — under
+       AA for the small label. Foreground keeps the active tab readable in
+       dark; light keeps the brand red, which is the app's tabBarActiveTintColor. */
     color: light-dark(var(--app-primary), var(--app-fg));
   }
 
-  .tabs__log {
+  /* FAB_R 28, lifted FAB_LIFT 6 above the row's centre, so its top clears the
+     baseline by 9.5 and sits inside the 38-radius arc with a 10px ring. */
+  .tabs__camera {
     display: grid;
     place-items: center;
     justify-self: center;
-    inline-size: 3.1em;
-    block-size: 3.1em;
-    margin-top: -1.6em;
-    border: 0.35em solid var(--app-card);
+    inline-size: 3.5em;
+    block-size: 3.5em;
+    translate: 0 -0.375em;
     border-radius: 999px;
     background: var(--app-primary);
-    color: #ffffff;
+    color: hsl(0 0% 98%); /* primaryForeground */
+    /* shadowColor brandCharcoal, opacity 0.18, radius 6, offset y 3. */
+    box-shadow: 0 0.1875em 0.375em rgba(57, 57, 57, 0.18);
   }
 
-  .tabs__log svg {
-    inline-size: 1.4em;
-    block-size: 1.4em;
+  .tabs__camera svg {
+    inline-size: 1.625em; /* Camera size 26 */
+    block-size: 1.625em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   .tabs__home-indicator {
-    grid-column: 1 / -1;
-    justify-self: center;
+    position: absolute;
+    left: 50%;
+    bottom: 0.5em;
+    translate: -50% 0;
     inline-size: 8em;
     block-size: 0.35em;
-    margin-top: 0.7em;
     border-radius: 999px;
     background: color-mix(in oklab, var(--app-fg) 55%, transparent);
   }

@@ -1,0 +1,98 @@
+---
+import { Image } from 'astro:assets'
+import { NEVER_MISS, SECTION_IDS, STEPS } from '@/lib/home-content'
+import bikeFront from '@/assets/home/bike-front.png'
+import receipt from '@/assets/home/receipt.png'
+import pointing from '@/assets/home/main-remind-point-visor-up.png'
+import appIcon from '@/assets/home/app-icon.png'
+
+/**
+ * Part 2, how it works: a short bridge between the opening and the lead.
+ *
+ * Three steps in one ordered list, each a big quiet numeral, one object and
+ * the label. The objects stand on one shared baseline at one optical size:
+ *   01  the bike, front on;
+ *   02  a receipt inside a camera's viewfinder corners;
+ *   03  a notification banner, and under it the rider, cut off at the
+ *       waist, pointing up at it, the crown of his helmet behind it.
+ *
+ * The notification says what part 3 and the app header in part 1 say is due
+ * next, so the three agree; it is built from NEVER_MISS's first item rather
+ * than a string of its own.
+ *
+ * Motion is in home.css: the bike rolls up and settles, one scan line sweeps
+ * the receipt, the banner drops in and the rider comes up under it.
+ */
+const [first] = NEVER_MISS.items
+---
+
+<section id={SECTION_IDS[1]} data-progress class="home-part steps">
+  <div class="steps__inner">
+    <h2 class="home-title steps__title home-enter">{STEPS.headline}</h2>
+
+    <ol class="steps__list" role="list">
+      {
+        STEPS.steps.map((step, i) => (
+          <li class={`step step--${step.picture}`} style={`--i: ${i}`}>
+            <div class="step__art" aria-hidden="true">
+              {step.picture === 'bike' && (
+                <Image
+                  src={bikeFront}
+                  alt=""
+                  widths={[Math.round(bikeFront.width / 2), bikeFront.width]}
+                  sizes="(min-width: 64rem) 11rem, 8rem"
+                  class="step__object step__bike"
+                />
+              )}
+              {step.picture === 'receipt' && (
+                <span class="step__finder">
+                  <span class="step__corner" />
+                  <span class="step__corner" />
+                  <span class="step__corner" />
+                  <span class="step__corner" />
+                  <Image
+                    src={receipt}
+                    alt=""
+                    widths={[Math.round(receipt.width / 2), receipt.width]}
+                    sizes="(min-width: 64rem) 9rem, 6rem"
+                    class="step__object step__receipt"
+                  />
+                  <span class="step__scan" />
+                </span>
+              )}
+              {step.picture === 'next' && (
+                <span class="step__remind">
+                  <span class="notice">
+                    <Image src={appIcon} alt="" width={120} height={120} class="notice__icon" />
+                    <span class="notice__body">
+                      <span class="notice__meta">
+                        <span>MyRideSG</span>
+                        <span>now</span>
+                      </span>
+                      <span class="notice__title">
+                        {first.label} due {first.due}
+                      </span>
+                    </span>
+                  </span>
+                  <span class="step__pointer">
+                    <Image
+                      src={pointing}
+                      alt=""
+                      widths={[Math.round(pointing.width / 2), pointing.width]}
+                      sizes="(min-width: 80rem) 11rem, (min-width: 40rem) 7rem, 6rem"
+                      class="step__point"
+                    />
+                  </span>
+                </span>
+              )}
+            </div>
+            <p class="step__name">
+              <span class="step__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <span class="step__label">{step.label}</span>
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

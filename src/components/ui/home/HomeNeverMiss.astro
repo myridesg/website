@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets'
+import { NEVER_MISS, SECTION_IDS } from '@/lib/home-content'
+import bike from '@/assets/home/bike-side.png'
+
+/**
+ * Part 3, the lead: the bike side on, very large, with what it needs next
+ * pinned to it.
+ *
+ * All seven items are one ordered list, nearest due first. The four jobs
+ * are parts of the bike, so each is a callout: a marker on the part, a
+ * leader line and its label. The three renewals are paperwork, not parts,
+ * so they are a row of tags under the bike. Jobs have round markers,
+ * renewals square ones, and each item says its kind to a screen reader.
+ *
+ * Under 900px there is no room beside the bike for leader lines: the jobs'
+ * markers carry their place in the list as a number, and the list runs down
+ * the page under the bike with the same numbers.
+ *
+ * SPOTS is where each job points, in bike-side.png's own pixels
+ * (1320 x 781, facing right), checked by eye against the render: the rear
+ * sprocket on the rear axle, the engine's crankcase cover, the front fork leg
+ * just above the axle where the brake caliper sits, and the top of the rear
+ * tyre's tread. `side` is where its label sits; `to` is how far out the
+ * label's near edge is, on the same axis. The lines run straight out, never
+ * across each other, and through the bike only where a part is inside a
+ * wheel.
+ */
+const SPOTS: Record<string, { x: number; y: number; side: 'left' | 'right' | 'below'; to: number }> = {
+  'Chain lube': { x: 205, y: 578, side: 'left', to: -40 },
+  'Oil change': { x: 645, y: 495, side: 'below', to: 820 },
+  'Brake pads': { x: 1112, y: 540, side: 'right', to: 1360 },
+  Tyres: { x: 150, y: 392, side: 'left', to: -40 },
+}
+
+const lineParts = NEVER_MISS.line.split(/\b(job|renewal)\b/)
+const nearest = NEVER_MISS.items[0].label
+
+function placement(label: string) {
+  const spot = SPOTS[label]
+  if (!spot) return ''
+  // The leader runs from `a` to `b` along its axis, in image pixels.
+  const [a, b] = spot.side === 'left' ? [spot.to, spot.x] : spot.side === 'right' ? [spot.x, spot.to] : [spot.y, spot.to]
+  return `--x: ${spot.x}; --y: ${spot.y}; --to: ${spot.to}; --a: ${a}; --b: ${b};`
+}
+---
+
+<section id={SECTION_IDS[2]} data-progress class="home-part never">
+  <div class="never__inner">
+    <header class="never__head">
+      <h2 class="home-title never__title home-enter">{NEVER_MISS.headline}</h2>
+      <p class="never__line home-enter" style="--i: 1">
+        {
+          lineParts.map((part, i) =>
+            i % 2 === 1 ? (
+              <span class="never__key" data-kind={part}>
+                <span class="never__key-mark" aria-hidden="true" />
+                {part}
+              </span>
+            ) : (
+              part
+            ),
+          )
+        }
+      </p>
+    </header>
+
+    <figure class="bike" data-progress>
+      <div class="bike__frame">
+        <div class="bike__stage" aria-hidden="true">
+          <span class="bike__ride">
+            <span class="bike__floor" />
+            <Image
+              src={bike}
+              alt=""
+              widths={[660, bike.width]}
+              sizes="(min-width: 56.25rem) 680px, 100vw"
+              class="bike__img"
+            />
+          </span>
+        </div>
+
+        <ol class="needs" role="list">
+          {
+            NEVER_MISS.items.map((item, i) => {
+              const spot = SPOTS[item.label]
+              return (
+                <li
+                  class="need"
+                  data-kind={item.kind}
+                  data-side={spot?.side}
+                  data-nearest={item.label === nearest ? '' : undefined}
+                  style={`--i: ${i}; ${placement(item.label)}`}
+                >
+                  <span class:list={['need__mark', item.kind === 'job' ? 'need__mark--round' : 'need__mark--square']} aria-hidden="true">
+                    <span class="need__num">{i + 1}</span>
+                  </span>
+                  {spot && <span class="need__leader" aria-hidden="true" />}
+                  <span class="need__text">
+                    <span class="sr-only">{item.kind}:</span>{' '}
+                    <span class="need__label">{item.label}</span>{' '}
+                    <span class="need__due">{item.due}</span>
+                  </span>
+                </li>
+              )
+            })
+          }
+        </ol>
+      </div>
+      <figcaption class="bike__caption">{NEVER_MISS.caption}</figcaption>
+    </figure>
+  </div>
+</section>

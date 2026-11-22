@@ -1,0 +1,53 @@
+---
+import { DETAIL, SECTION_IDS } from '@/lib/home-content'
+import { FAQ_ITEMS } from '@/lib/faq-items'
+
+/**
+ * Part 8, the detail for those who want it: the questions riders ask, one
+ * native <details> each, closed by default and sharing one name, so opening
+ * one closes the one that was open (an exclusive accordion; where a browser
+ * does not support the name, they simply open independently).
+ *
+ * The first row is "What can the app do today?" and opens on the six groups
+ * of features (owner decision, 22 Nov 2026: the always-open list was too
+ * many words). It is this page's own row, not part of FAQ_ITEMS, so the page's
+ * FAQPage structured data leaves it out.
+ */
+---
+
+<section id={SECTION_IDS[7]} data-progress class="home-part detail">
+  <div class="detail__inner">
+    <h2 class="home-title detail__title home-enter">{DETAIL.faqHeading}</h2>
+    <div class="faqs home-enter" style="--i: 1">
+      <details class="faq" name="questions">
+        <summary class="faq__q">
+          <span class="faq__text">{DETAIL.featuresQuestion}</span>
+          <span class="faq__mark" aria-hidden="true" />
+        </summary>
+        <div class="faq__a features">
+          {
+            DETAIL.groups.map((group) => (
+              <div class="features__group">
+                <h3 class="features__title">{group.title}</h3>
+                <ul class="features__items" role="list">
+                  {group.items.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </details>
+      {
+        FAQ_ITEMS.map((item) => (
+          <details class="faq" name="questions">
+            <summary class="faq__q">
+              <span class="faq__text">{item.q}</span>
+              <span class="faq__mark" aria-hidden="true" />
+            </summary>
+            <p class="faq__a">{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
