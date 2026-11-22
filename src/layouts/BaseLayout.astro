@@ -3,7 +3,7 @@ import '@/styles/global.css'
 import { getImage } from 'astro:assets'
 import { SITE, STORE } from '@/consts'
 import { buildGraph, serializeJsonLd } from '@/lib/seo'
-import defaultOgSource from '@/assets/hero-carpark-desktop.jpg'
+import defaultOgSource from '@/assets/og-default.png'
 
 // The three faces that render above the fold: Barlow Condensed 700 for the
 // hero h1 and the nav brand, Barlow 400 for the hero copy, Barlow 700 for the
@@ -111,8 +111,9 @@ const canonical = canonicalOverride
   ? new URL(canonicalOverride, Astro.site).href
   : new URL(Astro.url.pathname, Astro.site).href
 
-// Default card: the existing hero, cropped to the 1200x630 Open Graph size at
-// build time. JPEG rather than WebP because social crawlers handle it reliably.
+// Default card: the home page's headline, rider and four props on the studio
+// grey, drawn at the 1200x630 Open Graph size. Converted at build time to JPEG
+// rather than WebP because social crawlers handle it reliably.
 const defaultOg = ogImage
   ? undefined
   : await getImage({ src: defaultOgSource, width: 1200, height: 630, fit: 'cover', format: 'jpeg' })
@@ -120,7 +121,7 @@ const socialImage = ogImage
   ? new URL(ogImage, Astro.site).href
   : new URL(defaultOg!.src, Astro.site).href
 const socialImageAlt = defaultOg
-  ? 'A motorcycle on a Singapore carpark rooftop at night, with the city skyline behind'
+  ? 'One app for Singapore riders. The MyRideSG rider in a black full-face helmet presents a map, a chart, a fuel pump and a receipt.'
   : undefined
 
 const graph = buildGraph(Astro.site!, structuredData)
