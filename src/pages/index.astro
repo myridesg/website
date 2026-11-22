@@ -12,7 +12,7 @@ import HomeNext from '@/components/ui/home/HomeNext.astro'
 import HomeDetail from '@/components/ui/home/HomeDetail.astro'
 import HomeAsk from '@/components/ui/home/HomeAsk.astro'
 import { getImage } from 'astro:assets'
-import heroDesktop from '@/assets/hero-carpark-desktop.jpg'
+import ogSource from '@/assets/og-default.png'
 import { FAQ_ITEMS } from '@/lib/faq-items'
 import { entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
 import { SITE } from '@/consts'
@@ -21,9 +21,9 @@ import '@/styles/home.css'
 const title = 'Motorcycle App Singapore | Service, Fuel & COE'
 const pagePath = '/'
 
-// The hero is the page's main image; the same 1200x630 crop BaseLayout builds
-// for the default og:image, so both point at one asset.
-const ogImage = await getImage({ src: heroDesktop, width: 1200, height: 630, fit: 'cover', format: 'jpeg' })
+// The page's image for search engines: the same 1200x630 JPEG BaseLayout
+// builds for the default og:image, so both point at one asset.
+const ogImage = await getImage({ src: ogSource, width: 1200, height: 630, fit: 'cover', format: 'jpeg' })
 
 const structuredData = [
   webPageEntity(Astro.site!, {

@@ -130,6 +130,8 @@ Related: never attach invented ratings or reviews to a **named real business**.
 - `src/pages/privacy.astro` and `terms.astro` are ported **verbatim** from v2
   and still describe a *web application*. They need legal review for the native
   pivot. Do not edit legal copy — flag it.
-- No og:image yet.
+- The og:image, `src/assets/og-default.png`, is a flat picture of the home
+  page's headline and art. It does not follow the page: change the headline or
+  the rider and it needs redrawing by hand.
 - The Docker/nginx tester preview doesn't run the Worker, so `/r/*` is a 404
   there. Use `pnpm wrangler dev` after `pnpm build` to try it locally.
