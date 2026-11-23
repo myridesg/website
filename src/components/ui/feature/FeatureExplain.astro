@@ -1,0 +1,28 @@
+---
+/**
+ * The how-it-works detail, on the studio wall: the explanation on the left,
+ * and on the right a card standing on the floor with the worked example.
+ * The card's body is the slot; feature.css styles the three shapes it takes
+ * (.card-steps, .card-rows, .card-list) and a closing .card-note.
+ */
+interface Props {
+  headline: string
+  paragraphs: string[]
+  cardTitle: string
+}
+
+const { headline, paragraphs, cardTitle } = Astro.props
+---
+
+<section class="feature-explain">
+  <div class="feature-explain__inner">
+    <div class="feature-explain__copy">
+      <h2 class="home-title feature-title">{headline}</h2>
+      {paragraphs.map((text) => <p class="feature-text">{text}</p>)}
+    </div>
+    <div class="feature-card">
+      <h3 class="feature-label feature-card__title">{cardTitle}</h3>
+      <slot />
+    </div>
+  </div>
+</section>

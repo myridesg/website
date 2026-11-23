@@ -1,0 +1,31 @@
+---
+/**
+ * Getting started in three steps, each under the big quiet numeral the home
+ * page's steps use (01, 02, 03), with a capitals label and a line. The
+ * numeral is drawn by feature.css, not written in the page: the list is
+ * already ordered, and "03" read next to "Review…" looks like a review
+ * count to the claim checker.
+ */
+interface Props {
+  headline: string
+  steps: Array<[label: string, body: string]>
+}
+
+const { headline, steps } = Astro.props
+---
+
+<section class="feature-steps">
+  <div class="feature-steps__inner">
+    <h2 class="home-title feature-title">{headline}</h2>
+    <ol class="feature-steps__list" role="list">
+      {
+        steps.map(([label, body]) => (
+          <li class="feature-step">
+            <h3 class="feature-step__label">{label}</h3>
+            <p class="feature-step__body">{body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets'
+import { OBJECTS, objectStyle, objectWidths, type ObjectKey } from './objects'
+
+/**
+ * Where to go next: three links as the home page's tool tiles (a glossy
+ * object on the studio floor over its label, the whole tile the link), each
+ * with one line under it. Anything the page adds after them (a note, a
+ * related-tools line) is the slot.
+ */
+interface Props {
+  headline: string
+  intro: string
+  links: Array<{ href: string; title: string; line: string; object: ObjectKey }>
+}
+
+const { headline, intro, links } = Astro.props
+---
+
+<section class="feature-related">
+  <div class="feature-related__inner">
+    <div class="feature-related__head">
+      <h2 class="home-title feature-title">{headline}</h2>
+      <p class="feature-text">{intro}</p>
+    </div>
+    <ul class="feature-related__list" role="list">
+      {
+        links.map((link) => (
+          <li class="feature-related__item">
+            <a class="tool" href={link.href}>
+              <span class="tool__art" style={objectStyle(link.object)}>
+                <span class="tool__drop">
+                  <Image
+                    src={OBJECTS[link.object].image}
+                    alt=""
+                    widths={objectWidths(link.object)}
+                    sizes="9rem"
+                    loading="lazy"
+                    class="tool__icon"
+                  />
+                </span>
+              </span>
+              <span class="tool__label">{link.title}</span>
+            </a>
+            <p class="feature-related__line">{link.line}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <slot />
+  </div>
+</section>

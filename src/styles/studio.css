@@ -1,0 +1,679 @@
+/* ============================================================================
+ * The studio: what the home page (home.css) and the feature pages
+ * (feature.css) share. Both import this file first.
+ *
+ * Lifted unchanged from home.css when the feature pages took on its look;
+ * the class names keep their home-page names (.home-title, .faq, .ask,
+ * .tool) so the home components did not change. Every colour is a token
+ * from global.css or one of the studio neutrals below. .feature-page is the
+ * <main> of a feature page: it carries the same timing and studio tokens
+ * that each home part carries.
+ *
+ * The notes in home.css's header about tokens Tailwind does not emit, and
+ * about motion under html.home-running, apply here too. The feature pages
+ * never set home-running, so they always render finished.
+ * ==========================================================================*/
+
+/* ── Shared timing ──────────────────────────────────────────────────────────
+   Later parts build on these. --home-ease settles with a slight overshoot,
+   which is what gives a move its weight; --home-ease-out is the plain
+   deceleration for opacity and for things that should not bounce.
+
+   --home-accent is red for text and outlines: the brand red on light, the
+   lightened ember on dark, where the brand red is too dark to read. Fills
+   keep the brand red itself. */
+.home-part,
+.feature-page {
+  --home-ease: cubic-bezier(0.34, 1.32, 0.64, 1);
+  --home-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --home-fast: 180ms;
+  --home-base: 420ms;
+  --home-slow: 900ms;
+  --home-accent: light-dark(var(--color-red), var(--color-ember-on-dark));
+  /* The smallest text outside the app and passport drawings: spaced-caps
+     labels such as "Sample data". */
+  --home-label: var(--text-xs);
+}
+
+@media (width >= 64rem) {
+  .home-part,
+  .feature-page {
+    --home-label: var(--text-sm);
+  }
+}
+
+/* The site header lines its wordmark up with the parts' own gutters. */
+.site-header {
+  --site-header-max: 112rem;
+  --site-header-gutter: clamp(1.25rem, 5vw, 6rem);
+}
+
+/* And the footer, so its columns end where the finale's content does. */
+.site-footer {
+  --site-footer-max: 112rem;
+  --site-footer-gutter: clamp(1.25rem, 5vw, 6rem);
+}
+
+/* Studio neutrals. Not brand colours: the cool grey of the wall the 3D
+   renders were lit against, and for the dark theme a near-black warmed a
+   touch toward the site's dark ground (ember-1), which the renders were also
+   checked on. Text greys clear 4.5:1 on the wall in both. Shared by every
+   part that stands on the studio. */
+.promise,
+.steps,
+.never,
+.costs,
+.sg,
+.history,
+.next,
+.detail,
+.feature-page {
+  --studio-wall-top: light-dark(#d9dbe0, #0f0c0c);
+  --studio-wall-mid: light-dark(#e4e6ea, #151111);
+  --studio-wall-low: light-dark(#e8eaed, #191414);
+  --studio-floor: light-dark(#eef0f2, #1d1817);
+  --studio-glow: light-dark(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.045));
+  --studio-vignette: light-dark(rgb(20 22 30 / 0.14), rgb(0 0 0 / 0.45));
+  --studio-horizon: light-dark(rgb(120 124 135 / 0.1), rgb(255 255 255 / 0.04));
+  --studio-shadow-far: light-dark(rgb(30 32 40 / 0.2), rgb(0 0 0 / 0.55));
+  --studio-shadow-near: light-dark(rgb(30 32 40 / 0.16), rgb(0 0 0 / 0.5));
+  --studio-contact: light-dark(rgb(30 32 40 / 0.45), rgb(0 0 0 / 0.75));
+  --studio-headline: light-dark(var(--color-black), var(--color-ink));
+  --studio-eyebrow: light-dark(#4a4d55, #a9acb4);
+  --studio-text: light-dark(#3a3c42, #cfd1d6);
+  --studio-note: light-dark(#5a5d66, #9fa2aa);
+  --studio-dot: light-dark(var(--color-ember), var(--color-ember-on-dark));
+  /* Hairlines between rows, as in the questions. */
+  --studio-rule: light-dark(rgb(30 32 40 / 0.16), rgb(255 255 255 / 0.12));
+  /* Big quiet step numerals: 01, 02, 03. */
+  --studio-numeral: light-dark(#c4c7cd, #5c5250);
+}
+
+/* ============================================================================
+ * Part headlines (parts 2 to 8)
+ *
+ * Barlow Condensed 700 in capitals, tight, a step under part 1's h1 at every
+ * width. No ember full stop: that is part 1's and part 9's alone.
+ * ==========================================================================*/
+
+.home-title {
+  margin: 0;
+  font-size: clamp(2.5rem, 1.35rem + 4.4vw, 5.5rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--studio-headline);
+}
+
+/* ============================================================================
+ * A glossy object on the studio floor over its label, the whole tile a link
+ * (home part 5, the feature pages' related links). The list around it sets
+ * --icon, the optical size; each tile sets --k (its object's share of it)
+ * and --ratio (the render's width over height).
+ * ==========================================================================*/
+
+.tool {
+  display: grid;
+  justify-items: center;
+  row-gap: clamp(1rem, 0.75rem + 0.8vw, 1.5rem);
+  padding: 0.5rem 0.25rem 0.75rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  text-decoration: none;
+  color: var(--studio-headline);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tool:focus-visible {
+  outline: 2px solid var(--studio-headline);
+  outline-offset: 4px;
+}
+
+.tool__art {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  inline-size: calc(var(--icon) * var(--k) * var(--ratio));
+  block-size: var(--icon);
+}
+
+/* The floor under each: a wide soft shadow round a tight contact one, on
+   the shared baseline, as wide as the object over it. */
+.tool__art::before,
+.tool__art::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(100% - var(--icon) * 0.01);
+  border-radius: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
+  transition: scale var(--home-base) var(--home-ease-out), opacity var(--home-base) var(--home-ease-out);
+}
+
+.tool__art::before {
+  inline-size: calc(100% + var(--icon) * 0.3);
+  block-size: calc(var(--icon) * 0.16);
+  background: radial-gradient(closest-side, var(--studio-shadow-near), transparent);
+}
+
+.tool__art::after {
+  inline-size: calc(100% - var(--icon) * 0.06);
+  block-size: calc(var(--icon) * 0.05);
+  background: radial-gradient(closest-side, var(--studio-contact), transparent);
+}
+
+.tool__drop {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.tool__icon {
+  display: block;
+  block-size: calc(var(--icon) * var(--k));
+  inline-size: auto;
+  filter: drop-shadow(0 calc(var(--icon) * 0.03) calc(var(--icon) * 0.03) var(--studio-shadow-near));
+  transition: translate var(--home-base) var(--home-ease-out);
+}
+
+.tool__label {
+  /* Two lines tall whether it wraps or not, so the four labels make one
+     even row at every width. */
+  min-block-size: 2lh;
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 0.95rem + 0.6vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.tool__label::after {
+  content: '\2192' / '';
+  display: inline-block;
+  margin-inline-start: 0.3em;
+  color: var(--studio-note);
+  transition: translate var(--home-base) var(--home-ease-out);
+}
+
+@media (hover: hover) {
+  .tool:hover .tool__icon {
+    translate: 0 -0.5rem;
+  }
+
+  .tool:hover .tool__art::before {
+    scale: 0.85;
+    opacity: 0.7;
+  }
+
+  .tool:hover .tool__label::after {
+    translate: 0.2em 0;
+  }
+}
+
+.tool:focus-visible .tool__icon {
+  translate: 0 -0.5rem;
+}
+
+/* ============================================================================
+ * Part 8 · The detail
+ *
+ * For whoever wants all of it: the questions, on the page's lighter ground
+ * (the ground part 6 stands on), between the studio wall of part 7 and the
+ * dark finale. One native <details> each, sharing one name so one is open at
+ * a time; each is a whole-width row with a round plus that turns to a minus
+ * when open. From 1024px the headline sits beside the list and stays in view.
+ *
+ * The first row opens on everything in the app today: six small groups in a
+ * grid that follows the answer's own width (container units), three columns
+ * where it is wide, two on a tablet, one on a phone.
+ * ==========================================================================*/
+
+.detail {
+  padding-block: clamp(3.5rem, 2rem + 4vw, 6rem);
+  background: var(--color-paper);
+}
+
+.detail__inner {
+  display: grid;
+  row-gap: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+.detail__title {
+  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.75rem);
+}
+
+@media (width >= 64rem) {
+  .detail__inner {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 2.2fr);
+    align-items: start;
+    column-gap: clamp(2.5rem, 4vw, 5rem);
+  }
+
+  /* The headline stays in view beside a long open answer. */
+  .detail__title {
+    position: sticky;
+    top: calc(var(--site-bar-slim) + 1.5rem);
+  }
+}
+
+.faqs {
+  container: faqs / inline-size;
+  border-block-end: 1px solid var(--studio-rule);
+}
+
+.faq {
+  border-block-start: 1px solid var(--studio-rule);
+}
+
+.faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  min-block-size: 3rem;
+  /* Room round the row for the focus ring, with the text still on the
+     page's left edge. */
+  margin-inline: -0.75rem;
+  padding: clamp(0.875rem, 0.7rem + 0.5vw, 1.125rem) 0.75rem;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  list-style: none;
+  font-size: clamp(1rem, 0.92rem + 0.3vw, 1.1875rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--studio-headline);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.faq__q::-webkit-details-marker {
+  display: none;
+}
+
+.faq__q:focus-visible {
+  outline: 2px solid var(--studio-headline);
+  outline-offset: 2px;
+}
+
+.faq__text {
+  max-inline-size: 36em;
+  text-wrap: pretty;
+}
+
+/* The open/closed mark: a ring with a plus; open, a filled disc with a
+   minus. */
+.faq__mark {
+  position: relative;
+  flex: none;
+  inline-size: 2rem;
+  aspect-ratio: 1;
+  border: 2px solid var(--studio-headline);
+  border-radius: 50%;
+  color: var(--studio-headline);
+  transition:
+    background-color var(--home-fast) var(--home-ease-out),
+    color var(--home-fast) var(--home-ease-out),
+    scale var(--home-base) var(--home-ease-out);
+}
+
+.faq__mark::before,
+.faq__mark::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  inline-size: 0.75rem;
+  block-size: 2px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  translate: -50% -50%;
+  transition: rotate var(--home-base) var(--home-ease-out);
+}
+
+.faq__mark::after {
+  rotate: 90deg;
+}
+
+.faq[open] .faq__mark {
+  background: var(--studio-headline);
+  color: light-dark(var(--color-paper), var(--color-black));
+}
+
+.faq[open] .faq__mark::after {
+  rotate: 0deg;
+}
+
+@media (hover: hover) {
+  .faq__q:hover .faq__mark {
+    scale: 1.1;
+  }
+}
+
+.faq__a {
+  max-inline-size: 38em;
+  margin: 0;
+  padding-block: 0 clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+/* "What can the app do today?": the six groups, wider than an answer's
+   measure so the columns fit. */
+.faq__a.features {
+  display: grid;
+  gap: clamp(1.5rem, 1.25rem + 1vw, 2rem) clamp(1.5rem, 3vw, 3rem);
+  max-inline-size: none;
+}
+
+/* Columns by the list's own width (.faqs is the container). */
+@container faqs (width >= 30rem) {
+  .faq__a.features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container faqs (width >= 46rem) {
+  .faq__a.features {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* No rule of its own: the accordion's hairlines are the only lines. */
+.features__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--studio-headline);
+}
+
+.features__items {
+  display: grid;
+  /* Wider than a wrapped line's leading, so two items never read as one. */
+  row-gap: 0.5rem;
+  margin: 0.625rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-base);
+  line-height: 1.35;
+  color: var(--studio-text);
+}
+
+/* The answer settles in as it opens; running pages only, so reduced motion
+   just shows it. */
+.home-running .faq[open] .faq__a {
+  animation: faq-open 420ms var(--home-ease-out) both;
+}
+
+@keyframes faq-open {
+  from {
+    opacity: 0.35;
+    translate: 0 -0.375rem;
+  }
+}
+
+/* ============================================================================
+ * Part 9 · Ride more. Worry less.
+ *
+ * The finale and the page's one dark band, in both themes: a near-black
+ * studio lit by one soft spotlight from above, a glossy floor, and on it the
+ * main rider on his bike, side on. The floor gives back a faint mirror of
+ * it. The band's foot is the footer's black, so the two run on as one dark
+ * ground.
+ *
+ * The stage is a container, and the picture is in its units (cqi): --bw is
+ * its width, capped by --ride-max for sharpness; --below is the floor's
+ * depth under the tyres, room for the reflection. The picture is in the
+ * stage's flow, so the stage is as tall as it needs.
+ * ==========================================================================*/
+
+.ask {
+  --ask-ink: #f3f1ec;
+  --ask-sub: #a7a29c;
+  --ask-wall-top: #050404;
+  --ask-wall: #0d0a0a;
+  --ask-ground: #080808;
+  --ask-beam: rgb(255 244 230 / 0.17);
+  --ask-pool: rgb(255 244 230 / 0.16);
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding-block-start: clamp(3.5rem, 2rem + 4vw, 6rem);
+  color-scheme: dark;
+  background:
+    /* The spotlight's beam, falling from above the headline to the floor. */
+    radial-gradient(ellipse 30% 100% at 50% -14%, var(--ask-beam), transparent 74%),
+    linear-gradient(180deg, var(--ask-wall-top) 0%, var(--ask-wall) 58%, var(--ask-ground) 100%);
+}
+
+.ask__inner {
+  display: grid;
+  justify-items: center;
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+.ask__head {
+  display: grid;
+  justify-items: center;
+  row-gap: clamp(1.5rem, 1rem + 1.2vw, 2.25rem);
+  text-align: center;
+}
+
+.ask__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3.25rem, 1.75rem + 6vw, 8rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--ask-ink);
+}
+
+.ask__lines {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.25em;
+}
+
+.ask__row {
+  white-space: nowrap;
+}
+
+.ask__dot {
+  color: var(--color-ember-on-dark);
+}
+
+/* One quiet line under the buttons: smaller and greyer than either, so the
+   headline reads first and the buttons second. */
+.ask__note {
+  --i: 2;
+
+  margin: calc(clamp(1.5rem, 1rem + 1.2vw, 2.25rem) * -0.5) 0 0;
+  font-size: clamp(0.8125rem, 0.75rem + 0.25vw, 0.9375rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ask-sub);
+}
+
+/* The badges on black: the Play badge is black on black, so both get a
+   hairline ring that keeps their edge. */
+.ask__stores a {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.3);
+}
+
+.ask__stage {
+  /* The render is 830 px wide, so 415 px is sharp at 2x. The finale is the
+     one picture allowed past that, up to 544 px (1.31x, a little soft at
+     2x), and only where the screen is tall enough to show the whole scene,
+     floor and reflection, under the headline: on a 1440 x 900 screen that
+     leaves room for about 400 px, on 1920 x 1080 for the full 544. */
+  --ride-max: clamp(22rem, (100svh - 33rem) * 830 / 778, 34rem);
+  --bw: min(78cqi, var(--ride-max));
+  --below: 14cqi;
+
+  container-type: inline-size;
+  position: relative;
+  display: grid;
+  justify-items: center;
+  /* On a phone, out to the screen's edges: the bike is the picture. */
+  inline-size: calc(100% + 2.5rem);
+  margin-inline: -1.25rem;
+  margin-block-start: clamp(1rem, 0.5rem + 2vw, 2.5rem);
+}
+
+/* A soft pool of the spotlight on the wall behind the bike, and the lit
+   patch of glossy floor under it with a bright sheen at the floor line. */
+.ask__stage::before,
+.ask__stage::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.ask__stage::before {
+  inset: -6cqi -10cqi var(--below);
+  background: radial-gradient(48% 62% at 50% 62%, rgb(255 255 255 / 0.075), transparent 72%);
+}
+
+.ask__stage::after {
+  left: -30cqi;
+  right: -30cqi;
+  top: calc(100% - var(--below) - 3cqi);
+  /* Down to the band's foot and no further: the pool has faded out by
+     about half way. */
+  block-size: calc(var(--below) + 3cqi);
+  background:
+    radial-gradient(42% 7% at 50% 10%, rgb(255 255 255 / 0.11), transparent),
+    radial-gradient(34% 55% at 50% 12%, var(--ask-pool), transparent 75%);
+}
+
+.ask__ride {
+  position: relative;
+  z-index: 1;
+  inline-size: var(--bw);
+  margin-block: 4cqi var(--below);
+}
+
+/* Contact shadows where the tyres meet the floor. */
+.ask__ride::after {
+  content: '';
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  bottom: 0;
+  block-size: 3cqi;
+  border-radius: 50%;
+  translate: 0 50%;
+  background:
+    radial-gradient(11% 50% at 16% 50%, rgb(0 0 0 / 0.9), transparent),
+    radial-gradient(11% 50% at 84% 50%, rgb(0 0 0 / 0.9), transparent),
+    radial-gradient(closest-side, rgb(0 0 0 / 0.6), transparent);
+}
+
+/* He is black helmet and black leather on a black stage. The spotlight,
+   above and to his left, catches the top and left-hand edges in a hair of
+   warm light, and a soft glow on the wall behind his helmet keeps its
+   outline from sinking into the dark. */
+.ask__ride::before {
+  content: '';
+  position: absolute;
+  left: 22%;
+  top: -12%;
+  inline-size: 54%;
+  block-size: 58%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 244 230 / 0.16), rgb(255 244 230 / 0.06) 55%, transparent);
+  pointer-events: none;
+}
+
+.ask__ride .ask__img {
+  filter:
+    drop-shadow(-0.06cqi -0.14cqi 0 rgb(255 244 230 / 0.3))
+    drop-shadow(-0.1cqi -0.3cqi 0.5cqi rgb(255 244 230 / 0.06));
+}
+
+.ask__img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* The reflection: the picture again, upside down from the floor line,
+   faint and fading out a short way down, as on a glossy floor. */
+.ask__mirror {
+  position: absolute;
+  z-index: 0;
+  top: calc(100% - var(--below));
+  left: 50%;
+  inline-size: var(--bw);
+  margin-inline-start: calc(var(--bw) / -2);
+  /* Flipped in place: its box hangs from the floor line, so the picture's
+     foot meets the real one's. */
+  scale: 1 -1;
+  opacity: 0.16;
+  /* Gone before the band's foot, so the band does not cut it off. */
+  mask-image: linear-gradient(0deg, #000 0, rgb(0 0 0 / 0.4) calc(var(--below) * 0.45), transparent calc(var(--below) * 0.95));
+}
+
+@media (width >= 48rem) {
+  .ask__stage {
+    --bw: min(70cqi, var(--ride-max));
+    --below: 12cqi;
+
+    inline-size: min(100%, 56rem);
+    margin-inline: auto;
+  }
+}
+
+/* The footer is the same black: without its top hairline the finale's
+   floor runs straight on into it, one dark ground to the end of the page. */
+main:has(.ask) + .site-footer {
+  border-top-color: transparent;
+}
+
+/* ── Motion: the light comes up, the bike rolls in with him on it ──
+   The picture and its reflection travel together from the left and settle
+   on the weighted curve. */
+.home-running .ask__stage:not([data-seen]) :is(.ask__ride, .ask__mirror) {
+  opacity: 0.35;
+  translate: -16cqi 0;
+}
+
+.home-running .ask__stage:not([data-seen]) .ask__mirror {
+  opacity: 0.06;
+}
+
+.home-running .ask__stage:not([data-seen])::before,
+.home-running .ask__stage:not([data-seen])::after {
+  opacity: 0.35;
+}
+
+.home-running .ask__stage[data-seen] :is(.ask__ride, .ask__mirror) {
+  transition:
+    opacity 700ms var(--home-ease-out) 150ms,
+    translate 1300ms var(--home-ease) 150ms;
+}
+
+.home-running .ask__stage[data-seen]::before,
+.home-running .ask__stage[data-seen]::after {
+  transition: opacity 1400ms var(--home-ease-out);
+}

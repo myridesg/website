@@ -1,0 +1,33 @@
+---
+/**
+ * What the feature does, point by point: the headline and its intro on the
+ * left, the points in a two-by-two grid on the right, each under a hairline
+ * with a small capitals title (the home FAQ's feature-group style).
+ */
+interface Props {
+  headline: string
+  intro: string
+  points: Array<{ title: string; body: string }>
+}
+
+const { headline, intro, points } = Astro.props
+---
+
+<section class="feature-points">
+  <div class="feature-points__inner">
+    <div class="feature-points__head">
+      <h2 class="home-title feature-title">{headline}</h2>
+      <p class="feature-text">{intro}</p>
+    </div>
+    <ul class="feature-points__list" role="list">
+      {
+        points.map((point) => (
+          <li class="feature-point">
+            <h3 class="feature-label">{point.title}</h3>
+            <p class="feature-point__body">{point.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
