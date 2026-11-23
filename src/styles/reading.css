@@ -1,0 +1,648 @@
+/* ============================================================================
+ * The reading pages: guides and the guides list, support, delete account,
+ * privacy, terms, and the 404 (ProseLayout, PageHead, components/ui/guide).
+ *
+ * The feature pages' look, carried on to long text: the opening is
+ * FeatureHero's own markup and classes (feature.css), and the reading column
+ * is a white page standing on the studio floor. Everything here is built from
+ * the studio tokens (studio.css), which <main class="feature-page"> carries.
+ * ==========================================================================*/
+
+@import './feature.css';
+
+/* ── Opening (PageHead.astro) ───────────────────────────────────────────── */
+
+/* Without a stage the opening ends sooner: the reading panel or the list is
+   what comes next, not a picture. */
+.page-head--plain .feature-hero__inner {
+  padding-block-end: clamp(2rem, 1.25rem + 2.5vw, 3.5rem);
+}
+
+/* The floor runs on under a plain opening into the band that follows, so
+   it keeps the wall's fall of light but not the glow or the darkened
+   corners: either would draw a seam where the two meet. */
+.page-head--plain {
+  background: linear-gradient(
+    180deg,
+    var(--studio-wall-top) 0%,
+    var(--studio-wall-mid) 45%,
+    var(--studio-wall-low) 75%,
+    var(--studio-floor) 100%
+  );
+}
+
+.page-head--plain::after {
+  display: none;
+}
+
+/* Guide titles run to seventy characters: a size down, and wider. */
+.page-head--long .feature-hero__title {
+  max-inline-size: 18em;
+  font-size: clamp(2.125rem, 1.3rem + 3.6vw, 4.5rem);
+  line-height: 0.92;
+}
+
+/* The 404's eyebrow, set as the breadcrumb is. */
+.page-head__eyebrow {
+  margin: 0 0 clamp(0.875rem, 0.5rem + 1vw, 1.5rem);
+  font-size: clamp(0.75rem, 0.6rem + 0.45vw, 0.875rem);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--studio-eyebrow);
+}
+
+/* Author and dates: small, spaced, quiet. */
+.page-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem 1.25rem;
+  margin-top: clamp(1rem, 0.75rem + 0.8vw, 1.5rem);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--studio-note);
+}
+
+.page-head__more {
+  margin-top: clamp(1.25rem, 0.75rem + 1.4vw, 2rem);
+}
+
+.page-head__meta:empty,
+.page-head__more:empty {
+  display: none;
+}
+
+/* A line of links under the lead (the guides list). */
+.page-head__note {
+  max-inline-size: 36em;
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+/* Links on the wall: ink, underlined, never red. */
+.page-head__note a,
+.page-actions a:not(.page-button) {
+  font-weight: 600;
+  color: var(--studio-headline);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* The header's black button, at the size of a page action. */
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+}
+
+.page-button {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 3rem;
+  padding-inline: 1.5rem;
+  border-radius: 0.5rem;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 160ms ease;
+}
+
+.page-button:hover {
+  opacity: 0.86;
+}
+
+.page-button:focus-visible,
+.reading a:focus-visible,
+.page-head a:focus-visible {
+  outline: 2px solid var(--studio-headline);
+  outline-offset: 3px;
+}
+
+/* ── The reading column ─────────────────────────────────────────────────────
+   The floor the opening ends on, carried down, with the page standing on
+   it. */
+
+.reading {
+  --gutter: clamp(1.25rem, 5vw, 6rem);
+
+  /* The opening's gutter, inside the same 112rem frame. */
+  padding: 0 max(var(--gutter), (100% - 112rem) / 2 + var(--gutter)) clamp(3.5rem, 2rem + 5vw, 7rem);
+  background: var(--studio-floor);
+}
+
+/* The page itself: white, a hairline, the studio's soft shadow, as wide as
+   a comfortable line. Edge to edge on a phone, where a frame would only
+   cost reading width. */
+.reading__panel {
+  max-inline-size: 56rem;
+  padding: clamp(1.75rem, 1rem + 3vw, 4rem) clamp(1.25rem, 0.5rem + 4vw, 5rem);
+  border: 1px solid var(--studio-rule);
+  border-radius: var(--radius-lg);
+  background: var(--color-paper);
+  box-shadow:
+    0 1.5rem 3rem -1.25rem var(--studio-shadow-far),
+    0 0.25rem 0.75rem var(--studio-shadow-near);
+}
+
+@media (width < 40rem) {
+  .reading {
+    padding-inline: 0;
+  }
+
+  .reading__panel {
+    border-inline: 0;
+    border-radius: 0;
+  }
+}
+
+/* ── Prose ──────────────────────────────────────────────────────────────── */
+
+.prose-body > :first-child {
+  margin-top: 0;
+}
+
+.prose-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* Section heads in condensed capitals, as the feature pages' part titles,
+   a size for a column of text. */
+.prose-body h2 {
+  margin: clamp(2.5rem, 2rem + 1.5vw, 3.25rem) 0 0.875rem;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2.125rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--studio-headline);
+}
+
+.prose-body h3 {
+  margin: 2rem 0 0.5rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0;
+  color: var(--studio-headline);
+}
+
+.prose-body p,
+.prose-body ul,
+.prose-body ol {
+  margin: 0 0 1.125rem;
+  font-size: var(--text-md);
+  line-height: 1.7;
+  color: var(--studio-text);
+}
+
+.prose-body ul,
+.prose-body ol {
+  padding-left: 1.375rem;
+}
+
+@media (width >= 64rem) {
+  .prose-body p,
+  .prose-body ul,
+  .prose-body ol {
+    font-size: var(--text-lg);
+  }
+}
+
+.prose-body ul {
+  list-style: disc;
+}
+
+.prose-body ol {
+  list-style: decimal;
+}
+
+.prose-body li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+/* The headline's ember dot leads each bullet. */
+.prose-body ul > li::marker {
+  color: var(--studio-dot);
+}
+
+.prose-body ol > li::marker {
+  font-weight: 700;
+  color: var(--studio-note);
+}
+
+.prose-body strong {
+  font-weight: 700;
+  color: var(--studio-headline);
+}
+
+.prose-body a {
+  font-weight: 600;
+  color: var(--studio-headline);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--studio-note);
+  text-underline-offset: 0.2em;
+}
+
+@media (hover: hover) {
+  .prose-body a:hover {
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* ── Guide blocks (components/ui/guide) ─────────────────────────────────── */
+
+/* Small capitals over a block: "Note", "Related guides". */
+.block-label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--studio-note);
+}
+
+/* Callout: a quiet ground of the studio floor, the tone in the dot before
+   its label (ember for a warning, ink for a tip, grey for a note). */
+.callout {
+  margin: 2rem 0;
+  padding: 1.25rem clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  border-radius: var(--radius-xs);
+  background: var(--studio-floor);
+}
+
+.callout .block-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--studio-eyebrow);
+}
+
+.callout .block-label::before {
+  content: '';
+  inline-size: 0.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--tone);
+}
+
+.callout--info {
+  --tone: var(--studio-numeral);
+}
+
+.callout--warn {
+  --tone: var(--studio-dot);
+}
+
+.callout--success {
+  --tone: var(--studio-headline);
+}
+
+.callout > :last-child,
+.callout > div > :last-child {
+  margin-bottom: 0;
+}
+
+/* Label and value rows under hairlines, as the feature cards'. */
+.spec-rows {
+  container: spec-rows / inline-size;
+  margin: 2rem 0;
+}
+
+.spec-rows dl {
+  margin: 0;
+  border-bottom: 1px solid var(--studio-rule);
+}
+
+.spec-rows dl > div {
+  display: grid;
+  row-gap: 0.25rem;
+  padding-block: 0.875rem;
+  border-top: 1px solid var(--studio-rule);
+}
+
+.spec-rows dt {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--studio-note);
+}
+
+.spec-rows dd {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.5;
+  color: var(--studio-headline);
+}
+
+@container spec-rows (width >= 30rem) {
+  .spec-rows dl > div {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: baseline;
+    column-gap: 1.5rem;
+  }
+}
+
+/* The download block: the store buttons on the floor's grey, or a link as
+   the header's black button when the author gave one. */
+.guide-cta {
+  margin: 2.25rem 0;
+  padding: clamp(1.5rem, 1rem + 1.5vw, 2rem);
+  border-radius: var(--radius-xs);
+  background: var(--studio-floor);
+}
+
+.guide-cta p {
+  max-inline-size: 32em;
+  margin: 0 0 1.25rem;
+}
+
+.prose-body .guide-cta a {
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+.prose-body .guide-cta .page-button {
+  color: var(--color-paper);
+}
+
+/* In-article questions: the studio accordion (studio.css), a step smaller. */
+.prose-body .faqs {
+  margin: 1.5rem 0 2.25rem;
+}
+
+.prose-body .faq__q {
+  font-size: var(--text-md);
+}
+
+.prose-body .faq__mark {
+  inline-size: 1.75rem;
+}
+
+.prose-body .faq__a {
+  padding-block-end: 1.25rem;
+}
+
+.prose-body .faq__a > :last-child {
+  margin-bottom: 0;
+}
+
+/* Lists of guides: one hairline row each, the title with the tiles'
+   arrow. */
+.link-rows {
+  margin: 2.25rem 0;
+}
+
+.link-rows .block-label {
+  margin-bottom: 0.75rem;
+}
+
+.prose-body .link-rows ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--studio-rule);
+}
+
+.prose-body .link-rows li {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--studio-rule);
+}
+
+.prose-body .link-rows li::marker {
+  content: none;
+}
+
+.prose-body .link-rows li a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-block: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.prose-body .link-rows li a::after {
+  content: '\2192' / '';
+  flex: none;
+  color: var(--studio-note);
+  transition: translate 160ms ease;
+}
+
+@media (hover: hover) {
+  .prose-body .link-rows li a:hover::after {
+    translate: 0.25rem 0;
+    color: var(--studio-headline);
+  }
+}
+
+.link-rows__more {
+  margin-top: 1.25rem;
+}
+
+/* The way back to the list, at the foot of a guide. */
+.reading-back {
+  margin-top: 2.5rem;
+  font-size: var(--text-sm);
+}
+
+/* ── Guides list (guides/index.astro) ───────────────────────────────────── */
+
+.guide-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+}
+
+.guide-topics a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.25rem;
+  padding-inline: 0.875rem;
+  border: 1px solid var(--studio-rule);
+  border-radius: var(--radius-pill);
+  background: light-dark(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.04));
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--studio-headline);
+  transition: border-color 160ms ease;
+}
+
+@media (hover: hover) {
+  .guide-topics a:hover {
+    border-color: var(--studio-headline);
+  }
+}
+
+.guide-groups {
+  padding: clamp(1rem, 0.5rem + 2vw, 2.5rem) 0 clamp(3.5rem, 2rem + 5vw, 7rem);
+  background: var(--studio-floor);
+}
+
+.guide-group {
+  display: grid;
+  row-gap: clamp(1.25rem, 1rem + 1vw, 2rem);
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+  scroll-margin-top: calc(var(--site-bar-slim) + 1rem);
+}
+
+.guide-group + .guide-group {
+  margin-top: clamp(3rem, 2rem + 3vw, 5rem);
+}
+
+.guide-group__head {
+  display: grid;
+  align-content: start;
+  row-gap: 0.75rem;
+}
+
+.guide-group__title {
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 3rem);
+}
+
+.guide-group__intro {
+  max-inline-size: 30em;
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+.guide-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--studio-rule);
+}
+
+.guide-row {
+  border-top: 1px solid var(--studio-rule);
+}
+
+.guide-row a {
+  display: grid;
+  row-gap: 0.5rem;
+  margin-inline: -0.75rem;
+  padding: clamp(1.125rem, 0.9rem + 0.6vw, 1.5rem) 0.75rem;
+  border-radius: var(--radius-xs);
+  color: inherit;
+  text-decoration: none;
+}
+
+.guide-row a:focus-visible {
+  outline: 2px solid var(--studio-headline);
+  outline-offset: 2px;
+}
+
+.guide-row time {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--studio-note);
+}
+
+.guide-row__title {
+  margin: 0;
+  font-size: clamp(1.25rem, 1.05rem + 0.7vw, 1.625rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--studio-headline);
+}
+
+.guide-row__title::after {
+  content: '\2192' / '';
+  display: inline-block;
+  margin-inline-start: 0.3em;
+  color: var(--studio-note);
+  transition: translate 160ms ease;
+}
+
+.guide-row__body {
+  max-inline-size: 40em;
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: 1.55;
+  color: var(--studio-text);
+}
+
+@media (hover: hover) {
+  .guide-row a:hover .guide-row__title::after {
+    translate: 0.25rem 0;
+    color: var(--studio-headline);
+  }
+}
+
+@media (width >= 64rem) {
+  .guide-group {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 2.2fr);
+    align-items: start;
+    column-gap: clamp(2.5rem, 4vw, 5rem);
+  }
+
+  .guide-group__head {
+    position: sticky;
+    top: calc(var(--site-bar-slim) + 1.5rem);
+  }
+}
+
+/* "No guides yet", on the floor. */
+.guide-empty {
+  max-inline-size: 112rem;
+  margin: 0 auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+.guide-empty p {
+  max-inline-size: 32em;
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+/* ── 404 ────────────────────────────────────────────────────────────────── */
+
+/* The opening is the whole page: tall enough that the footer does not
+   ride up under it. */
+.page-head--lost .feature-hero__inner {
+  min-block-size: min(46rem, 78svh);
+  align-content: center;
+}
+
+@media (width >= 64rem) {
+  .page-head--lost .feature-hero__inner {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+}
+
+.page-head--lost .feature-hero__objects {
+  --icon: clamp(7rem, 5rem + 8vw, 13rem);
+}

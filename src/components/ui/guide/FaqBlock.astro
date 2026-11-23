@@ -2,9 +2,9 @@
 /**
  * `faq` block from the Sanity article body.
  *
- * Native <details>, styled by the `faq-item` utility in global.css. They
- * disclose instantly rather than sliding; the `+` to `x` rotation is the only
- * motion.
+ * The studio accordion (studio.css, as FeatureFaq): native <details> sharing
+ * one name per block, so one answer is open at a time, each row with the
+ * ring-and-plus mark.
  *
  * Also emits FAQPage structured data, as the home page does: these guides exist
  * to be found, and it is the cleanest format for search and AI crawlers to
@@ -19,10 +19,13 @@ interface FaqItem {
 }
 
 interface Props {
-  node: { items?: FaqItem[] }
+  node: { _key?: string; items?: FaqItem[] }
 }
 
 const { node } = Astro.props
+// One group per block (Portable Text gives every block a _key), so two FAQ
+// blocks in one article don't close each other's answers.
+const group = `faq-${node._key ?? 'block'}`
 
 const items = (node.items ?? []).filter((item): item is FaqItem & { question: string } =>
   Boolean(item?.question),
@@ -66,12 +69,14 @@ const faqSchema =
 
 {
   items.length > 0 && (
-    <div class="my-8 border-t border-ink/12">
+    <div class="faqs">
       {items.map((item) => (
-        <details class="faq-item">
-          <summary>{item.question}</summary>
-
-          <div class="max-w-xl pb-5 [&>p:last-child]:mb-0">
+        <details class="faq" name={group}>
+          <summary class="faq__q">
+            <span class="faq__text">{item.question}</span>
+            <span class="faq__mark" aria-hidden="true" />
+          </summary>
+          <div class="faq__a">
             <PortableText value={item.answer ?? []} />
           </div>
         </details>

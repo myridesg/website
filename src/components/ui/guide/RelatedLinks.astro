@@ -32,15 +32,15 @@ const links = (node.slugs ?? []).filter(
 
 {
   links.length > 0 && (
-    <aside class="my-9 rounded-md bg-soft px-6 py-6">
+    <aside class="link-rows">
       {/* A span, not a heading: this is a widget label, and promoting it to h2
           would inject a section into the guide's outline that the author never
-          wrote. `.prose-body h2` would also override the eyebrow sizing. */}
-      <span class="eyebrow block text-ink/75">Related guides</span>
+          wrote. */}
+      <span class="block-label">Related guides</span>
 
-      <ul class="mt-4 flex flex-col gap-2.5">
+      <ul>
         {links.map((link) => (
-          <li class="leading-snug">
+          <li>
             <a href={`/guides/${link.slug}/`}>{link.title}</a>
           </li>
         ))}
@@ -48,18 +48,3 @@ const links = (node.slugs ?? []).filter(
     </aside>
   )
 }
-
-<style>
-  /* The list is the block's whole content, so it should not inherit
-     ProseLayout's paragraph spacing and indentation. Link colour is left alone
-     — these ARE prose links and should look like the rest of the article. */
-  ul {
-    margin-bottom: 0;
-    padding-left: 0;
-    list-style: none;
-  }
-
-  li {
-    margin-bottom: 0;
-  }
-</style>

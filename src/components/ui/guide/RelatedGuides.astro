@@ -9,13 +9,13 @@ const { guides, showAppLink = false } = Astro.props
 
 {
   (guides.length > 0 || showAppLink) && (
-    <aside class="mt-14 border-t border-ink/12 pt-8">
+    <aside class="link-rows">
       {guides.length > 0 && (
         <>
-          <p class="eyebrow text-muted">More guides</p>
-          <ul class="mt-4 flex flex-col gap-2.5">
+          <span class="block-label">More guides</span>
+          <ul>
             {guides.map((guide) => (
-              <li class="leading-snug">
+              <li>
                 <a href={`/guides/${guide.slug}/`}>{guide.title}</a>
               </li>
             ))}
@@ -24,7 +24,7 @@ const { guides, showAppLink = false } = Astro.props
       )}
 
       {showAppLink && (
-        <p class:list={[guides.length > 0 && 'mt-6']}>
+        <p class:list={[guides.length > 0 && 'link-rows__more']}>
           Want to keep track of servicing records and mileage in one place? See the{' '}
           <a href="/motorcycle-maintenance-app/">motorcycle maintenance app</a>.
         </p>
@@ -32,19 +32,3 @@ const { guides, showAppLink = false } = Astro.props
     </aside>
   )
 }
-
-<style>
-  ul {
-    margin-bottom: 0;
-    padding-left: 0;
-    list-style: none;
-  }
-
-  li {
-    margin-bottom: 0;
-  }
-
-  p {
-    margin-bottom: 0;
-  }
-</style>

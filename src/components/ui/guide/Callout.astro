@@ -3,10 +3,9 @@
  * `callout` block from the Sanity article body.
  *
  * v2 renders these in blue/amber/green (packages/ui/src/patterns/Callout.tsx).
- * Those hues do not exist in this site's nine-token palette and AGENTS.md rule 4
- * forbids inventing brand values, so the three tones are distinguished by an
- * accent rule and a label instead of by hue. Everything below resolves to
- * palette tokens, which is also what makes dark mode work for free.
+ * Those hues do not exist in this site's palette and AGENTS.md rule 4 forbids
+ * inventing brand values, so the three tones share the studio floor's grey
+ * and differ by their label and the dot before it (reading.css).
  */
 import { PortableText } from 'astro-portabletext'
 import type { PortableTextProps } from 'astro-portabletext/types'
@@ -23,23 +22,16 @@ const { node } = Astro.props
 // The schema defaults to 'info' and validates the field as required, but a
 // document written through the API bypasses schema validation entirely — the
 // Studio is the only thing that enforces it. So treat the field as optional.
-const TONES = {
-  info: { label: 'Note', surface: 'bg-soft', accent: 'border-l-ink/30' },
-  warn: { label: 'Warning', surface: 'bg-rose', accent: 'border-l-ember' },
-  success: { label: 'Tip', surface: 'bg-soft', accent: 'border-l-red' },
-} as const
-
-const tone = TONES[node.type ?? 'info'] ?? TONES.info
+const LABELS = { info: 'Note', warn: 'Warning', success: 'Tip' } as const
+const tone = node.type && node.type in LABELS ? node.type : 'info'
 ---
 
-<aside class:list={['my-7 rounded-xs border-l-4 px-5 py-4', tone.surface, tone.accent]}>
-  {/* A span, not a <p>: `.prose-body p` would add a paragraph's bottom margin
-      and line-height to what is a one-word label. */}
-  {/* ink/75 rather than muted: muted fails AA on the soft and rose surfaces
-      this sits on (4.31:1 / 4.10:1 light). ink/75 is 6.4+:1 in both themes. */}
-  <span class="eyebrow block text-ink/75">{tone.label}</span>
+<aside class={`callout callout--${tone}`}>
+  {/* A span, not a <p>: `.prose-body p` would add a paragraph's spacing to
+      what is a one-word label. */}
+  <span class="block-label">{LABELS[tone]}</span>
 
-  <div class="mt-2 [&>p:last-child]:mb-0">
+  <div>
     <PortableText value={node.body ?? []} />
   </div>
 </aside>

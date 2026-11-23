@@ -2,6 +2,10 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import SiteNav from '@/components/ui/SiteNav.astro'
 import SiteFooter from '@/components/ui/SiteFooter.astro'
+import { Image } from 'astro:assets'
+import PageHead from '@/components/ui/PageHead.astro'
+import { OBJECTS, objectStyle, objectWidths } from '@/components/ui/feature/objects'
+import '@/styles/reading.css'
 
 // Astro emits this as dist/404.html rather than 404/index.html, which is the
 // filename both Cloudflare Pages and nginx look for.
@@ -18,35 +22,33 @@ import SiteFooter from '@/components/ui/SiteFooter.astro'
 >
   <SiteNav />
 
-  <main class="flex min-h-[75vh] items-center bg-paper py-24">
-    <div class="shell">
-      <div class="mx-auto max-w-xl text-center">
-        <p class="eyebrow text-red">Error 404</p>
-
-        <h1 class="mt-4 text-display-sm md:text-display">We could not find that page.</h1>
-
-        <p class="mx-auto mt-5 max-w-md text-lg leading-relaxed text-muted">
-          The link may be out of date, or the address may have a small typo in it.
-          Everything on the site is reachable from the homepage.
-        </p>
-
-        <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <a
-            href="/"
-            class="inline-flex min-h-12 items-center rounded-pill bg-ember px-7 text-md font-semibold text-on-dark transition-opacity hover:opacity-85"
-          >
-            Back to the homepage
-          </a>
-
-          <a
-            href="/#detail"
-            class="inline-flex min-h-12 items-center rounded-pill border border-ink/15 px-7 text-md font-semibold transition-colors hover:bg-soft"
-          >
-            Read the FAQ
-          </a>
-        </div>
+  <main class="feature-page">
+    <PageHead
+      class="page-head--lost"
+      eyebrow="Error 404"
+      title="We could not find that page."
+      lead="The link may be out of date, or the address may have a small typo in it. Everything on the site is reachable from the homepage."
+    >
+      <div class="page-actions">
+        <a href="/" class="page-button">Back to the homepage</a>
+        <a href="/#detail">Read the FAQ</a>
       </div>
-    </div>
+
+      <ul slot="stage" class="feature-hero__objects" role="list" aria-hidden="true">
+        <li class="tool__art" style={objectStyle('map')}>
+          <span class="tool__drop">
+            <Image
+              src={OBJECTS.map.image}
+              alt=""
+              widths={objectWidths('map')}
+              sizes="13rem"
+              loading="eager"
+              class="tool__icon"
+            />
+          </span>
+        </li>
+      </ul>
+    </PageHead>
   </main>
 
   <SiteFooter />

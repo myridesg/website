@@ -1,0 +1,58 @@
+---
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+
+/**
+ * A page's opening on the studio wall, for pages with no stage of their own
+ * (the reading pages, the guides list, the 404): the breadcrumb as the
+ * eyebrow, the headline in heavy capitals with its full stop in ember, an
+ * optional lead and an optional meta line. It wears FeatureHero's own
+ * classes (feature.css), so the type and spacing are the feature pages'
+ * exactly; reading.css only adds what differs.
+ *
+ * Slots: the default slot goes under the lead (buttons, a line of links);
+ * "meta" replaces the meta prop when it needs markup (dates in <time>);
+ * "stage" sits beside the copy from 1024px, under it on a phone.
+ */
+interface Props {
+  /** The eyebrow: the breadcrumb trail, Home first, */
+  crumbs?: Array<{ name: string; href?: string }>
+  /** or plain words where there is no trail (the 404's "Error 404"). */
+  eyebrow?: string
+  title: string
+  lead?: string
+  /** One quiet line under the lead, e.g. "Last updated: 6 August 2026". */
+  meta?: string
+  class?: string
+}
+
+const { crumbs, eyebrow, title, lead, meta, class: className } = Astro.props
+
+// The ember full stop ends a statement; a question or an exclamation keeps
+// its own mark.
+const ownMark = /[?!]$/.test(title)
+const words = ownMark ? title : title.replace(/\.$/, '')
+// Guide titles run to seventy characters; at the feature size they would
+// fill a phone screen on their own.
+const long = title.length > 34
+const hasStage = Astro.slots.has('stage')
+---
+
+<section class:list={['feature-hero page-head', long && 'page-head--long', !hasStage && 'page-head--plain', className]}>
+  <div class="feature-hero__inner">
+    <div class="feature-hero__copy">
+      <div class="feature-hero__crumbs">
+        {crumbs ? <Breadcrumbs items={crumbs} /> : <p class="page-head__eyebrow">{eyebrow}</p>}
+      </div>
+      <h1 class="feature-hero__title">
+        {words}{!ownMark && <span class="feature-hero__dot">.</span>}
+      </h1>
+      {lead && <p class="feature-hero__lead">{lead}</p>}
+      {/* Both hidden while empty (reading.css): a caller's slot holding only a
+          false expression still counts as passed, so render and let CSS tell. */}
+      <div class="page-head__meta">{meta}<slot name="meta" /></div>
+      <div class="page-head__more"><slot /></div>
+    </div>
+
+    {hasStage && <div class="feature-hero__stage"><slot name="stage" /></div>}
+  </div>
+</section>
