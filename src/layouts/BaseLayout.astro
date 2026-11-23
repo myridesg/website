@@ -1,7 +1,7 @@
 ---
 import '@/styles/global.css'
 import { getImage } from 'astro:assets'
-import { SITE, STORE } from '@/consts'
+import { IOS_APP_ID, IOS_LIVE, SITE, STORE } from '@/consts'
 import { buildGraph, serializeJsonLd } from '@/lib/seo'
 import defaultOgSource from '@/assets/og-default.png'
 
@@ -154,6 +154,11 @@ const bingSiteVerification = envVar('BING_SITE_VERIFICATION')
       <meta name="google-site-verification" content={googleSiteVerification} />
     )}
     {bingSiteVerification && <meta name="msvalidate.01" content={bingSiteVerification} />}
+
+    {/* Safari on iPhone shows its own "Open / Get" banner for the App Store
+        listing. Not a script, so the CSP has nothing to say about it. Left
+        off while iOS is on TestFlight, where there is no listing to show. */}
+    {IOS_LIVE && <meta name="apple-itunes-app" content={`app-id=${IOS_APP_ID}`} />}
 
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />

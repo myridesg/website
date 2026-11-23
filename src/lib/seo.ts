@@ -1,4 +1,4 @@
-import { SITE, STORE } from '@/consts'
+import { SITE, SOCIAL, STORE } from '@/consts'
 
 type Entity = Record<string, unknown>
 
@@ -183,9 +183,9 @@ export function buildGraph(site: URL, pageEntities: Entity[] = []) {
         availableLanguage: 'en',
       },
       areaServed: { '@type': 'Country', name: 'Singapore' },
-      // Only destinations that verifiably exist: the two store listings. There
-      // are no company social profiles in either repo, so none are claimed.
-      sameAs: storeUrls,
+      // Only destinations that verifiably exist: the two store listings and
+      // the owner-confirmed social accounts.
+      sameAs: [...storeUrls, ...SOCIAL.map((s) => s.href)],
     },
     {
       '@type': 'WebSite',

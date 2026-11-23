@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import StoreButtons from '@/components/ui/StoreButtons.astro'
+import StoresWithQr from '@/components/ui/StoresWithQr.astro'
 import ride from '@/assets/home/main-on-bike-visor-up.png'
 
 /**
@@ -28,7 +29,9 @@ const rideSizes = '(min-width: 48rem) 34rem, 80vw'
   <div class="ask__inner">
     <header class="ask__head">
       <h2 class="ask__title">{words}<span class="ask__dot">.</span></h2>
-      <StoreButtons tone="light" center class="ask__stores" />
+      <StoresWithQr>
+        <StoreButtons tone="light" center class="ask__stores" />
+      </StoresWithQr>
       <p class="ask__note">{note}</p>
     </header>
 
