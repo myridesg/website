@@ -13,34 +13,35 @@ const summaries = await listGuideArticles(contentRepo)
 const selected = preferred.flatMap((slug) => summaries.filter((guide) => guide.slug === slug))
 const fetched = await Promise.all(selected.map((guide) => getGuideArticle(contentRepo, guide.slug)))
 const guides = fetched.filter((guide) => guide !== null && !guide.seo.noIndex)
+
+// Only on the maintenance page, so it wears the feature pages' studio look
+// (feature.css, which the page imports).
 ---
 
 {guides.length > 0 && (
-  <section class="bg-soft py-20 md:py-28" aria-labelledby="maintenance-reading-title">
-    <div class="shell">
-      <div class="max-w-2xl">
-        <h2 id="maintenance-reading-title" class="text-display-sm md:text-display">
+  <section class="feature-related" aria-labelledby="maintenance-reading-title">
+    <div class="feature-related__inner">
+      <div class="feature-related__head">
+        <h2 id="maintenance-reading-title" class="home-title feature-title">
           Keep learning about your motorcycle.
         </h2>
-        <p class="mt-5 text-lg leading-relaxed text-ink/75">
+        <p class="feature-text">
           Explore maintenance guides, then keep a record of the work you do in MyRideSG.
         </p>
       </div>
-      <ul class="mt-10 grid gap-8 md:grid-cols-3">
+      <ul class="feature-guides" role="list">
         {guides.map((guide) => (
-          <li class="border-t border-ink/15 pt-6">
-            <h3 class="text-2xl">
-              <a href={`/guides/${guide!.slug}/`} class="hover:text-red underline underline-offset-4">
-                {guide!.title}
-              </a>
+          <li class="feature-point">
+            <h3 class="feature-label">
+              <a href={`/guides/${guide!.slug}/`}>{guide!.title}</a>
             </h3>
-            <p class="mt-3 leading-relaxed text-ink/75">{guide!.description}</p>
+            <p class="feature-point__body">{guide!.description}</p>
           </li>
         ))}
       </ul>
-      <a href="/guides/" class="mt-9 inline-block text-red underline underline-offset-4">
-        Browse all riding guides
-      </a>
+      <p class="feature-related__more">
+        <a href="/guides/">Browse all riding guides</a>
+      </p>
     </div>
   </section>
 )}

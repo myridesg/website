@@ -1,0 +1,33 @@
+---
+/**
+ * The page's questions, as the home page's: one native <details> each,
+ * sharing one name so one is open at a time, the headline beside them from
+ * 1024px. Same markup and classes as HomeDetail.astro (studio.css). The
+ * page's FAQPage structured data is built from the same array.
+ */
+interface Props {
+  headline: string
+  questions: Array<{ q: string; a: string }>
+}
+
+const { headline, questions } = Astro.props
+---
+
+<section class="detail">
+  <div class="detail__inner">
+    <h2 class="home-title detail__title">{headline}</h2>
+    <div class="faqs">
+      {
+        questions.map((item) => (
+          <details class="faq" name="questions">
+            <summary class="faq__q">
+              <span class="faq__text">{item.q}</span>
+              <span class="faq__mark" aria-hidden="true" />
+            </summary>
+            <p class="faq__a">{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

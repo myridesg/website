@@ -1,0 +1,504 @@
+/* ============================================================================
+ * The feature pages (src/pages/motorcycle-*.astro, src/components/ui/feature).
+ *
+ * The home page's look, carried over: the studio wall and floor, heavy
+ * uppercase Barlow Condensed headlines, the 3D objects on the floor, the
+ * same questions and the same dark finale. Everything shared with the home
+ * page is in studio.css; this file only lays out the parts the feature pages
+ * have and the home page does not, from the same tokens and the same sizes.
+ *
+ * Grounds alternate as on the home page: studio wall (opening, worked
+ * example, related links), the page's paper (points, steps, questions), and
+ * the one dark band at the close.
+ *
+ * No motion: the pages load no script, so everything is at rest.
+ * ==========================================================================*/
+
+@import './studio.css';
+
+/* ── Shared ─────────────────────────────────────────────────────────────── */
+
+.feature-points,
+.feature-explain,
+.feature-steps,
+.feature-related {
+  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem);
+}
+
+.feature-points,
+.feature-steps {
+  background: var(--color-paper);
+}
+
+.feature-hero__inner,
+.feature-points__inner,
+.feature-explain__inner,
+.feature-steps__inner,
+.feature-related__inner {
+  display: grid;
+  row-gap: clamp(2rem, 1rem + 3vw, 3.5rem);
+  max-inline-size: 112rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 6rem);
+}
+
+/* The studio wall, as home part 5: lighter toward the floor, darkened
+   corners. */
+.feature-hero,
+.feature-explain,
+.feature-related {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background:
+    radial-gradient(80% 60% at 50% 75%, var(--studio-glow) 0%, transparent 70%),
+    linear-gradient(
+      180deg,
+      var(--studio-wall-top) 0%,
+      var(--studio-wall-mid) 45%,
+      var(--studio-wall-low) 75%,
+      var(--studio-floor) 100%
+    );
+}
+
+.feature-hero::after,
+.feature-explain::after,
+.feature-related::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(130% 100% at 50% 45%, transparent 60%, var(--studio-vignette) 100%);
+}
+
+/* Part headlines: the size home parts 2 and 8 use. */
+.feature-title {
+  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.75rem);
+}
+
+.feature-text {
+  max-inline-size: 34em;
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+/* Small capitals titles: the home FAQ's feature groups, a step larger. */
+.feature-label {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--studio-headline);
+}
+
+/* ── Opening ──────────────────────────────────────────────────────────────
+   Copy, then the stage under it; side by side from 1024px. */
+
+.feature-hero__inner {
+  /* Clears the site header at rest. */
+  padding-block: calc(var(--site-bar) + clamp(1.75rem, 1rem + 2vw, 2.75rem)) clamp(3rem, 2rem + 4vw, 6rem);
+}
+
+/* The breadcrumb is the eyebrow: spaced capitals, as home part 1's. */
+.feature-hero__crumbs nav {
+  margin: 0 0 clamp(0.875rem, 0.5rem + 1vw, 1.5rem);
+  font-size: clamp(0.75rem, 0.6rem + 0.45vw, 0.875rem);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--studio-eyebrow);
+}
+
+.feature-hero__crumbs a {
+  color: inherit;
+}
+
+.feature-hero__title {
+  max-inline-size: 13em;
+  margin: 0;
+  font-size: clamp(2.75rem, 1.4rem + 5.6vw, 6.5rem);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--studio-headline);
+}
+
+.feature-hero__dot {
+  color: var(--studio-dot);
+}
+
+.feature-hero__lead {
+  max-inline-size: 30em;
+  margin: clamp(1rem, 0.6rem + 1.2vw, 1.75rem) 0 0;
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--studio-text);
+}
+
+.feature-hero__ask {
+  margin-top: clamp(1.25rem, 0.75rem + 1.4vw, 2rem);
+}
+
+.feature-hero__note {
+  margin: 0.75rem 0 0;
+  font-size: clamp(0.75rem, 0.7rem + 0.2vw, 0.875rem);
+  font-weight: 600;
+  color: var(--studio-note);
+}
+
+.feature-hero__stage {
+  display: grid;
+  justify-items: center;
+  row-gap: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+}
+
+/* The page's objects in one row on the floor (the tool tiles' art, without
+   the link), over the app preview. */
+.feature-hero__objects {
+  --icon: clamp(4.5rem, 3.5rem + 3vw, 7rem);
+
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(1.25rem, 0.5rem + 3vw, 2.75rem);
+  margin: 0;
+  padding: 0 0 calc(var(--icon) * 0.08);
+  list-style: none;
+}
+
+/* The preview's caption, read on the wall. */
+.feature-hero__stage figcaption {
+  color: var(--studio-note);
+}
+
+@media (width >= 64rem) {
+  .feature-hero__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: clamp(3rem, 6vw, 7rem);
+  }
+}
+
+/* ── Points ───────────────────────────────────────────────────────────────
+   Headline and intro, then the points two by two under hairlines; beside
+   each other from 1024px. */
+
+.feature-points__head,
+.feature-explain__copy,
+.feature-related__head {
+  display: grid;
+  align-content: start;
+  row-gap: clamp(1rem, 0.75rem + 1vw, 1.5rem);
+}
+
+.feature-points__list {
+  display: grid;
+  gap: clamp(1.75rem, 1rem + 2vw, 2.5rem) clamp(1.5rem, 3vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-point {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--studio-rule);
+}
+
+.feature-point__body {
+  margin: 0.75rem 0 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+@media (width >= 40rem) {
+  .feature-points__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 64rem) {
+  .feature-points__inner {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+    column-gap: clamp(3rem, 6vw, 7rem);
+  }
+}
+
+/* ── Worked example ───────────────────────────────────────────────────────
+   The explanation, and a card on the studio floor. */
+
+.feature-card {
+  container: feature-card / inline-size;
+  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  border: 1px solid var(--studio-rule);
+  border-radius: var(--radius-lg);
+  background: var(--color-paper);
+  box-shadow:
+    0 1.5rem 3rem -1.25rem var(--studio-shadow-far),
+    0 0.25rem 0.75rem var(--studio-shadow-near);
+}
+
+.feature-card__title {
+  margin-bottom: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+}
+
+/* Numbered steps, each led by a quiet numeral. */
+.card-steps {
+  display: grid;
+  row-gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: card-step;
+}
+
+.card-steps li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  column-gap: 0.75rem;
+  font-size: var(--text-md);
+  line-height: 1.55;
+  color: var(--studio-text);
+  counter-increment: card-step;
+}
+
+.card-steps li::before {
+  content: counter(card-step, decimal-leading-zero);
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+  color: var(--studio-numeral);
+}
+
+/* Label and value rows under hairlines. */
+.card-rows {
+  margin: 0;
+  border-bottom: 1px solid var(--studio-rule);
+}
+
+.card-rows > div {
+  display: grid;
+  row-gap: 0.25rem;
+  padding-block: 0.875rem;
+  border-top: 1px solid var(--studio-rule);
+}
+
+.card-rows dt {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--studio-note);
+}
+
+.card-rows dd {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--studio-headline);
+}
+
+/* Label beside value where the card has room (the card is the container). */
+@container feature-card (width >= 26rem) {
+  .card-rows > div {
+    grid-template-columns: 10rem minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: 1rem;
+  }
+}
+
+/* A list, each item led by the headline's ember dot. */
+.card-list {
+  display: grid;
+  row-gap: 0.875rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card-list li {
+  display: grid;
+  grid-template-columns: 0.5rem minmax(0, 1fr);
+  column-gap: 0.875rem;
+  font-size: var(--text-md);
+  line-height: 1.55;
+  color: var(--studio-text);
+}
+
+.card-list li::before {
+  content: '';
+  margin-top: 0.55em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--studio-dot);
+}
+
+.card-note {
+  margin: clamp(1.25rem, 1rem + 0.8vw, 1.75rem) 0 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--studio-note);
+}
+
+@media (width >= 64rem) {
+  .feature-explain__inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    column-gap: clamp(3rem, 6vw, 7rem);
+  }
+}
+
+/* ── Steps ────────────────────────────────────────────────────────────────
+   Three columns from 640px, each under home part 2's quiet numeral. */
+
+.feature-steps__list {
+  counter-reset: feature-step;
+  display: grid;
+  row-gap: clamp(1.75rem, 1rem + 2vw, 2.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-step {
+  counter-increment: feature-step;
+}
+
+.feature-step::before {
+  content: counter(feature-step, decimal-leading-zero) / '';
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 2rem + 2vw, 4rem);
+  font-weight: 700;
+  line-height: 0.85;
+  font-variant-numeric: tabular-nums;
+  color: var(--studio-numeral);
+}
+
+.feature-step__label {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--studio-headline);
+}
+
+.feature-step__body {
+  max-inline-size: 30em;
+  margin: 0.75rem 0 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+@media (width >= 40rem) {
+  .feature-steps__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(1.5rem, 3vw, 3.5rem);
+  }
+}
+
+/* ── Related links ────────────────────────────────────────────────────────
+   Home part 5's tiles, three in a row from 768px, each with a line under
+   it. */
+
+.feature-related__list {
+  --icon: clamp(6.5rem, 5rem + 4vw, 9rem);
+
+  display: grid;
+  gap: clamp(2.25rem, 1rem + 3vw, 3rem) clamp(1rem, 3vw, 2.5rem);
+  inline-size: min(100%, 72rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-related__line {
+  max-inline-size: 22em;
+  margin: 0.25rem auto 0;
+  text-align: center;
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--studio-text);
+}
+
+/* Anything the page adds under the tiles: a note, a line of links. */
+.feature-related__more {
+  max-inline-size: 42em;
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+.feature-related__more--small {
+  font-size: var(--text-sm);
+  color: var(--studio-note);
+}
+
+.feature-related__more a {
+  font-weight: 600;
+  color: var(--studio-headline);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (width >= 48rem) {
+  .feature-related__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ── Finale ───────────────────────────────────────────────────────────────
+   Home part 9 (studio.css); the feature headlines are a sentence longer
+   than "Ride more. Worry less.", so a size smaller and free to wrap. */
+
+.feature-ask .ask__title {
+  max-inline-size: 13em;
+  font-size: clamp(2.75rem, 1.5rem + 4.4vw, 6.5rem);
+  text-wrap: balance;
+}
+
+/* ── Further reading (FeaturedGuides.astro, maintenance page) ─────────────
+   Text links under hairlines, as the points; three in a row from 768px. */
+
+.feature-guides {
+  display: grid;
+  gap: clamp(1.75rem, 1rem + 2vw, 2.5rem) clamp(1.5rem, 3vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-guides a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--studio-rule);
+  text-underline-offset: 0.2em;
+}
+
+@media (hover: hover) {
+  .feature-guides a:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+@media (width >= 48rem) {
+  .feature-guides {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

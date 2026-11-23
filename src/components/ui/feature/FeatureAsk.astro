@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import ride from '@/assets/home/main-on-bike-visor-up.png'
+
+/**
+ * The close, as the home page's finale (HomeAsk.astro, styles in
+ * studio.css): the one dark band, in both themes, the headline with its
+ * ember full stop, the store buttons, one quiet line, and the rider on his
+ * bike on the glossy floor with its reflection.
+ */
+interface Props {
+  /** One sentence ending in a full stop. */
+  headline: string
+  note: string
+}
+
+const { headline, note } = Astro.props
+const words = headline.replace(/\.$/, '')
+
+// Drawn twice, the second time as the floor's reflection; the same source,
+// so the browser fetches it once.
+const rideWidths = [Math.round(ride.width / 2), ride.width]
+const rideSizes = '(min-width: 48rem) 34rem, 80vw'
+---
+
+<section class="ask feature-ask">
+  <div class="ask__inner">
+    <header class="ask__head">
+      <h2 class="ask__title">{words}<span class="ask__dot">.</span></h2>
+      <StoreButtons tone="light" center class="ask__stores" />
+      <p class="ask__note">{note}</p>
+    </header>
+
+    <div class="ask__stage" aria-hidden="true">
+      <span class="ask__mirror">
+        <Image src={ride} alt="" widths={rideWidths} sizes={rideSizes} class="ask__img" loading="lazy" />
+      </span>
+      <span class="ask__ride">
+        <Image src={ride} alt="" widths={rideWidths} sizes={rideSizes} class="ask__img" loading="lazy" />
+      </span>
+    </div>
+  </div>
+</section>
