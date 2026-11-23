@@ -3,6 +3,7 @@ import receipt from '@/assets/home/receipt.png'
 import chart from '@/assets/home/chart.png'
 import map from '@/assets/home/map.png'
 import coe from '@/assets/home/tool-coe.png'
+import cams from '@/assets/home/tool-cams.png'
 import petrol from '@/assets/home/tool-petrol.png'
 import workshops from '@/assets/home/tool-workshops.png'
 import guides from '@/assets/home/next-guides.png'
@@ -20,6 +21,7 @@ export const OBJECTS = {
   chart: { image: chart, k: 0.8 },
   map: { image: map, k: 0.78 },
   coe: { image: coe, k: 1 },
+  cams: { image: cams, k: 0.9 },
   petrol: { image: petrol, k: 1 },
   workshops: { image: workshops, k: 0.96 },
   guides: { image: guides, k: 1 },
