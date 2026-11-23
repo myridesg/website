@@ -4,7 +4,9 @@ import SiteNav from '@/components/ui/SiteNav.astro'
 import SiteFooter from '@/components/ui/SiteFooter.astro'
 import StoreButtons from '@/components/ui/StoreButtons.astro'
 import PhoneFrame from '@/components/ui/PhoneFrame.astro'
-import BikeScreen from '@/components/ui/app/BikeScreen.astro'
+import AppCapture from '@/components/ui/app/AppCapture.astro'
+import serviceLight from '@/assets/app/captures/service-light.png'
+import serviceDark from '@/assets/app/captures/service-dark.png'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
 import FeaturedGuides from '@/components/ui/FeaturedGuides.astro'
 import { breadcrumbEntity, entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
@@ -93,12 +95,10 @@ const features = [
           </div>
           <figure class="mx-auto">
             <PhoneFrame width={300} chrome={false}>
-              <div class="app-screen" role="img" aria-label="Illustrative MyRideSG bike overview with sample dates, mileage and servicing interval">
-                <BikeScreen />
-              </div>
+              <AppCapture light={serviceLight} dark={serviceDark} alt="MyRideSG Service screen with sample data: an oil change chart showing the next change in 2,880 km against a 4,000 km interval, reminders for chain lube and oil change, and recent services" />
             </PhoneFrame>
             <figcaption class="mt-5 max-w-xs text-center text-sm leading-relaxed text-muted">
-              Illustrative app preview with sample ownership dates and mileage.
+              Illustrative app preview with sample service history.
             </figcaption>
           </figure>
         </div>
