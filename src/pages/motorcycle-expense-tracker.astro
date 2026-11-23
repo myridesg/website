@@ -4,7 +4,9 @@ import SiteNav from '@/components/ui/SiteNav.astro'
 import SiteFooter from '@/components/ui/SiteFooter.astro'
 import StoreButtons from '@/components/ui/StoreButtons.astro'
 import PhoneFrame from '@/components/ui/PhoneFrame.astro'
-import FuelScreen from '@/components/ui/app/FuelScreen.astro'
+import AppCapture from '@/components/ui/app/AppCapture.astro'
+import fuelLight from '@/assets/app/captures/fuel-light.png'
+import fuelDark from '@/assets/app/captures/fuel-dark.png'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
 import { breadcrumbEntity, entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
 
@@ -92,12 +94,10 @@ const features = [
           </div>
           <figure class="mx-auto">
             <PhoneFrame width={300} chrome={false}>
-              <div class="app-screen" role="img" aria-label="Illustrative MyRideSG fuel hub with sample fill-ups, a fuel economy figure and petrol prices">
-                <FuelScreen />
-              </div>
+              <AppCapture light={fuelLight} dark={fuelDark} alt="MyRideSG Fuel screen with sample data: this month's fuel spend, fill-up count and average km/L, a fuel economy chart and recent fill-ups" />
             </PhoneFrame>
             <figcaption class="mt-5 max-w-xs text-center text-sm leading-relaxed text-muted">
-              Illustrative app preview with sample fill-ups and prices.
+              Illustrative app preview with sample data.
             </figcaption>
           </figure>
         </div>

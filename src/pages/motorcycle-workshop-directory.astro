@@ -4,7 +4,9 @@ import SiteNav from '@/components/ui/SiteNav.astro'
 import SiteFooter from '@/components/ui/SiteFooter.astro'
 import StoreButtons from '@/components/ui/StoreButtons.astro'
 import PhoneFrame from '@/components/ui/PhoneFrame.astro'
-import WorkshopsScreen from '@/components/ui/app/WorkshopsScreen.astro'
+import AppCapture from '@/components/ui/app/AppCapture.astro'
+import workshopsLight from '@/assets/app/captures/workshops-light.png'
+import workshopsDark from '@/assets/app/captures/workshops-dark.png'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
 import { breadcrumbEntity, entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
 
@@ -91,9 +93,7 @@ const features = [
           </div>
           <figure class="mx-auto">
             <PhoneFrame width={300} chrome={false}>
-              <div class="app-screen" role="img" aria-label="Illustrative MyRideSG workshops search with sample workshop listings and contact actions">
-                <WorkshopsScreen />
-              </div>
+              <AppCapture light={workshopsLight} dark={workshopsDark} alt="MyRideSG workshop search with sample data: a map of Singapore with two sample workshops, listed with today's opening hours, distance and area" />
             </PhoneFrame>
             <figcaption class="mt-5 max-w-xs text-center text-sm leading-relaxed text-muted">
               Illustrative app preview with sample listings.
