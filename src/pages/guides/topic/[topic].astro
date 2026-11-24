@@ -1,0 +1,105 @@
+---
+import type { GetStaticPaths } from 'astro'
+import { Image } from 'astro:assets'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import GuideNav from '@/components/ui/guide/GuideNav.astro'
+import GuideGrid from '@/components/ui/guide/GuideGrid.astro'
+import FeatureAsk from '@/components/ui/feature/FeatureAsk.astro'
+import { OBJECTS, objectWidths } from '@/components/ui/feature/objects'
+import { contentRepo } from '@/lib/content'
+import { GUIDE_GROUPS, topicPath } from '@/lib/guide-navigation'
+import { loadGuides } from '@/lib/guide-data'
+import { TOPIC_OBJECT } from '@/lib/guides'
+import { breadcrumbEntity, webPageEntity } from '@/lib/seo'
+import '@/styles/guides.css'
+
+// One page per topic that has at least one listed guide. A topic with none has
+// no page, and no link to it in the topic bar.
+export const getStaticPaths = (async () => {
+  const guides = (await loadGuides(contentRepo)).filter((entry) => entry.listed)
+  const topics = GUIDE_GROUPS.filter((group) => guides.some((entry) => entry.topic === group.id))
+  return topics.map((group) => ({
+    params: { topic: group.id },
+    props: {
+      group,
+      guides: guides.filter((entry) => entry.topic === group.id),
+      topics: topics.map((t) => t.id),
+    },
+  }))
+}) satisfies GetStaticPaths
+
+const { group, guides, topics } = Astro.props
+const site = Astro.site!
+const path = topicPath(group.id)
+const object = OBJECTS[TOPIC_OBJECT[group.id]]
+
+// "Bike troubleshooting guides for Singapore riders"; a title that already
+// says "guides" or "Singapore" does not say it twice.
+const named = /guides$/i.test(group.title) ? group.title : `${group.title} guides`
+const title = `${named} for ${/singapore/i.test(group.title) ? '' : 'Singapore '}riders`
+const count = guides.length
+
+const structuredData = [
+  webPageEntity(site, {
+    path,
+    type: 'CollectionPage',
+    name: title,
+    description: group.intro,
+    mainEntity: { '@id': new URL(`${path}#guides`, site).href },
+  }),
+  breadcrumbEntity(site, path, [
+    { name: 'Home', href: '/' },
+    { name: 'Riding guides', href: '/guides/' },
+    { name: group.title },
+  ]),
+  {
+    '@type': 'ItemList',
+    '@id': new URL(`${path}#guides`, site).href,
+    numberOfItems: count,
+    itemListElement: guides.map((guide, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: guide.article.title,
+      url: new URL(`/guides/${guide.article.slug}/`, site).href,
+    })),
+  },
+]
+---
+
+<BaseLayout title={title} description={group.intro} structuredData={structuredData}>
+  <SiteNav />
+
+  <main class="feature-page guides-page">
+    <GuideNav topics={topics} current={group.id} />
+
+    <div class="guides-wrap">
+      <header class="topic-head">
+        <div class="topic-head__copy">
+          <h1 class="topic-head__title">{group.title}</h1>
+          <p class="guides-head__lead">{group.intro}</p>
+          <p class="topic-head__count">{count} {count === 1 ? 'guide' : 'guides'}</p>
+        </div>
+        <Image
+          src={object.image}
+          alt=""
+          widths={objectWidths(TOPIC_OBJECT[group.id])}
+          sizes="12rem"
+          loading="eager"
+          class="topic-head__object"
+          style={`--k: ${object.k}`}
+        />
+      </header>
+
+      <GuideGrid guides={guides} />
+    </div>
+
+    <FeatureAsk
+      headline="Keep your motorcycle records close."
+      note="Log services, fuel and renewal dates in MyRideSG on iOS or Android."
+    />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

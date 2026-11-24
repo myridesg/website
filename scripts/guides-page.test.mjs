@@ -44,3 +44,21 @@ test('built page: the home has the topic bar, one section per topic, five cards 
   assert.equal(cards(home.match(/<section[^>]+id="ownership"[\s\S]*?<\/section>/)[0]), 5)
   assert.match(home, /Keeping a service record\? Explore the/)
 })
+
+test('built page: a topic page lists all its guides with its own head', () => {
+  const page = read('dist/guides/topic/troubleshooting/index.html')
+  assert.match(page, /<title>Bike troubleshooting guides for Singapore riders/)
+  assert.match(page, /<h1[^>]*>Bike troubleshooting<\/h1>/)
+  assert.match(page, />14 guides</)
+  assert.equal(cards(page), 14)
+  assert.match(page, /<a[^>]+aria-current="page"[^>]*>\s*Troubleshooting\s*<\/a>/)
+  assert.match(read('dist/sitemap-0.xml'), /\/guides\/topic\/troubleshooting\//)
+  assert.ok(!existsSync('dist/guides/topic/nothing/index.html'))
+})
+
+test('built page: a four-guide topic leads with one full-width card', () => {
+  const page = read('dist/guides/topic/more/index.html')
+  assert.equal(page.match(/<a class="guide-card guide-card--feature"/g)?.length, 1)
+  assert.equal(cards(page), 4)
+  assert.match(page, />4 guides</)
+})

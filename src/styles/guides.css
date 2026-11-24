@@ -338,3 +338,55 @@
 .guide-section__all {
   font-size: var(--text-md);
 }
+
+/* ── Topic page ─────────────────────────────────────────────────────────────
+   The topic's name in the display face, its intro, how many guides; the
+   topic's object beside it from 900px. */
+
+.topic-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-block-end: clamp(3rem, 2rem + 3vw, 5rem);
+}
+
+.topic-head__copy {
+  display: grid;
+  flex: 1 1 28rem;
+  min-inline-size: 0;
+  gap: 1.25rem;
+}
+
+.topic-head__title {
+  margin: 0;
+  font-size: clamp(2.75rem, 1.4rem + 5.6vw, 5rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--studio-headline);
+}
+
+.topic-head__count {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--studio-note);
+}
+
+.topic-head__object {
+  display: none;
+  inline-size: auto;
+  block-size: calc(11.5rem * var(--k));
+  margin-inline-end: 3rem;
+  filter: drop-shadow(0 0.5rem 0.5rem var(--studio-shadow-near));
+}
+
+@media (width >= 56rem) {
+  .topic-head__object {
+    display: block;
+  }
+}
