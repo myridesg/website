@@ -1,0 +1,192 @@
+/* ============================================================================
+ * The guides: the home (/guides/), a page per topic, and the article.
+ *
+ * Plain white pages in the manner of Wise's blog: a topic bar under the
+ * header, picture cards, one narrow column of text. The studio's neutrals and
+ * the home page's type come through feature.css (which imports studio.css);
+ * <main class="feature-page guides-page"> carries the tokens.
+ *
+ * No wall, no panel, no shadow. The display face is kept for section names on
+ * the list pages and the closing band; everything else is Barlow.
+ * ==========================================================================*/
+
+@import './feature.css';
+
+.guides-page {
+  background: var(--color-paper);
+  color: var(--studio-text);
+}
+
+/* ── Picture panels ─────────────────────────────────────────────────────────
+   One 3D object on a panel the colour of the studio wall. --cover-h is the
+   panel's height; the object is about 62% of it, evened out by its own --k. */
+
+.guide-cover {
+  --cover-h: 15rem;
+
+  display: grid;
+  place-items: center;
+  block-size: var(--cover-h);
+  border-radius: var(--radius-lg);
+  background: var(--studio-wall-low);
+}
+
+.guide-cover--hero,
+.guide-cover--feature {
+  --cover-h: 15rem;
+}
+
+.guide-cover--card {
+  --cover-h: 14rem;
+}
+
+@media (width >= 40rem) {
+  .guide-cover--hero,
+  .guide-cover--feature {
+    --cover-h: 26rem;
+  }
+}
+
+.guide-cover__img {
+  display: block;
+  inline-size: auto;
+  block-size: calc(var(--cover-h) * 0.62 * var(--k));
+  filter: drop-shadow(0 calc(var(--cover-h) * 0.04) calc(var(--cover-h) * 0.04) var(--studio-shadow-near));
+}
+
+/* ── Byline ─────────────────────────────────────────────────────────────── */
+
+.guide-byline {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.guide-byline__pic {
+  flex: none;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: 50%;
+}
+
+.guide-byline--article .guide-byline__pic {
+  inline-size: 3rem;
+  block-size: 3rem;
+}
+
+.guide-byline__text {
+  display: grid;
+  min-inline-size: 0;
+}
+
+.guide-byline__name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--studio-headline);
+}
+
+.guide-byline--article .guide-byline__name {
+  font-size: var(--text-md);
+}
+
+.guide-byline__meta {
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  color: var(--studio-note);
+}
+
+.guide-byline--article .guide-byline__meta {
+  font-size: var(--text-sm);
+}
+
+/* ── Cards and grids ────────────────────────────────────────────────────── */
+
+.guide-card {
+  display: grid;
+  align-content: start;
+  gap: 0.875rem;
+  min-inline-size: 0;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.guide-card:focus-visible {
+  outline: 2px solid var(--studio-headline);
+  outline-offset: 4px;
+  border-radius: var(--radius-lg);
+}
+
+.guide-card__topic {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--studio-headline);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.guide-card__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--studio-headline);
+}
+
+.guide-card--feature .guide-card__title {
+  font-size: 1.625rem;
+  line-height: 1.22;
+}
+
+.guide-card__text {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: var(--studio-text);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+@media (hover: hover) {
+  .guide-card:hover .guide-card__title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.guide-grid {
+  display: grid;
+  row-gap: 3rem;
+}
+
+.guide-grid__lead,
+.guide-grid__rest {
+  display: grid;
+  gap: 3rem 1rem;
+}
+
+@media (width >= 40rem) {
+  .guide-grid__rest,
+  .guide-grid__lead--pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 56rem) {
+  .guide-grid__rest {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .guide-grid__lead--pair {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+}

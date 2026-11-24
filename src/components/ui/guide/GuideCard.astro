@@ -1,0 +1,30 @@
+---
+import { GUIDE_GROUPS } from '@/lib/guide-navigation'
+import type { GuideEntry } from '@/lib/guides'
+import GuideCover from './GuideCover.astro'
+import GuideByline from './GuideByline.astro'
+
+/**
+ * A guide as a card, Wise-style: picture, topic, title, a line of intro, who
+ * and when. The whole card is one link. No border, no shadow, no fill.
+ */
+interface Props {
+  guide: GuideEntry
+  /** The large card at the head of a grid. */
+  feature?: boolean
+  showDescription?: boolean
+}
+
+const { guide, feature = false, showDescription = true } = Astro.props
+const { article, topic, cover, readMinutes } = guide
+const label = GUIDE_GROUPS.find((group) => group.id === topic)?.label ?? 'Guides'
+const name = article.author.name.trim() && article.author.name !== 'Unknown' ? article.author.name : null
+---
+
+<a class:list={['guide-card', feature && 'guide-card--feature']} href={`/guides/${article.slug}/`}>
+  <GuideCover cover={cover} size={feature ? 'feature' : 'card'} />
+  <span class="guide-card__topic">{label}</span>
+  <h3 class="guide-card__title">{article.title}</h3>
+  {showDescription && <p class="guide-card__text">{article.description}</p>}
+  <GuideByline name={name} published={article.publishedAt} readMinutes={readMinutes} size="card" />
+</a>

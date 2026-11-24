@@ -1,0 +1,39 @@
+---
+import { leadCount, type GuideEntry } from '@/lib/guides'
+import GuideCard from './GuideCard.astro'
+
+/**
+ * Cards in rows of three, so that no card sits alone in the last row: when
+ * the count leaves one over, the first card spans the row; when it leaves
+ * two, the first two share a row, two to one. See leadCount().
+ */
+interface Props {
+  guides: GuideEntry[]
+}
+
+const { guides } = Astro.props
+const leads = leadCount(guides.length)
+const lead = guides.slice(0, leads)
+const rest = guides.slice(leads)
+---
+
+<div class="guide-grid">
+  {
+    lead.length > 0 && (
+      <div class:list={['guide-grid__lead', lead.length === 2 && 'guide-grid__lead--pair']}>
+        {lead.map((guide, i) => (
+          <GuideCard guide={guide} feature={i === 0} />
+        ))}
+      </div>
+    )
+  }
+  {
+    rest.length > 0 && (
+      <div class="guide-grid__rest">
+        {rest.map((guide) => (
+          <GuideCard guide={guide} />
+        ))}
+      </div>
+    )
+  }
+</div>
