@@ -1,0 +1,3663 @@
+[
+ {
+  "_id": "motorcycle-chain-maintenance-singapore",
+  "title": "Motorcycle Chain Maintenance — Singapore Guide (2025)",
+  "slug": {
+   "current": "motorcycle-chain-maintenance-singapore"
+  },
+  "category": "guide",
+  "description": "Singapore's humidity destroys unlubed chains within days. Complete guide to motorcycle chain noise diagnosis, lubrication schedule, tension adjustment, and replacement costs at Singapore workshops.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0001",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0002",
+      "text": "Singapore's humidity destroys unlubed chains within days. Complete guide to motorcycle chain noise diagnosis, lubrication schedule, tension adjustment, and replacement costs at Singapore workshops.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-maintenance-singapore",
+  "title": "Motorcycle Maintenance Checklist Singapore 2025",
+  "slug": {
+   "current": "motorcycle-maintenance-singapore"
+  },
+  "category": "guide",
+  "description": "A complete motorcycle maintenance guide for Singapore riders. Recommended service intervals, typical costs at SG workshops, and tips for keeping your bike in peak condition year-round.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0003",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0004",
+      "text": "A complete motorcycle maintenance guide for Singapore riders. Recommended service intervals, typical costs at SG workshops, and tips for keeping your bike in peak condition year-round.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-oil-change-singapore",
+  "title": "Motorcycle Oil Change Singapore — Best Oils, Costs & Intervals (2025)",
+  "slug": {
+   "current": "motorcycle-oil-change-singapore"
+  },
+  "category": "guide",
+  "description": "Best motorcycle engine oils for Singapore's heat, recommended change intervals, workshop costs, and the top oil brands trusted by Singapore riders.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "callout",
+    "_key": "k0007",
+    "type": "success",
+    "body": [
+     {
+      "_type": "block",
+      "_key": "k0008",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "k0009",
+        "text": "Singapore Oil Change Rule: Change every 3,000 km (not 5,000 km as many manufacturers state). SG heat, humidity, and stop-go traffic degrade oil faster. Log in MyRide SG to get a reminder at exactly 3,000 km.",
+        "marks": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0010",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0011",
+      "text": "Recommended Oil Grades",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "specsTable",
+    "_key": "k0012",
+    "rows": [
+     {
+      "_key": "k0013",
+      "label": "10W-40 (semi-synthetic / mineral)",
+      "value": "Honda Wave, Yamaha Y15ZR, most commuters — standard grade for most SG commuter bikes"
+     },
+     {
+      "_key": "k0014",
+      "label": "10W-30 (mineral / semi-synthetic)",
+      "value": "Small-displacement bikes under 150cc — lighter viscosity for smaller engines"
+     },
+     {
+      "_key": "k0015",
+      "label": "15W-50 (full synthetic)",
+      "value": "Honda CB650R, Kawasaki Z900, performance bikes — best for hot-running big bikes in SG heat"
+     },
+     {
+      "_key": "k0016",
+      "label": "5W-40 (full synthetic)",
+      "value": "BMW, Ducati, KTM, modern Euro bikes — manufacturer-specified for many premium bikes"
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0017",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0018",
+      "text": "Best Engine Oil Brands in Singapore",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "specsTable",
+    "_key": "k0019",
+    "rows": [
+     {
+      "_key": "k0020",
+      "label": "Motul 7100 4T",
+      "value": "Full synthetic · $35–$55/L · Most popular among SG enthusiasts"
+     },
+     {
+      "_key": "k0021",
+      "label": "Castrol Power 1",
+      "value": "Full / semi-synthetic · $22–$40/L · Widely available, good value"
+     },
+     {
+      "_key": "k0022",
+      "label": "Shell Advance Ultra",
+      "value": "Full synthetic · $30–$50/L · Shell promo discounts at stations"
+     },
+     {
+      "_key": "k0023",
+      "label": "Yamalube",
+      "value": "Semi-synthetic · $18–$28/L · OEM recommended for Yamaha bikes"
+     },
+     {
+      "_key": "k0024",
+      "label": "Honda Genuine Oil",
+      "value": "Semi-synthetic · $18–$28/L · OEM recommended for Honda bikes"
+     },
+     {
+      "_key": "k0025",
+      "label": "Liqui-Moly",
+      "value": "Full synthetic · $35–$60/L · German engineering, excellent heat resistance"
+     }
+    ]
+   },
+   {
+    "_type": "cta",
+    "_key": "k0026",
+    "note": "Log your oil change in MyRide SG and set a 3,000 km or 3-month reminder — whichever comes first."
+   },
+   {
+    "_type": "block",
+    "_key": "k0027",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0028",
+      "text": "Frequently Asked Questions",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "faq",
+    "_key": "k0029",
+    "items": [
+     {
+      "_key": "k0030",
+      "question": "How often should I change motorcycle oil in Singapore?",
+      "answer": [
+       {
+        "_type": "block",
+        "_key": "k0031",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "k0032",
+          "text": "Change every 3,000 km for mineral/semi-synthetic oil, or 5,000 km for full synthetic — whichever comes first. In Singapore's heat and stop-go traffic, oil degrades faster than manufacturer recommendations (usually 5,000–6,000 km). If you ride daily in SG traffic, lean toward the shorter interval.",
+          "marks": []
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "_key": "k0033",
+      "question": "How much does a motorcycle oil change cost in Singapore?",
+      "answer": [
+       {
+        "_type": "block",
+        "_key": "k0034",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "k0035",
+          "text": "DIY cost: $15–$50 for oil + $5 for filter. Workshop cost: $30–$80 including oil, filter, and labour. Full synthetic at a workshop: $60–$120. Authorised service centres charge more ($80–$150) but some include multi-point checks.",
+          "marks": []
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "_key": "k0036",
+      "question": "What motorcycle oil is best for Singapore's climate?",
+      "answer": [
+       {
+        "_type": "block",
+        "_key": "k0037",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "k0038",
+          "text": "Full synthetic 10W-40 handles SG's heat best for most commuter bikes. For high-performance and big bikes, 15W-50 full synthetic provides better viscosity at high operating temperatures. Motul 7100 and Liqui-Moly are the most recommended by Singapore riders.",
+          "marks": []
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "_key": "k0039",
+      "question": "Can I mix different brands of motorcycle oil?",
+      "answer": [
+       {
+        "_type": "block",
+        "_key": "k0040",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "k0041",
+          "text": "Not recommended. Different brands use different additive packages that may not be compatible. It's fine in an emergency (topping up) but change to a single brand at the next service. Never mix mineral and synthetic oil if possible.",
+          "marks": []
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "_key": "k0042",
+      "question": "How do I know if my motorcycle needs an oil change?",
+      "answer": [
+       {
+        "_type": "block",
+        "_key": "k0043",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+         {
+          "_type": "span",
+          "_key": "k0044",
+          "text": "Check the oil level and colour via the sight glass or dipstick. Dark brown/black oil = overdue. Milky oil = water contamination (serious — workshop immediately). Low level = top up with the same oil grade. Use MyRide SG to track your last oil change by date and km.",
+          "marks": []
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "relatedLinks",
+    "_key": "k0045",
+    "slugs": [
+     {
+      "slug": "motorcycle-maintenance-checklist-singapore",
+      "title": "Motorcycle Maintenance Checklist Singapore 2025",
+      "category": "guide"
+     },
+     {
+      "slug": "motorcycle-chain-maintenance-singapore",
+      "title": "Motorcycle Chain Maintenance — Singapore Guide (2025)",
+      "category": "guide"
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-tyres-singapore",
+  "title": "Motorcycle Tyres Singapore — Prices, Brands & Replacement Guide (2025)",
+  "slug": {
+   "current": "motorcycle-tyres-singapore"
+  },
+  "category": "guide",
+  "description": "Best motorcycle tyre brands, replacement costs at Singapore workshops, wear signs to watch for, and correct pressure for Singapore's heat. Updated 2025.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0046",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0047",
+      "text": "Best motorcycle tyre brands, replacement costs at Singapore workshops, wear signs to watch for, and correct pressure for Singapore's heat. Updated 2025.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "workshops-singapore",
+  "title": "Best Motorcycle Workshops in Singapore",
+  "slug": {
+   "current": "workshops-singapore"
+  },
+  "category": "guide",
+  "description": "Find trusted motorcycle workshops across Singapore for oil changes, tyre replacements, full servicing and more. Browse by area, specialty and price range — all verified by real riders.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0048",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0049",
+      "text": "Find trusted motorcycle workshops across Singapore for oil changes, tyre replacements, full servicing and more. Browse by area, specialty and price range — all verified by real riders.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "honda-cb400-problems",
+  "title": "Honda CB400 Common Problems Singapore — Diagnosis & Fix Guide (2025)",
+  "slug": {
+   "current": "honda-cb400-problems"
+  },
+  "category": "guide",
+  "description": "The Honda CB400 Super Four is Singapore's most popular Class 2 sports naked. Here are the most common problems CB400 owners face in Singapore's heat and humidity — with local costs and fixes.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0053",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0052",
+      "text": "The Honda CB400 Super Four is Singapore's most popular Class 2 sports naked. Here are the most common problems CB400 owners face in Singapore's heat and humidity — with local costs and fixes.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "callout",
+    "_key": "k0160",
+    "type": "warn",
+    "body": [
+     {
+      "_type": "block",
+      "_key": "k0161",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+       {
+        "_type": "span",
+        "_key": "k0162",
+        "text": "Do not ride with a knocking engine or a flashing oil light. Stop, switch off and check the oil level before anything else.",
+        "marks": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0055",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0054",
+      "text": "5 Most Common Honda CB400 Problems in Singapore",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0057",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0056",
+      "text": "VTEC Not Engaging (All Cylinders Not Firing)",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0059",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0058",
+      "text": "Common Issue · DIY possible · Est. SG Cost: $80–$200 at workshop",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0061",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0060",
+      "text": "The Honda CB400 Super Four uses a VTEC system that switches from 2 to 4 valves per cylinder above ~6,500rpm. When VTEC fails to engage, you lose significant top-end power and the bike feels flat at high revs.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0063",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0062",
+      "text": "Causes:",
+      "marks": [
+       "strong"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0065",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0064",
+      "text": "Dirty or faulty VTEC solenoid (most common)",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0067",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0066",
+      "text": "Low engine oil level or old oil causing spool-up failure",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0069",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0068",
+      "text": "Clogged oil galleries due to infrequent oil changes",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0071",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0070",
+      "text": "Faulty VTEC pressure switch",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0073",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0072",
+      "text": "ECU issue (rare)",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0076",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0074",
+      "text": "Fix:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0075",
+      "text": " Clean or replace the VTEC solenoid ($30–$80 part). Always use Honda-recommended 10W-40 engine oil and change it every 3,000km. Test by rev-matching to 7,000rpm — you should feel a distinct power surge.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0078",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0077",
+      "text": "Excessive Vibration at Idle",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0080",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0079",
+      "text": "Inspect Soon · Workshop recommended · Est. SG Cost: $60–$150",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0082",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0081",
+      "text": "The CB400 is an inline-4 and should be very smooth at idle. Excessive vibration points to carburetor sync issues (NC39/NC42) or throttle body sync issues on fuel-injected models.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0084",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0083",
+      "text": "Causes:",
+      "marks": [
+       "strong"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0086",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0085",
+      "text": "Carburettors out of sync (4-carb models)",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0088",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0087",
+      "text": "Throttle bodies out of balance (FI models)",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0090",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0089",
+      "text": "Worn engine mounts",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0092",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0091",
+      "text": "Idle speed set too low",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0094",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0093",
+      "text": "Fouled spark plugs",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0097",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0095",
+      "text": "Fix:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0096",
+      "text": " Carb sync requires a vacuum gauge set — most Ubi workshops can do this for $60–$100. Spark plugs should be replaced every 15,000km. Use NGK CR9EH-9 (standard spec).",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0099",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0098",
+      "text": "Coolant Leak / Overheating",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0101",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0100",
+      "text": "Fix Immediately · Workshop recommended · Est. SG Cost: $100–$300 for water pump seal",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0103",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0102",
+      "text": "CB400s over 10 years old are prone to coolant leaks from the water pump seal or radiator hoses. Singapore heat exacerbates this.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0105",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0104",
+      "text": "Causes:",
+      "marks": [
+       "strong"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0107",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0106",
+      "text": "Worn water pump mechanical seal",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0109",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0108",
+      "text": "Cracked or perished radiator hoses",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0111",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0110",
+      "text": "Loose hose clamps",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0113",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0112",
+      "text": "Blocked radiator fins (road grime)",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0116",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0114",
+      "text": "Fix:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0115",
+      "text": " Flush and replace coolant every 2 years. Inspect hoses for cracking. Water pump seal replacement is a workshop job but affordable. Never run the engine if coolant warning appears.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0118",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0117",
+      "text": "Hard Starting When Cold",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0120",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0119",
+      "text": "Common in SG · Workshop recommended · Est. SG Cost: $80–$200 for carb clean",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0122",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0121",
+      "text": "Despite SG's heat, CB400s (especially carb models) can be hard to start when left overnight due to fuel evaporation and enrichment circuit issues.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0124",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0123",
+      "text": "Causes:",
+      "marks": [
+       "strong"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0126",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0125",
+      "text": "Choke/enrichment circuit blocked",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0128",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0127",
+      "text": "Pilot jets clogged (carb models)",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0130",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0129",
+      "text": "Weak battery (replace every 2–3 years)",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0132",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0131",
+      "text": "Old fuel sitting in carbs",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0135",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0133",
+      "text": "Fix:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0134",
+      "text": " Run the choke on cold starts. For carb models, a full carb clean every 20,000km prevents this. Keep the battery on a trickle charger if the bike sits for weeks.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0137",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0136",
+      "text": "Chain Jumping / Noisy Chain",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0139",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0138",
+      "text": "Safety Issue · DIY possible · Est. SG Cost: $150–$300 for chain and sprocket set",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0141",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0140",
+      "text": "CB400 uses a 520 chain. Singapore humidity accelerates rust and wear. A worn chain and sprocket combination causes jumping under load — dangerous at high speed.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0143",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0142",
+      "text": "Causes:",
+      "marks": [
+       "strong"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0145",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0144",
+      "text": "Chain stretched beyond 3% elongation",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0147",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0146",
+      "text": "Worn sprocket teeth (hooked profile)",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0149",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0148",
+      "text": "Insufficient lubrication in SG humidity",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0151",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0150",
+      "text": "Incorrect chain tension",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0154",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0152",
+      "text": "Fix:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0153",
+      "text": " Measure chain stretch — replace if worn. Always replace chain AND both sprockets together. Lubricate every 500km with a quality chain lube (not WD-40). Adjust tension to 25–35mm slack.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0156",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0155",
+      "text": "Honda CB400 FAQs — Singapore",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0159",
+    "style": "normal",
+    "markDefs": [
+     {
+      "_key": "k0157",
+      "_type": "link",
+      "href": "/guides/"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0158",
+      "text": "All guides",
+      "marks": [
+       "k0157"
+      ]
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "honda-pcx-problems",
+  "title": "Honda PCX 150 / 160 Common Problems Singapore — Fix Guide (2025)",
+  "slug": {
+   "current": "honda-pcx-problems"
+  },
+  "category": "guide",
+  "description": "The Honda PCX is Singapore's top-selling scooter. Here are the most common problems PCX 150 and PCX 160 owners face — with causes, fixes, and Singapore workshop costs.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0163",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0164",
+      "text": "The Honda PCX is Singapore's top-selling scooter. Here are the most common problems PCX 150 and PCX 160 owners face — with causes, fixes, and Singapore workshop costs.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "honda-wave-problems",
+  "title": "Honda Wave 100/110 Common Problems Singapore — Fix Guide (2025)",
+  "slug": {
+   "current": "honda-wave-problems"
+  },
+  "category": "guide",
+  "description": "Honda Wave 100 and 110 common problems in Singapore — carb issues, chain wear, hard starting and more. Budget-friendly fixes for Singapore's most common delivery and commuter bike.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0165",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0166",
+      "text": "Honda Wave 100 and 110 common problems in Singapore — carb issues, chain wear, hard starting and more. Budget-friendly fixes for Singapore's most common delivery and commuter bike.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "kawasaki-ninja-problems",
+  "title": "Kawasaki Ninja 400 & 650 Common Problems Singapore — Fix Guide (2025)",
+  "slug": {
+   "current": "kawasaki-ninja-problems"
+  },
+  "category": "guide",
+  "description": "Common Kawasaki Ninja problems in Singapore — overheating in traffic, clutch judder, chain wear and more. With local SG workshop costs.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0167",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0168",
+      "text": "Common Kawasaki Ninja problems in Singapore — overheating in traffic, clutch judder, chain wear and more. With local SG workshop costs.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-brakes-problems-singapore",
+  "title": "Motorcycle Brake Problems — Singapore Guide & Repair Costs (2025)",
+  "slug": {
+   "current": "motorcycle-brakes-problems-singapore"
+  },
+  "category": "guide",
+  "description": "Squealing, spongy, grinding or dragging brakes? Full diagnosis guide for Singapore riders including causes, repair costs at Singapore workshops, and when to stop riding immediately.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0169",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0170",
+      "text": "Squealing, spongy, grinding or dragging brakes? Full diagnosis guide for Singapore riders including causes, repair costs at Singapore workshops, and when to stop riding immediately.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-electrical-problems-singapore",
+  "title": "Motorcycle Electrical Problems Singapore — Diagnosis & Repair Guide (2025)",
+  "slug": {
+   "current": "motorcycle-electrical-problems-singapore"
+  },
+  "category": "guide",
+  "description": "Singapore's humidity destroys motorcycle electrics faster than anywhere else. Complete guide to diagnosing and fixing lights, battery drain, regulator failure, instruments and more — with SG workshop costs.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0171",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0172",
+      "text": "Singapore's humidity destroys motorcycle electrics faster than anywhere else. Complete guide to diagnosing and fixing lights, battery drain, regulator failure, instruments and more — with SG workshop costs.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-engine-problems",
+  "title": "Motorcycle Engine Problems — Singapore Diagnosis Guide (2025)",
+  "slug": {
+   "current": "motorcycle-engine-problems"
+  },
+  "category": "guide",
+  "description": "The most common motorcycle engine problems Singapore riders face — knocking, overheating, stalling, misfiring and smoke. Includes estimated repair costs at Singapore workshops and DIY tips.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0173",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0174",
+      "text": "The most common motorcycle engine problems Singapore riders face — knocking, overheating, stalling, misfiring and smoke. Includes estimated repair costs at Singapore workshops and DIY tips.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-scratch-repair-singapore",
+  "title": "Motorcycle Scratch & Bodywork Repair Singapore — Costs & Guide (2025)",
+  "slug": {
+   "current": "motorcycle-scratch-repair-singapore"
+  },
+  "category": "guide",
+  "description": "Motorcycle scratch repair, fairing replacement, paint touch-up, and respray costs in Singapore. What you can DIY vs what needs a professional bodywork shop.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0175",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0176",
+      "text": "Motorcycle scratch repair, fairing replacement, paint touch-up, and respray costs in Singapore. What you can DIY vs what needs a professional bodywork shop.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-wont-start-singapore",
+  "title": "Motorcycle Won't Start? Singapore Troubleshooting Guide (2025)",
+  "slug": {
+   "current": "motorcycle-wont-start-singapore"
+  },
+  "category": "guide",
+  "description": "Step-by-step diagnosis for Singapore riders — covering the most common reasons a motorcycle won't start, estimated repair costs at Singapore workshops, and whether you can fix it yourself.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0177",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0178",
+      "text": "Step-by-step diagnosis for Singapore riders — covering the most common reasons a motorcycle won't start, estimated repair costs at Singapore workshops, and whether you can fix it yourself.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "royal-enfield-problems",
+  "title": "Royal Enfield Common Problems Singapore — Fix Guide (2025)",
+  "slug": {
+   "current": "royal-enfield-problems"
+  },
+  "category": "guide",
+  "description": "Royal Enfield Classic 350, Meteor, Interceptor 650, and Bullet problems in Singapore — oil leaks, electrical issues, gearbox, and carb maintenance with local workshop costs.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0179",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0180",
+      "text": "Royal Enfield Classic 350, Meteor, Interceptor 650, and Bullet problems in Singapore — oil leaks, electrical issues, gearbox, and carb maintenance with local workshop costs.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "vespa-problems",
+  "title": "Vespa GTS / Primavera Common Problems Singapore — Fix Guide (2025)",
+  "slug": {
+   "current": "vespa-problems"
+  },
+  "category": "guide",
+  "description": "Common Vespa problems in Singapore — rust, CVT wear, MIA warnings, and suspension. With authorised dealer costs and independent workshop options.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0181",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0182",
+      "text": "Common Vespa problems in Singapore — rust, CVT wear, MIA warnings, and suspension. With authorised dealer costs and independent workshop options.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "yamaha-mt07-problems",
+  "title": "Yamaha MT-07 Common Problems Singapore — Fix Guide (2025)",
+  "slug": {
+   "current": "yamaha-mt07-problems"
+  },
+  "category": "guide",
+  "description": "The Yamaha MT-07 is one of Singapore's most popular Class 2 middleweights. Here are the most common issues MT-07 owners face in SG — with honest fixes and local costs.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0183",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0184",
+      "text": "The Yamaha MT-07 is one of Singapore's most popular Class 2 middleweights. Here are the most common issues MT-07 owners face in SG — with honest fixes and local costs.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "yamaha-nmax-problems",
+  "title": "Yamaha NMax 155 Common Problems Singapore — Fix Guide (2025)",
+  "slug": {
+   "current": "yamaha-nmax-problems"
+  },
+  "category": "guide",
+  "description": "The Yamaha NMax 155 is one of Singapore's best-selling maxi-scooters. Here are the most common problems and maintenance issues NMax owners face.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0185",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0186",
+      "text": "The Yamaha NMax 155 is one of Singapore's best-selling maxi-scooters. Here are the most common problems and maintenance issues NMax owners face.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "yamaha-y15zr-problems",
+  "title": "Yamaha Y15ZR Common Problems Singapore — Fix Guide (2025)",
+  "slug": {
+   "current": "yamaha-y15zr-problems"
+  },
+  "category": "guide",
+  "description": "Common Yamaha Y15ZR problems in Singapore — overheating, VVA issues, chain wear and dashboard failures. With local costs and fixes.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0187",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0188",
+      "text": "Common Yamaha Y15ZR problems in Singapore — overheating, VVA issues, chain wear and dashboard failures. With local costs and fixes.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "free-motorcycle-parking-singapore",
+  "title": "Free Motorcycle Parking in Singapore — Complete Guide 2025",
+  "slug": {
+   "current": "free-motorcycle-parking-singapore"
+  },
+  "category": "guide",
+  "description": "Find free and cheap motorcycle parking spots across Singapore. Crowd-sourced tips from real Singapore riders covering HDB carparks, shopping malls and MRT stations.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0189",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0190",
+      "text": "Find free and cheap motorcycle parking spots across Singapore. Crowd-sourced tips from real Singapore riders covering HDB carparks, shopping malls and MRT stations.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-coe-singapore",
+  "title": "Motorcycle COE Singapore — Renewal Guide, Costs & Calculator (2025)",
+  "slug": {
+   "current": "motorcycle-coe-singapore"
+  },
+  "category": "guide",
+  "description": "Singapore motorcycle COE explained — Category D prices, PQP, renewal vs scrap decision, PARF rebates, and how to never miss your expiry date.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0194",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0193",
+      "text": "Singapore motorcycle COE explained — Category D prices, PQP, renewal vs scrap decision, PARF rebates, and how to never miss your expiry date.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "coeCalculator",
+    "_key": "k0227"
+   },
+   {
+    "_type": "block",
+    "_key": "k0196",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0195",
+      "text": "COE Renewal Options",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0198",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0197",
+      "text": "5-Year Renewal",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0200",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0199",
+      "text": "Pay 50% of PQP (Prevailing Quota Premium). Bike gets an additional 5-year PARF rebate extension. Option to renew again for another 5 years.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0203",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0201",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0202",
+      "text": " Bikes in good condition, mid-range value.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0205",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0204",
+      "text": "10-Year Renewal",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0207",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0206",
+      "text": "Pay full PQP. Bike gets a full 10-year extension. No PARF rebate upon deregistration after this point.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0210",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0208",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0209",
+      "text": " Bikes you plan to keep long-term, well-maintained bikes.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0212",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0211",
+      "text": "Deregister & Scrap",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0214",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0213",
+      "text": "Claim PARF rebate (if within 10 years) + scrap/export rebate. Use funds toward a new/newer bike.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0217",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0215",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0216",
+      "text": " High-mileage bikes, expensive repair history, rising PQP.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0219",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0218",
+      "text": "Quick Renewal Cost Estimate",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0221",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0220",
+      "text": "Based on Cat D PQP of ~$10,000 (check LTA for current figure):",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0223",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0222",
+      "text": "Frequently Asked Questions",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0226",
+    "style": "normal",
+    "markDefs": [
+     {
+      "_key": "k0224",
+      "_type": "link",
+      "href": "/guides/"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0225",
+      "text": "All guides",
+      "marks": [
+       "k0224"
+      ]
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-insurance-singapore",
+  "title": "Motorcycle Insurance Singapore — Complete Guide & Cost (2025)",
+  "slug": {
+   "current": "motorcycle-insurance-singapore"
+  },
+  "category": "guide",
+  "description": "Everything Singapore riders need to know about motorcycle insurance — coverage types, costs, NCD, renewal tips, and the major insurers.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0228",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0229",
+      "text": "Everything Singapore riders need to know about motorcycle insurance — coverage types, costs, NCD, renewal tips, and the major insurers.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-licence-singapore",
+  "title": "Motorcycle Licence Singapore — Class 2B, 2A & 2 Guide (2025)",
+  "slug": {
+   "current": "motorcycle-licence-singapore"
+  },
+  "category": "guide",
+  "description": "Complete guide to getting your motorcycle licence in Singapore — Class 2B, 2A and 2 explained, costs, duration, driving centres, and upgrading your licence.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0230",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0231",
+      "text": "Complete guide to getting your motorcycle licence in Singapore — Class 2B, 2A and 2 explained, costs, duration, driving centres, and upgrading your licence.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-road-tax-singapore",
+  "title": "Motorcycle Road Tax Singapore — Rates, Renewal Guide & Reminders (2025)",
+  "slug": {
+   "current": "motorcycle-road-tax-singapore"
+  },
+  "category": "guide",
+  "description": "Complete guide to Singapore motorcycle road tax — rates by engine size, how to renew, what happens if it expires, and how to never miss your renewal date.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0232",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0233",
+      "text": "Complete guide to Singapore motorcycle road tax — rates by engine size, how to renew, what happens if it expires, and how to never miss your renewal date.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "petrol-prices-singapore",
+  "title": "Singapore Petrol Prices Today — RON 95 & RON 98",
+  "slug": {
+   "current": "petrol-prices-singapore"
+  },
+  "category": "guide",
+  "description": "Live petrol prices across Shell, SPC, Esso, Caltex and Sinopec stations in Singapore. Updated weekly. Find the cheapest RON 95 and RON 98 fuel for your motorcycle.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0234",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0235",
+      "text": "Live petrol prices across Shell, SPC, Esso, Caltex and Sinopec stations in Singapore. Updated weekly. Find the cheapest RON 95 and RON 98 fuel for your motorcycle.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "best-motorcycles-singapore",
+  "title": "Best Motorcycles in Singapore 2025 — Class 2B, 2A & Class 2 Buyer's Guide",
+  "slug": {
+   "current": "best-motorcycles-singapore"
+  },
+  "category": "guide",
+  "description": "Top motorcycle recommendations for Singapore riders by licence class — with prices (including COE), pros/cons, and who each bike is best suited for.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0239",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0238",
+      "text": "Top motorcycle recommendations for Singapore riders by licence class — with prices (including COE), pros/cons, and who each bike is best suited for.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0241",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0240",
+      "text": "Best Class 2B Motorcycles (Up to 200cc)",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0243",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0242",
+      "text": "Honda CB125R — 125cc · $6,000–$8,000",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0246",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0244",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0245",
+      "text": " Reliable, easy to maintain, great resale value",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0249",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0247",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0248",
+      "text": " Pricier than competitors",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0252",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0250",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0251",
+      "text": " New riders wanting quality",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0254",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0253",
+      "text": "Yamaha Y15ZR — 150cc · $5,500–$7,500",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0257",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0255",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0256",
+      "text": " Fuel-efficient, sporty, huge parts availability",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0260",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0258",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0259",
+      "text": " Aggressive riding position",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0263",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0261",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0262",
+      "text": " Daily commuter + weekend fun",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0265",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0264",
+      "text": "Honda MSX125 (Grom) — 125cc · $6,500–$9,000",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0268",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0266",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0267",
+      "text": " Fun, compact, city-perfect",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0271",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0269",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0270",
+      "text": " Not ideal for pillion or long rides",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0274",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0272",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0273",
+      "text": " City riding, fun riding",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0276",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0275",
+      "text": "Kawasaki Z125 Pro — 125cc · $7,000–$9,500",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0279",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0277",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0278",
+      "text": " Premium look, smooth engine",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0282",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0280",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0281",
+      "text": " Limited dealer network in SG",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0285",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0283",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0284",
+      "text": " Style-conscious rider",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0287",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0286",
+      "text": "Best Class 2A Motorcycles (201–400cc)",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0289",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0288",
+      "text": "Honda CB300R — 286cc · $9,000–$12,000",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0292",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0290",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0291",
+      "text": " Smooth, comfortable, excellent build quality",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0295",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0293",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0294",
+      "text": " Low seat can feel small for tall riders",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0298",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0296",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0297",
+      "text": " 2A upgrade seeking comfort",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0300",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0299",
+      "text": "Kawasaki Z400 — 399cc · $10,000–$14,000",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0303",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0301",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0302",
+      "text": " Punchy twin, sporty, good ergonomics",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0306",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0304",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0305",
+      "text": " Slightly firm suspension",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0309",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0307",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0308",
+      "text": " Performance-focused 2A rider",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0311",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0310",
+      "text": "Yamaha MT-03 — 321cc · $9,500–$13,000",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0314",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0312",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0313",
+      "text": " Sporty, lightweight, reliable",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0317",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0315",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0316",
+      "text": " Aggressive riding position",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0320",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0318",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0319",
+      "text": " Weekend sports riding",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0322",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0321",
+      "text": "Royal Enfield Meteor 350 — 349cc · $9,000–$11,000",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0325",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0323",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0324",
+      "text": " Retro cool, comfortable, torquey",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0328",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0326",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0327",
+      "text": " Heavier than Japanese competitors",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0331",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0329",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0330",
+      "text": " Casual, relaxed riding",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0333",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0332",
+      "text": "Best Class 2 Motorcycles (400cc+)",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0335",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0334",
+      "text": "Honda CB650R — 649cc · $16,000–$22,000",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0338",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0336",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0337",
+      "text": " Smooth 4-cylinder, practical, reliable",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0341",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0339",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0340",
+      "text": " Premium price",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0344",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0342",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0343",
+      "text": " All-rounder for Class 2",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0346",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0345",
+      "text": "Kawasaki Z650 — 649cc · $14,000–$19,000",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0349",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0347",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0348",
+      "text": " Lightweight, punchy parallel twin",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0352",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0350",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0351",
+      "text": " Less refined than Honda",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0355",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0353",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0354",
+      "text": " Budget-friendly Class 2 entry",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0357",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0356",
+      "text": "Yamaha MT-07 — 689cc · $16,000–$21,000",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0360",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0358",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0359",
+      "text": " Incredible torque, fun character",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0363",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0361",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0362",
+      "text": " Hard seat on long rides",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0366",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0364",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0365",
+      "text": " Fun, engaging Class 2 riding",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0368",
+    "style": "h3",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0367",
+      "text": "BMW G310R — 313cc · $11,000–$14,000",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0371",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0369",
+      "text": "Pros:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0370",
+      "text": " Premium brand, good finance options",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0374",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0372",
+      "text": "Cons:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0373",
+      "text": " Small engine for Class 2 price",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0377",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0375",
+      "text": "Best for:",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k0376",
+      "text": " Brand-conscious rider",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "k0379",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0378",
+      "text": "Frequently Asked Questions",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0382",
+    "style": "normal",
+    "markDefs": [
+     {
+      "_key": "k0380",
+      "_type": "link",
+      "href": "/guides/"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0381",
+      "text": "All guides",
+      "marks": [
+       "k0380"
+      ]
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-accident-singapore",
+  "title": "Motorcycle Accident Singapore — What to Do: Step-by-Step Guide (2025)",
+  "slug": {
+   "current": "motorcycle-accident-singapore"
+  },
+  "category": "guide",
+  "description": "If you've been in a motorcycle accident in Singapore, follow this exact sequence — what to do at the scene, how to file a report, insurance steps, and important hotlines.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0383",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0384",
+      "text": "If you've been in a motorcycle accident in Singapore, follow this exact sequence — what to do at the scene, how to file a report, insurance steps, and important hotlines.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-modification-singapore",
+  "title": "Motorcycle Modifications Singapore — Legal Guide, Costs & LTA Rules (2025)",
+  "slug": {
+   "current": "motorcycle-modification-singapore"
+  },
+  "category": "guide",
+  "description": "What motorcycle modifications are legal in Singapore, LTA rules, costs, and what will void your insurance. Complete guide for SG riders.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0385",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0386",
+      "text": "What motorcycle modifications are legal in Singapore, LTA rules, costs, and what will void your insurance. Complete guide for SG riders.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "motorcycle-suspension-singapore",
+  "title": "Motorcycle Suspension Problems Singapore — Diagnosis & Repair Guide (2025)",
+  "slug": {
+   "current": "motorcycle-suspension-singapore"
+  },
+  "category": "guide",
+  "description": "Fork leaks, speed wobbles, harsh ride, bottoming out on speed bumps — full suspension diagnosis guide for Singapore riders with workshop costs.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0387",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0388",
+      "text": "Fork leaks, speed wobbles, harsh ride, bottoming out on speed bumps — full suspension diagnosis guide for Singapore riders with workshop costs.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-12T00:00:00.000Z",
+  "updatedAt": "2026-05-12T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": false
+  }
+ },
+ {
+  "_id": "fixture-long-values",
+  "title": "Fixture: a very long guide title that keeps going so the headline has to wrap on a small phone screen",
+  "slug": {
+   "current": "fixture-long-values"
+  },
+  "category": "guide",
+  "description": "Edge case: long unbroken values and repeated headings.",
+  "author": {
+   "slug": {
+    "current": "hidayah"
+   },
+   "name": "Hidayah"
+  },
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0389",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0390",
+      "text": "Repeated heading",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "specsTable",
+    "_key": "k0391",
+    "rows": [
+     {
+      "_key": "k0392",
+      "label": "Part number",
+      "value": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+     },
+     {
+      "_key": "k0393",
+      "label": "Short",
+      "value": "Value"
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0394",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0395",
+      "text": "Repeated heading",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0396",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0397",
+      "text": "Text under the second heading.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0398",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0399",
+      "text": "A third heading",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0400",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0401",
+      "text": "Text.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-13T00:00:00.000Z",
+  "updatedAt": "2026-05-13T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": true
+  }
+ },
+ {
+  "_id": "fixture-one-heading",
+  "title": "Fixture: a guide with one heading",
+  "slug": {
+   "current": "fixture-one-heading"
+  },
+  "category": "guide",
+  "description": "Edge case: one heading, updated later, no author.",
+  "body": [
+   {
+    "_type": "block",
+    "_key": "k0402",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0403",
+      "text": "Only heading",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k0404",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0405",
+      "text": "Some text under it.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "publishedAt": "2026-05-14T00:00:00.000Z",
+  "updatedAt": "2026-06-03T00:00:00.000Z",
+  "tags": [],
+  "relatedSlugs": [],
+  "seo": {
+   "noIndex": true
+  }
+ }
+]
