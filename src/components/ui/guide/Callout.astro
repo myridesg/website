@@ -1,11 +1,11 @@
 ---
 /**
- * `callout` block from the Sanity article body.
- *
- * v2 renders these in blue/amber/green (packages/ui/src/patterns/Callout.tsx).
- * Those hues do not exist in this site's palette and AGENTS.md rule 4 forbids
- * inventing brand values, so the three tones share the studio floor's grey
- * and differ by their label and the dot before it (reading.css).
+ * `callout` block from the Sanity article body: a quote set off by a thin line
+ * on its left, as Wise marks a key rule. No fill. v2 renders these in
+ * blue/amber/green; those hues are not in this site's palette (AGENTS.md
+ * rule 4), so the tone is the line's colour: ember for a warning, grey for a
+ * note or tip. A warning also says "Warning" in words, so the meaning never
+ * rests on colour alone.
  */
 import { PortableText } from 'astro-portabletext'
 import type { PortableTextProps } from 'astro-portabletext/types'
@@ -22,16 +22,11 @@ const { node } = Astro.props
 // The schema defaults to 'info' and validates the field as required, but a
 // document written through the API bypasses schema validation entirely — the
 // Studio is the only thing that enforces it. So treat the field as optional.
-const LABELS = { info: 'Note', warn: 'Warning', success: 'Tip' } as const
-const tone = node.type && node.type in LABELS ? node.type : 'info'
+const TONES = ['info', 'warn', 'success'] as const
+const tone = TONES.find((t) => t === node.type) ?? 'info'
 ---
 
-<aside class={`callout callout--${tone}`}>
-  {/* A span, not a <p>: `.prose-body p` would add a paragraph's spacing to
-      what is a one-word label. */}
-  <span class="block-label">{LABELS[tone]}</span>
-
-  <div>
-    <PortableText value={node.body ?? []} />
-  </div>
-</aside>
+<blockquote class={`callout callout--${tone}`}>
+  {tone === 'warn' && <strong class="callout__label">Warning</strong>}
+  <PortableText value={node.body ?? []} />
+</blockquote>

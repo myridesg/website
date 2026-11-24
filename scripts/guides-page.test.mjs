@@ -113,3 +113,25 @@ test('built page: more guides are cards, and an unlisted guide is in no row', ()
     assert.ok(!guide(slug).includes('/guides/fixture-one-heading/'))
   }
 })
+
+test('built page: callouts are quotes, a warning says so in words', () => {
+  assert.match(guide('motorcycle-oil-change-singapore'), /<blockquote class="callout callout--success"/)
+  assert.match(
+    guide('honda-cb400-problems'),
+    /<blockquote class="callout callout--warn"[\s\S]*?<strong[^>]*>Warning<\/strong>/,
+  )
+})
+
+test('built page: the download block keeps the note and the store links', () => {
+  const block = guide('motorcycle-oil-change-singapore').match(/<aside class="guide-cta"[\s\S]*?<\/aside>/)[0]
+  assert.match(block, /Log your oil change/)
+  assert.match(block, /apps\.apple\.com|testflight\.apple\.com|play\.google\.com/)
+})
+
+test('built page: a table is label and value rows in a frame', () => {
+  const html = guide('motorcycle-oil-change-singapore')
+  const table = html.match(/<div class="spec-rows"[\s\S]*?<\/dl>/)[0]
+  assert.equal(table.match(/<dt>/g).length, 4)
+  assert.match(table, /<dd>Honda Wave, Yamaha Y15ZR/)
+  assert.match(html, /<aside class="guide-related"[\s\S]*?Related guides[\s\S]*?<a href="\/guides\/motorcycle-chain-maintenance-singapore\/"/)
+})

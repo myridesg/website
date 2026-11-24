@@ -32,11 +32,11 @@ const links = (node.slugs ?? []).filter(
 
 {
   links.length > 0 && (
-    <aside class="link-rows">
-      {/* A span, not a heading: this is a widget label, and promoting it to h2
-          would inject a section into the guide's outline that the author never
-          wrote. */}
-      <span class="block-label">Related guides</span>
+    <aside class="guide-related">
+      {/* A paragraph, not a heading: this is a widget label, and promoting it
+          to h2 would inject a section into the guide's outline that the author
+          never wrote. */}
+      <p class="guide-related__label">Related guides</p>
 
       <ul>
         {links.map((link) => (
