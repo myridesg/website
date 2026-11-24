@@ -18,10 +18,29 @@ test('built page: a card is one link with its picture, topic, title and read tim
     home.match(
       /<a[^>]+class="[^"]*guide-card[^"]*"[^>]+href="\/guides\/motorcycle-oil-change-singapore\/"[\s\S]*?<\/a>/,
     )?.[0] ?? ''
-  assert.match(card, /<img[^>]+alt=""/)
+  assert.match(card, /<img[^>]+ alt[ >]/)
   assert.match(card, /Maintenance/)
   assert.match(card, /Motorcycle Oil Change Singapore/)
   assert.match(card, /Read time \d+ minutes?/)
   assert.match(card, /Hidayah/)
   assert.match(card, /12 May 2026/)
+})
+
+const read = (path) => readFileSync(path, 'utf8')
+const cards = (html) => html.match(/<a class="guide-card[ "]/g)?.length ?? 0
+
+test('built page: the home lists only indexable guides', () => {
+  assert.ok(!read('dist/guides/index.html').includes('/guides/fixture-long-values/'))
+  assert.ok(!read('dist/guides/index.html').includes('/guides/fixture-one-heading/'))
+})
+
+test('built page: the home has the topic bar, one section per topic, five cards at most', () => {
+  const home = read('dist/guides/index.html')
+  assert.match(home, /<nav[^>]+aria-label="Guide topics"[\s\S]*?href="\/guides\/topic\/troubleshooting\/"/)
+  assert.match(home, /<h1[^>]*>Motorcycle guides for Singapore riders<\/h1>/)
+  assert.match(home, /See all 14 guides/)
+  assert.ok(!/See all \d+ guides/.test(home.match(/<section[^>]+id="maintenance"[\s\S]*?<\/section>/)[0]))
+  assert.equal(cards(home.match(/<section[^>]+id="troubleshooting"[\s\S]*?<\/section>/)[0]), 5)
+  assert.equal(cards(home.match(/<section[^>]+id="ownership"[\s\S]*?<\/section>/)[0]), 5)
+  assert.match(home, /Keeping a service record\? Explore the/)
 })

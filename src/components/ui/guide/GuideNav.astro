@@ -1,0 +1,40 @@
+---
+import { GUIDE_GROUPS, topicPath, type GuideGroupId } from '@/lib/guide-navigation'
+
+/**
+ * The bar under the site header on every guides page, as Wise's blog has: the
+ * way back to the guides home, then one link per topic that has guides.
+ * `current` is the page you are on (aria-current); `within` is the topic a
+ * guide article belongs to, marked but not "current", since the article is
+ * its own page.
+ */
+interface Props {
+  topics: GuideGroupId[]
+  current?: 'home' | GuideGroupId
+  within?: GuideGroupId
+}
+
+const { topics, current, within } = Astro.props
+const links = GUIDE_GROUPS.filter((group) => topics.includes(group.id))
+---
+
+<nav aria-label="Guide topics" class="guide-nav">
+  <div class="guide-nav__inner">
+    <a
+      href="/guides/"
+      class="guide-nav__home"
+      aria-current={current === 'home' ? 'page' : undefined}>Guides</a
+    >
+    {
+      links.map((group) => (
+        <a
+          href={topicPath(group.id)}
+          class:list={['guide-nav__topic', within === group.id && 'is-within']}
+          aria-current={current === group.id ? 'page' : undefined}
+        >
+          {group.label}
+        </a>
+      ))
+    }
+  </div>
+</nav>
