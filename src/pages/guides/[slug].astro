@@ -57,6 +57,23 @@ const repeatedIntroduction = first?._type === 'block'
   && first.children.map((child) => child.text ?? '').join('').trim() === article.description.trim()
 const blocks = repeatedIntroduction ? originalBlocks.slice(1) : originalBlocks
 
+// Reading time from the words the article shows: prose, questions and
+// answers, table rows and notes, at 200 words a minute.
+const READ_KEYS = new Set(['text', 'question', 'label', 'value', 'note'])
+function countWords(node: unknown): number {
+  if (Array.isArray(node)) return node.reduce((sum: number, item) => sum + countWords(item), 0)
+  if (!node || typeof node !== 'object') return 0
+  return Object.entries(node).reduce(
+    (sum, [key, value]) =>
+      sum +
+      (typeof value === 'string'
+        ? READ_KEYS.has(key) ? value.split(/\s+/).filter(Boolean).length : 0
+        : countWords(value)),
+    0,
+  )
+}
+const readMinutes = Math.max(1, Math.round(countWords(blocks) / 200))
+
 const hasRelatedBlock = originalBlocks.some((block) =>
   (block as { _type?: string })._type === 'relatedLinks',
 )
@@ -108,6 +125,7 @@ const structuredData = [
 ---
 
 <ProseLayout
+  article
   title={article.title}
   lead={article.description}
   seoTitle={article.seo.metaTitle ?? undefined}
@@ -125,6 +143,7 @@ const structuredData = [
     {hasAuthor && <span>By {article.author.name}</span>}
     <span>Published <time datetime={article.publishedAt.toISOString()}>{dateFormat.format(article.publishedAt)}</time></span>
     <span>Updated <time datetime={article.updatedAt.toISOString()}>{dateFormat.format(article.updatedAt)}</time></span>
+    <span>{readMinutes} min read</span>
   </Fragment>
 
   <GuideBody value={blocks} />

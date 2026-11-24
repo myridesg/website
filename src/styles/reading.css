@@ -42,6 +42,41 @@
   line-height: 0.92;
 }
 
+/* An article (a guide): the opening's text starts on the same left edge as
+   the centred page's text under it, and the title keeps the author's own
+   capitalisation, as article titles do, in the same heavy face. */
+.page-head--article .feature-hero__inner {
+  --page-gutter: clamp(1.25rem, 5vw, 6rem);
+  --page-pad: clamp(1.25rem, 0.5rem + 4vw, 5rem);
+
+  max-inline-size: none;
+  padding-inline: calc(max(var(--page-gutter), (100% - 56rem) / 2) + var(--page-pad));
+}
+
+@media (width < 40rem) {
+  .page-head--article .feature-hero__inner {
+    padding-inline: var(--page-pad);
+  }
+}
+
+.page-head--article .feature-hero__title {
+  max-inline-size: none;
+  font-size: clamp(2rem, 1.45rem + 2.4vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* The trail ends at "Riding guides": the title is the next line down, and
+   repeating all of it in capitals above itself only pushes it lower. */
+.page-head--article .feature-hero__crumbs li:has([aria-current='page']) {
+  display: none;
+}
+
+.page-head--article .feature-hero__lead {
+  max-inline-size: 34em;
+}
+
 /* The 404's eyebrow, set as the breadcrumb is. */
 .page-head__eyebrow {
   margin: 0 0 clamp(0.875rem, 0.5rem + 1vw, 1.5rem);
@@ -162,6 +197,11 @@
     border-inline: 0;
     border-radius: 0;
   }
+}
+
+/* An article's page stands in the middle of the floor. */
+.reading--article .reading__panel {
+  margin-inline: auto;
 }
 
 /* ── Prose ──────────────────────────────────────────────────────────────── */
