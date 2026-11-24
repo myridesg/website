@@ -28,7 +28,9 @@
   place-items: center;
   block-size: var(--cover-h);
   border-radius: var(--radius-lg);
-  background: var(--studio-wall-low);
+  /* The wall's grey in light; the floor's, a step lighter than the page, in
+     dark, where the wall would vanish into it. */
+  background: light-dark(var(--studio-wall-low), var(--studio-floor));
 }
 
 .guide-cover--hero,
@@ -165,29 +167,59 @@
 
 .guide-grid {
   display: grid;
-  row-gap: 3rem;
-}
-
-.guide-grid__lead,
-.guide-grid__rest {
-  display: grid;
   gap: 3rem 1rem;
 }
 
+/* Two wide: six tracks, a card spans three. An odd count gives the first
+   card a row to itself, in the large size, so none is left alone below. */
 @media (width >= 40rem) {
-  .guide-grid__rest,
-  .guide-grid__lead--pair {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .guide-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .guide-grid > .guide-card {
+    grid-column: span 3;
+  }
+
+  .guide-grid--odd > .guide-card:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .guide-grid--odd > .guide-card:first-child .guide-cover {
+    --cover-h: 22rem;
+  }
+
+  .guide-grid--odd > .guide-card:first-child .guide-card__title {
+    font-size: 1.625rem;
+    line-height: 1.22;
   }
 }
 
+/* Three wide: a card spans two. */
 @media (width >= 56rem) {
-  .guide-grid__rest {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .guide-grid > .guide-card {
+    grid-column: span 2;
   }
 
-  .guide-grid__lead--pair {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  .guide-grid--lead1 > .guide-card:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .guide-grid--lead2 > .guide-card:first-child {
+    grid-column: span 4;
+  }
+
+  .guide-grid--odd > .guide-card:first-child .guide-cover {
+    --cover-h: 15rem;
+  }
+
+  .guide-grid--lead1 > .guide-card:first-child .guide-cover,
+  .guide-grid--lead2 > .guide-card:first-child .guide-cover {
+    --cover-h: 26rem;
+  }
+
+  .guide-grid--odd:not(.guide-grid--lead0) > .guide-card:first-child .guide-card__title {
+    font-size: 1.625rem;
   }
 }
 
@@ -580,12 +612,6 @@
   gap: 0.625rem;
 }
 
-.guide-faq__item h3 {
-  margin: 0;
-  font-size: 1.1875rem;
-  line-height: 1.37;
-}
-
 .guide-faq__answer {
   display: grid;
   gap: 1rem;
@@ -625,7 +651,9 @@
 
 .callout--info,
 .callout--success {
-  --tone: var(--studio-numeral);
+  /* The numeral grey is too faint for a line that has to be seen; the
+     eyebrow grey is the darkest quiet tone the studio has. */
+  --tone: var(--studio-eyebrow);
 }
 
 .callout--warn {

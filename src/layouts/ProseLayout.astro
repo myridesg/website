@@ -28,17 +28,12 @@ interface Props {
   seoTitle?: string
   noindex?: boolean
   canonical?: string
-  /**
-   * An article (a guide): the opening and the page share one centred
-   * column, and the title keeps the author's own capitalisation.
-   */
-  article?: boolean
   /** The eyebrow trail; defaults to Home and the page's title. */
   breadcrumbs?: Array<{ name: string; href?: string }>
   structuredData?: Record<string, unknown>[]
 }
 
-const { title, description, lead, meta, seoTitle, noindex, canonical, article, breadcrumbs, structuredData } =
+const { title, description, lead, meta, seoTitle, noindex, canonical, breadcrumbs, structuredData } =
   Astro.props
 const crumbs = breadcrumbs ?? [{ name: 'Home', href: '/' }, { name: title }]
 const metaHtml = Astro.slots.has('meta') ? await Astro.slots.render('meta') : undefined
@@ -54,11 +49,11 @@ const metaHtml = Astro.slots.has('meta') ? await Astro.slots.render('meta') : un
   <SiteNav />
 
   <main class="feature-page">
-    <PageHead crumbs={crumbs} title={title} lead={lead} meta={meta} class={article ? 'page-head--article' : undefined}>
+    <PageHead crumbs={crumbs} title={title} lead={lead} meta={meta}>
       {metaHtml && <Fragment slot="meta" set:html={metaHtml} />}
     </PageHead>
 
-    <div class:list={['reading', article && 'reading--article']}>
+    <div class="reading">
       <article class="reading__panel prose-body">
         <slot />
       </article>
