@@ -22,7 +22,7 @@
    panel's height; the object is about 62% of it, evened out by its own --k. */
 
 .guide-cover {
-  --cover-h: 15rem;
+  --cover-h: 14rem;
 
   display: grid;
   place-items: center;
@@ -33,8 +33,7 @@
   background: light-dark(var(--studio-wall-low), var(--studio-floor));
 }
 
-.guide-cover--hero,
-.guide-cover--feature {
+.guide-cover--hero {
   --cover-h: 15rem;
 }
 
@@ -43,8 +42,7 @@
 }
 
 @media (width >= 40rem) {
-  .guide-cover--hero,
-  .guide-cover--feature {
+  .guide-cover--hero {
     --cover-h: 26rem;
   }
 }
@@ -140,11 +138,6 @@
   color: var(--studio-headline);
 }
 
-.guide-card--feature .guide-card__title {
-  font-size: 1.625rem;
-  line-height: 1.22;
-}
-
 .guide-card__text {
   display: -webkit-box;
   margin: 0;
@@ -195,10 +188,25 @@
   }
 }
 
-/* Three wide: a card spans two. */
+/* Three wide: a card spans two. The first card is the large one only where
+   the count leaves one or two over; with none over, it is a card like the
+   rest and the odd-count rule above is undone. */
 @media (width >= 56rem) {
   .guide-grid > .guide-card {
     grid-column: span 2;
+  }
+
+  .guide-grid--lead0 > .guide-card:first-child {
+    grid-column: span 2;
+  }
+
+  .guide-grid--lead0 > .guide-card:first-child .guide-cover {
+    --cover-h: 14rem;
+  }
+
+  .guide-grid--lead0 > .guide-card:first-child .guide-card__title {
+    font-size: 1.5rem;
+    line-height: 1.25;
   }
 
   .guide-grid--lead1 > .guide-card:first-child {
@@ -209,17 +217,15 @@
     grid-column: span 4;
   }
 
-  .guide-grid--odd > .guide-card:first-child .guide-cover {
-    --cover-h: 15rem;
-  }
-
   .guide-grid--lead1 > .guide-card:first-child .guide-cover,
   .guide-grid--lead2 > .guide-card:first-child .guide-cover {
     --cover-h: 26rem;
   }
 
-  .guide-grid--odd:not(.guide-grid--lead0) > .guide-card:first-child .guide-card__title {
+  .guide-grid--lead1 > .guide-card:first-child .guide-card__title,
+  .guide-grid--lead2 > .guide-card:first-child .guide-card__title {
     font-size: 1.625rem;
+    line-height: 1.22;
   }
 }
 
@@ -744,6 +750,10 @@
   color: inherit;
   font-weight: inherit;
   text-decoration: none;
+}
+
+.guide-text .guide-cta a:focus-visible {
+  outline-color: var(--color-on-dark);
 }
 
 .guide-text .guide-cta .guide-cta__button {

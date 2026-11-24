@@ -8,7 +8,7 @@
  */
 import type { Article } from '@/content/entities'
 import type { ObjectKey } from '@/components/ui/feature/objects'
-import { groupOf, type GuideGroupId } from './guide-navigation.ts'
+import { groupOf, topicPath, type GuideGroupId } from './guide-navigation.ts'
 
 export interface GuideEntry {
   article: Article
@@ -138,6 +138,25 @@ export function coverFor(guide: { slug: string; topic: GuideGroupId }): ObjectKe
  */
 export function leadCount(count: number): 0 | 1 | 2 {
   return (count % 3) as 0 | 1 | 2
+}
+
+/**
+ * The trail for a guide's structured data: Home / Riding guides / topic /
+ * title. The topic level is left out when the topic has no page: a topic
+ * page is built only for topics that have a listed guide, so an unlisted
+ * guide in an otherwise empty topic would point at a 404.
+ */
+export function guideBreadcrumbs(
+  topic: { id: GuideGroupId; title: string },
+  title: string,
+  hasTopicPage: boolean,
+): Array<{ name: string; href?: string }> {
+  return [
+    { name: 'Home', href: '/' },
+    { name: 'Riding guides', href: '/guides/' },
+    ...(hasTopicPage ? [{ name: topic.title, href: topicPath(topic.id) }] : []),
+    { name: title },
+  ]
 }
 
 export function toGuideEntry(article: Article): GuideEntry {

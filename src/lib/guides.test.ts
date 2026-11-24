@@ -5,6 +5,7 @@ import {
   anchorHeadings,
   coverFor,
   faqItemsOf,
+  guideBreadcrumbs,
   leadCount,
   readMinutes,
   readTimeLabel,
@@ -112,4 +113,19 @@ test('toGuideEntry reads topic, cover, read time and whether the guide is listed
   assert.equal(entry.cover, 'petrol')
   assert.equal(entry.readMinutes, 2)
   assert.equal(entry.listed, false)
+})
+
+test('guideBreadcrumbs only links a topic page that exists', () => {
+  const group = { id: 'more', title: 'More guides' } as const
+  assert.deepEqual(guideBreadcrumbs(group, 'A guide', true), [
+    { name: 'Home', href: '/' },
+    { name: 'Riding guides', href: '/guides/' },
+    { name: 'More guides', href: '/guides/topic/more/' },
+    { name: 'A guide' },
+  ])
+  assert.deepEqual(guideBreadcrumbs(group, 'A guide', false), [
+    { name: 'Home', href: '/' },
+    { name: 'Riding guides', href: '/guides/' },
+    { name: 'A guide' },
+  ])
 })

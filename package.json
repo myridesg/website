@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test-skip-pattern='built page' --test 'worker/*.test.ts' 'src/**/*.test.ts' 'scripts/*.test.mjs'",
     "test:page": "astro build && node --test scripts/home-page.test.mjs",
-    "test:guides": "GUIDES_FIXTURE=scripts/fixtures/guides.json astro build && node --test scripts/guides-page.test.mjs",
+    "test:guides": "GUIDES_FIXTURE=scripts/fixtures/guides.json astro build --outDir dist-guides && node --test scripts/guides-page.test.mjs",
     "tunnel": "cloudflared tunnel --url http://localhost:4321",
     "tunnel:docker": "cloudflared tunnel --url http://localhost:8080"
   },

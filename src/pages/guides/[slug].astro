@@ -8,7 +8,7 @@ import RelatedGuides from '@/components/ui/guide/RelatedGuides.astro'
 import { contentRepo } from '@/lib/content'
 import { GUIDE_GROUPS, isMaintenanceGuide, relatedGuides } from '@/lib/guide-navigation'
 import { loadGuides } from '@/lib/guide-data'
-import { anchorHeadings, faqItemsOf } from '@/lib/guides'
+import { anchorHeadings, faqItemsOf, guideBreadcrumbs } from '@/lib/guides'
 import {
   breadcrumbEntity,
   entityId,
@@ -112,12 +112,7 @@ const structuredData = [
       : { author: { '@id': entityId(site, ORGANIZATION_PATH) } }),
     publisher: { '@id': entityId(site, ORGANIZATION_PATH) },
   },
-  breadcrumbEntity(site, canonical, [
-    { name: 'Home', href: '/' },
-    { name: 'Riding guides', href: '/guides/' },
-    { name: group.title, href: `/guides/topic/${group.id}/` },
-    { name: article.title },
-  ]),
+  breadcrumbEntity(site, canonical, guideBreadcrumbs(group, article.title, topics.includes(group.id))),
   // The questions shown in the body, in this page's one graph.
   ...(questions.length > 0 ? [faqPageEntity(site, canonical, questions)] : []),
 ]

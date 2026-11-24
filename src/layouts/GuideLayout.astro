@@ -50,7 +50,7 @@ const name = article.author.name.trim() && article.author.name !== 'Unknown' ? a
       <GuideCover cover={cover} size="hero" eager />
       <div class="guide-head__tags">
         <a href="/guides/">Guides</a>
-        <a href={topicPath(topic)}>{group.label}</a>
+        {topics.includes(topic) ? <a href={topicPath(topic)}>{group.label}</a> : <span>{group.label}</span>}
       </div>
       <h1 class="guide-head__title">{article.title}</h1>
       <GuideByline
