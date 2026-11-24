@@ -1,37 +1,42 @@
 ---
 import type { GetStaticPaths } from 'astro'
 import type { PortableTextProps } from 'astro-portabletext/types'
-import ProseLayout from '@/layouts/ProseLayout.astro'
+import GuideLayout from '@/layouts/GuideLayout.astro'
 import GuideBody from '@/components/ui/guide/GuideBody.astro'
-import { listGuideArticles, getGuideArticle } from '@/content/usecases'
-import { contentRepo } from '@/lib/content'
-import type { Article } from '@/content/entities'
-import { relatedGuides, isMaintenanceGuide } from '@/lib/guide-navigation'
-import { breadcrumbEntity, entityId, webPageEntity, ORGANIZATION_PATH } from '@/lib/seo'
+import GuideContents from '@/components/ui/guide/GuideContents.astro'
 import RelatedGuides from '@/components/ui/guide/RelatedGuides.astro'
-import FeatureAsk from '@/components/ui/feature/FeatureAsk.astro'
+import { contentRepo } from '@/lib/content'
+import { GUIDE_GROUPS, isMaintenanceGuide, relatedGuides } from '@/lib/guide-navigation'
+import { loadGuides } from '@/lib/guide-data'
+import { anchorHeadings, faqItemsOf } from '@/lib/guides'
+import {
+  breadcrumbEntity,
+  entityId,
+  faqPageEntity,
+  webPageEntity,
+  ORGANIZATION_PATH,
+} from '@/lib/seo'
 
 // One page per published guide, resolved at build time. With Sanity
 // unconfigured this returns [], so the route simply produces nothing and the
-// build still succeeds — see src/lib/content.ts.
+// build still succeeds — see src/lib/content.ts. A guide marked noIndex still
+// gets its page (it is reachable by its address) but no list shows it.
 export const getStaticPaths = (async () => {
-  const guides = await listGuideArticles(contentRepo)
-
-  const articles = await Promise.all(
-    guides.map((guide) => getGuideArticle(contentRepo, guide.slug)),
+  const guides = await loadGuides(contentRepo)
+  const listed = guides.filter((entry) => entry.listed)
+  const topics = GUIDE_GROUPS.filter((group) => listed.some((entry) => entry.topic === group.id)).map(
+    (group) => group.id,
   )
-
-  const indexableSlugs = new Set(articles.filter((article) => article && !article.seo.noIndex).map((article) => article!.slug))
-  const availableGuides = guides.filter((guide) => indexableSlugs.has(guide.slug))
-
-  return articles
-    .filter((article): article is Article => article !== null)
-    .map((article) => ({ params: { slug: article.slug }, props: { article, guides: availableGuides } }))
+  return guides.map((guide) => ({
+    params: { slug: guide.article.slug },
+    props: { guide, listed, topics },
+  }))
 }) satisfies GetStaticPaths
 
 // Props are inferred from getStaticPaths above; a local `Props` interface would
 // be ignored by Astro's generated types for a dynamic route.
-const { article, guides } = Astro.props
+const { guide, listed, topics } = Astro.props
+const { article } = guide
 
 // Portable Text arrives as JSON in bodySource, tagged by bodyFormat, because
 // the domain entity is renderer-agnostic. mdx-v1 is the other format in the
@@ -55,35 +60,26 @@ const repeatedIntroduction = first?._type === 'block'
   && !first.markDefs?.length
   && first.children?.every((child) => child._type === 'span' && !child.marks?.length)
   && first.children.map((child) => child.text ?? '').join('').trim() === article.description.trim()
-const blocks = repeatedIntroduction ? originalBlocks.slice(1) : originalBlocks
+const introduced = repeatedIntroduction ? originalBlocks.slice(1) : originalBlocks
 
-// Reading time from the words the article shows: prose, questions and
-// answers, table rows and notes, at 200 words a minute.
-const READ_KEYS = new Set(['text', 'question', 'label', 'value', 'note'])
-function countWords(node: unknown): number {
-  if (Array.isArray(node)) return node.reduce((sum: number, item) => sum + countWords(item), 0)
-  if (!node || typeof node !== 'object') return 0
-  return Object.entries(node).reduce(
-    (sum, [key, value]) =>
-      sum +
-      (typeof value === 'string'
-        ? READ_KEYS.has(key) ? value.split(/\s+/).filter(Boolean).length : 0
-        : countWords(value)),
-    0,
-  )
-}
-const readMinutes = Math.max(1, Math.round(countWords(blocks) / 200))
+// Every h2 gets an id, and the contents box lists them.
+const { blocks, contents } = anchorHeadings(introduced)
+const questions = faqItemsOf(blocks)
 
-const hasRelatedBlock = originalBlocks.some((block) =>
-  (block as { _type?: string })._type === 'relatedLinks',
+// "More guides": the article's own related-links block replaces the row.
+const hasRelatedBlock = originalBlocks.some(
+  (block) => (block as { _type?: string })._type === 'relatedLinks',
 )
-const recommendations = hasRelatedBlock ? [] : relatedGuides(article, guides)
+const related = hasRelatedBlock
+  ? []
+  : relatedGuides(
+      article,
+      listed.map((entry) => entry.article),
+      3,
+    ).flatMap((summary) => listed.filter((entry) => entry.article.slug === summary.slug))
+
+const group = GUIDE_GROUPS.find((g) => g.id === guide.topic)!
 const hasAuthor = article.author.name.trim() && article.author.name !== 'Unknown'
-const dateFormat = new Intl.DateTimeFormat('en-SG', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-})
 const canonical = new URL(article.seo.canonicalUrl ?? `/guides/${article.slug}/`, Astro.site).href
 // A CMS-supplied canonical may be an absolute URL; the seo helpers resolve any
 // absolute href against the site untouched, so the WebPage's @id and url keep
@@ -119,53 +115,32 @@ const structuredData = [
   breadcrumbEntity(site, canonical, [
     { name: 'Home', href: '/' },
     { name: 'Riding guides', href: '/guides/' },
+    { name: group.title, href: `/guides/topic/${group.id}/` },
     { name: article.title },
   ]),
+  // The questions shown in the body, in this page's one graph.
+  ...(questions.length > 0 ? [faqPageEntity(site, canonical, questions)] : []),
 ]
 ---
 
-<ProseLayout
-  article
-  title={article.title}
-  lead={article.description}
+<GuideLayout
+  guide={guide}
+  topics={topics}
   seoTitle={article.seo.metaTitle ?? undefined}
   description={article.seo.metaDescription ?? article.description}
   noindex={article.seo.noIndex}
   canonical={article.seo.canonicalUrl ?? undefined}
-  breadcrumbs={[
-    { name: 'Home', href: '/' },
-    { name: 'Riding guides', href: '/guides/' },
-    { name: article.title },
-  ]}
   structuredData={structuredData}
 >
-  <Fragment slot="meta">
-    {hasAuthor && <span>By {article.author.name}</span>}
-    <span>Published <time datetime={article.publishedAt.toISOString()}>{dateFormat.format(article.publishedAt)}</time></span>
-    <span>Updated <time datetime={article.updatedAt.toISOString()}>{dateFormat.format(article.updatedAt)}</time></span>
-    <span>{readMinutes} min read</span>
-  </Fragment>
-
+  <GuideContents items={contents} />
   <GuideBody value={blocks} />
 
   {isMaintenanceGuide(article) && (
-    <aside class="callout callout--success">
-      <p>
-        Keep the date, mileage and cost of your next service together with the{' '}
-        <a href="/motorcycle-maintenance-app/">MyRideSG motorcycle maintenance tracker</a>.
-      </p>
-    </aside>
+    <p>
+      Keep the date, mileage and cost of your next service together with the{' '}
+      <a href="/motorcycle-maintenance-app/">MyRideSG motorcycle maintenance tracker</a>.
+    </p>
   )}
 
-  <RelatedGuides guides={recommendations} />
-
-  <p class="reading-back">
-    <a href="/guides/">All guides</a>
-  </p>
-
-  <FeatureAsk
-    slot="after"
-    headline="Keep your motorcycle records close."
-    note="Log services, fuel and renewal dates in MyRideSG on iOS or Android."
-  />
-</ProseLayout>
+  <RelatedGuides slot="after" guides={related} />
+</GuideLayout>

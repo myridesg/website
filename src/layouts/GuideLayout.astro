@@ -1,0 +1,79 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import GuideNav from '@/components/ui/guide/GuideNav.astro'
+import GuideCover from '@/components/ui/guide/GuideCover.astro'
+import GuideByline from '@/components/ui/guide/GuideByline.astro'
+import FeatureAsk from '@/components/ui/feature/FeatureAsk.astro'
+import { GUIDE_GROUPS, topicPath, type GuideGroupId } from '@/lib/guide-navigation'
+import type { GuideEntry } from '@/lib/guides'
+import '@/styles/guides.css'
+
+/**
+ * The guide article's page: the topic bar, a picture, two tags, the title and
+ * the byline in a wide head, then the text in a narrower column under it. The
+ * default slot is the body; "after" is whatever follows the text (more
+ * guides). The page ends on the closing band.
+ */
+interface Props {
+  guide: GuideEntry
+  /** Topics that have guides, for the bar. */
+  topics: GuideGroupId[]
+  /** Document <title> when it differs from the h1 (a CMS metaTitle). */
+  seoTitle?: string
+  description: string
+  noindex?: boolean
+  canonical?: string
+  structuredData?: Record<string, unknown>[]
+}
+
+const { guide, topics, seoTitle, description, noindex, canonical, structuredData } = Astro.props
+const { article, topic, cover, readMinutes } = guide
+const group = GUIDE_GROUPS.find((g) => g.id === topic)!
+const name = article.author.name.trim() && article.author.name !== 'Unknown' ? article.author.name : null
+---
+
+<BaseLayout
+  title={seoTitle ?? article.title}
+  description={description}
+  noindex={noindex}
+  canonical={canonical}
+  structuredData={structuredData}
+>
+  <SiteNav />
+
+  <main class="feature-page guides-page guide-article">
+    <GuideNav topics={topics} within={topic} />
+
+    <header class="guide-head">
+      <GuideCover cover={cover} size="hero" eager />
+      <div class="guide-head__tags">
+        <a href="/guides/">Guides</a>
+        <a href={topicPath(topic)}>{group.label}</a>
+      </div>
+      <h1 class="guide-head__title">{article.title}</h1>
+      <GuideByline
+        name={name}
+        published={article.publishedAt}
+        updated={article.updatedAt}
+        readMinutes={readMinutes}
+        size="article"
+      />
+    </header>
+
+    <article class="guide-text">
+      <p class="guide-text__lead">{article.description}</p>
+      <slot />
+    </article>
+
+    <slot name="after" />
+
+    <FeatureAsk
+      headline="Keep your motorcycle records close."
+      note="Log services, fuel and renewal dates in MyRideSG on iOS or Android."
+    />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

@@ -62,3 +62,54 @@ test('built page: a four-guide topic leads with one full-width card', () => {
   assert.equal(cards(page), 4)
   assert.match(page, />4 guides</)
 })
+
+const guide = (slug) => read(`dist/guides/${slug}/index.html`)
+
+test('built page: the article opens with picture, tags, title and byline', () => {
+  const html = guide('motorcycle-oil-change-singapore')
+  assert.match(
+    html,
+    /<h1[^>]*>Motorcycle Oil Change Singapore — Best Oils, Costs &amp; Intervals \(2025\)<\/h1>/,
+  )
+  assert.match(html, /href="\/guides\/topic\/maintenance\/"[^>]*>Maintenance</)
+  assert.match(html, /<a[^>]+href="\/guides\/"[^>]*>Guides<\/a>/)
+  const byline = html.match(/guide-byline guide-byline--article[\s\S]*?<\/div><\/div>/)[0]
+  assert.match(byline, /Read time \d+ minutes?/)
+  assert.ok(!byline.includes('(updated'), 'same day: no "updated"')
+  assert.match(html, /<img[^>]+class="guide-cover__img"/)
+})
+
+test('built page: the contents box links to each h2, and only when there are two or more', () => {
+  const html = guide('motorcycle-oil-change-singapore')
+  assert.match(html, /In this guide/)
+  const box = html.match(/<nav[^>]+class="guide-contents"[\s\S]*?<\/nav>/)[0]
+  const ids = [...box.matchAll(/href="#([^"]+)"/g)].map((m) => m[1])
+  assert.ok(ids.length >= 2)
+  for (const id of ids) assert.match(html, new RegExp(`<h2[^>]+id="${id}"`))
+  const repeated = guide('fixture-long-values')
+  assert.match(repeated, /id="repeated-heading"/)
+  assert.match(repeated, /id="repeated-heading-2"/)
+  const one = guide('fixture-one-heading')
+  assert.ok(!one.includes('In this guide'))
+  assert.match(one, /\(updated /)
+  assert.match(one, /MyRideSG<\/span>/)
+})
+
+test('built page: questions show their answers and sit in the one JSON-LD graph', () => {
+  const html = guide('motorcycle-oil-change-singapore')
+  assert.equal(html.match(/application\/ld\+json/g).length, 1)
+  assert.match(html, /"@type":"FAQPage"/)
+  assert.ok(!/<details/.test(html.match(/<article[\s\S]*<\/article>/)[0]))
+  assert.match(html, /<h3[^>]*>How often should I change motorcycle oil in Singapore\?<\/h3>/)
+  assert.match(html, /"@type":"BreadcrumbList"[\s\S]*?Motorcycle maintenance/)
+})
+
+test('built page: more guides are cards, and an unlisted guide is in no row', () => {
+  const html = guide('honda-cb400-problems')
+  assert.match(html, /<h2[^>]*>More guides<\/h2>/)
+  assert.equal(cards(html), 3)
+  for (const slug of ['motorcycle-oil-change-singapore', 'honda-cb400-problems']) {
+    assert.ok(!guide(slug).includes('/guides/fixture-long-values/'))
+    assert.ok(!guide(slug).includes('/guides/fixture-one-heading/'))
+  }
+})

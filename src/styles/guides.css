@@ -390,3 +390,226 @@
     display: block;
   }
 }
+
+/* ── Article ────────────────────────────────────────────────────────────────
+   A wide head (picture, tags, title, byline) and the text in a narrower
+   column under it, as Wise sets its articles: 888px over 733px. */
+
+.guide-head,
+.guide-text,
+.guide-more {
+  inline-size: min(55.5rem, 100% - 2.5rem);
+  margin-inline: auto;
+}
+
+.guide-head {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: clamp(1.5rem, 1rem + 1.5vw, 2rem) 0;
+}
+
+.guide-head .guide-cover--hero {
+  margin-block-end: 0.75rem;
+}
+
+@media (width < 40rem) {
+  /* On a phone the picture runs edge to edge, square. */
+  .guide-head .guide-cover--hero {
+    margin-inline: -1.25rem;
+    border-radius: 0;
+  }
+}
+
+.guide-head__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}
+
+.guide-head__tags a {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--studio-headline);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.guide-head__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.17;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--studio-headline);
+}
+
+/* The text: 733px wide, 18/28 (17/27 on a phone), 32px between blocks. */
+
+.guide-text {
+  display: grid;
+  max-inline-size: 45.8rem;
+  gap: 1.75rem;
+  padding-block: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem) clamp(3rem, 2rem + 3vw, 5rem);
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+@media (width >= 40rem) {
+  .guide-text {
+    gap: 2rem;
+    font-size: 1.125rem;
+    line-height: 1.555;
+  }
+}
+
+.guide-text > * {
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.guide-text h2 {
+  margin-block-start: 1rem;
+  font-family: var(--font-sans);
+  font-size: clamp(1.5rem, 1.35rem + 0.5vw, 1.625rem);
+  font-weight: 700;
+  line-height: 1.23;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--studio-headline);
+  scroll-margin-block-start: calc(var(--site-bar-slim) + 1rem);
+}
+
+.guide-text h3 {
+  font-family: var(--font-sans);
+  font-size: 1.3125rem;
+  font-weight: 600;
+  line-height: 1.33;
+  letter-spacing: -0.005em;
+  color: var(--studio-headline);
+}
+
+/* A heading belongs to what follows it: pull the text up to 1rem. */
+.guide-text :is(h2, h3) {
+  margin-block-end: -1rem;
+}
+
+.guide-text ul,
+.guide-text ol {
+  display: grid;
+  gap: 0.625rem;
+  padding-inline-start: 1.375rem;
+}
+
+.guide-text ul {
+  list-style: disc;
+}
+
+.guide-text ol {
+  list-style: decimal;
+}
+
+.guide-text li::marker {
+  color: var(--studio-headline);
+}
+
+.guide-text strong {
+  font-weight: 700;
+  color: var(--studio-headline);
+}
+
+.guide-text a {
+  font-weight: 600;
+  color: var(--studio-headline);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--studio-note);
+  text-underline-offset: 0.2em;
+}
+
+@media (hover: hover) {
+  .guide-text a:hover {
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 2px;
+  }
+}
+
+.guide-text a:focus-visible {
+  outline: 2px solid var(--studio-headline);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* The frame Wise puts round its contents list and its tables: a rounded
+   hairline box with a tinted header. */
+
+.guide-contents {
+  border: 1px solid var(--studio-rule);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.guide-contents__title {
+  margin: 0;
+  padding: 1.125rem 1.5rem;
+  border-block-end: 1px solid var(--studio-rule);
+  background: var(--color-soft);
+  font-size: var(--text-md);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--studio-headline);
+}
+
+.guide-contents ul {
+  margin: 0;
+  padding: 1.25rem 1.5rem 1.5rem 2.75rem;
+}
+
+/* Questions: a heading, then the answer, all showing. */
+
+.guide-faq {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.guide-faq__item {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.guide-faq__item h3 {
+  margin: 0;
+  font-size: 1.1875rem;
+  line-height: 1.37;
+}
+
+.guide-faq__answer {
+  display: grid;
+  gap: 1rem;
+}
+
+.guide-faq__answer > * {
+  margin: 0;
+}
+
+/* ── More guides ────────────────────────────────────────────────────────── */
+
+.guide-more {
+  max-inline-size: 71.75rem;
+  display: grid;
+  gap: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+  padding-block: 0 clamp(4rem, 2.5rem + 5vw, 6.5rem);
+}
+
+.guide-more__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.625rem;
+  font-weight: 700;
+  line-height: 1.23;
+  letter-spacing: -0.01em;
+  color: var(--studio-headline);
+}

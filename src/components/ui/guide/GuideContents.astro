@@ -1,0 +1,28 @@
+---
+/**
+ * "In this guide": a box of links to the article's h2 headings, in the frame
+ * Wise puts round its contents and its tables (a rounded hairline box with a
+ * tinted header). Nothing is drawn for fewer than two headings: a list of one
+ * is not a way round anything.
+ */
+interface Props {
+  items: Array<{ id: string; text: string }>
+}
+
+const { items } = Astro.props
+---
+
+{
+  items.length >= 2 && (
+    <nav class="guide-contents" aria-labelledby="guide-contents-title">
+      <p class="guide-contents__title" id="guide-contents-title">In this guide</p>
+      <ul>
+        {items.map((item) => (
+          <li>
+            <a href={`#${item.id}`}>{item.text}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

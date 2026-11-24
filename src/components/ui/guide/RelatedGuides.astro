@@ -1,34 +1,20 @@
 ---
+import type { GuideEntry } from '@/lib/guides'
+import GuideGrid from './GuideGrid.astro'
+
+/** "More guides": up to three cards under the article. */
 interface Props {
-  guides: Array<{ slug: string; title: string }>
-  showAppLink?: boolean
+  guides: GuideEntry[]
 }
 
-const { guides, showAppLink = false } = Astro.props
+const { guides } = Astro.props
 ---
 
 {
-  (guides.length > 0 || showAppLink) && (
-    <aside class="link-rows">
-      {guides.length > 0 && (
-        <>
-          <span class="block-label">More guides</span>
-          <ul>
-            {guides.map((guide) => (
-              <li>
-                <a href={`/guides/${guide.slug}/`}>{guide.title}</a>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {showAppLink && (
-        <p class:list={[guides.length > 0 && 'link-rows__more']}>
-          Want to keep track of servicing records and mileage in one place? See the{' '}
-          <a href="/motorcycle-maintenance-app/">motorcycle maintenance app</a>.
-        </p>
-      )}
-    </aside>
+  guides.length > 0 && (
+    <section class="guide-more">
+      <h2 class="guide-more__title">More guides</h2>
+      <GuideGrid guides={guides} />
+    </section>
   )
 }
