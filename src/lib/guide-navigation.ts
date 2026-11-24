@@ -5,31 +5,42 @@ export type GuideGroupId = 'maintenance' | 'troubleshooting' | 'ownership' | 'mo
 export interface GuideGroup {
   id: GuideGroupId
   title: string
+  /** The word in the topic bar and on a guide's tag. */
+  label: string
   intro: string
 }
 
 export const GUIDE_GROUPS: GuideGroup[] = [
   {
     id: 'maintenance',
+    label: 'Maintenance',
     title: 'Motorcycle maintenance',
     intro: 'Servicing, parts and routine care to keep a bike in good shape.',
   },
   {
     id: 'troubleshooting',
+    label: 'Troubleshooting',
     title: 'Bike troubleshooting',
     intro: 'Common problems, what causes them and what to check.',
   },
   {
     id: 'ownership',
+    label: 'Ownership',
     title: 'Singapore ownership',
     intro: 'COE, road tax, insurance, licences and the costs of owning a bike here.',
   },
   {
     id: 'more',
+    label: 'More',
     title: 'More guides',
     intro: 'Other guides for Singapore riders.',
   },
 ]
+
+/** The page that lists every guide in a topic. */
+export function topicPath(id: GuideGroupId): string {
+  return `/guides/topic/${id}/`
+}
 
 // Matched against whole words of the slug and tags, not substrings, so "coe"
 // does not catch "coefficient" and "oil" does not catch "coil".
