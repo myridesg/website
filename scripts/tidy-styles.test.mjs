@@ -55,3 +55,11 @@ test('tidy: non-links get a line, links get one flat card, nothing gets a shadow
   assert.ok(!/box-shadow/.test(rule(feature, '.feature-card')), 'example card is flat')
   assert.ok(!/text-align: center|justify-self: center/.test(rule(home, '.sg__title')), 'tools headline starts at the left')
 })
+
+test('tidy: guides and reading pages hold no spacing or radius of their own', () => {
+  for (const path of ['src/styles/guides.css', 'src/styles/reading.css']) {
+    const css = read(path)
+    assert.ok(!/border-radius: \d/.test(css.replace(/border-radius: (50%|2px|0);/g, '')), `${path}: radius comes from a token`)
+    assert.ok(!/(^|\s)gap: clamp\(/m.test(css), `${path}: gaps come from the ladder`)
+  }
+})
