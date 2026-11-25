@@ -25,3 +25,10 @@ test('tidy: the token ladder exists with the agreed values', () => {
     '--radius-card: var(--radius-lg);', '--card-pad: var(--space-6);',
   ]) assert.ok(global.includes(decl), decl)
 })
+
+test('tidy: every section uses the one section padding', () => {
+  const home = read('src/styles/home.css'), studio = read('src/styles/studio.css'), feature = read('src/styles/feature.css')
+  for (const [css, sel] of [[home, '.steps'], [home, '.never'], [home, '.costs'], [home, '.sg'], [home, '.history'], [home, '.next'], [studio, '.detail']])
+    assert.match(rule(css, sel), /padding-block: var\(--section-pad\);/, sel)
+  assert.ok(!/padding-block: clamp\(3\.5rem, 2rem \+ 5vw, 7rem\)/.test(home + feature), 'old 7rem section padding is gone')
+})

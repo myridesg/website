@@ -226,7 +226,7 @@
 .guides-wrap {
   inline-size: min(71.75rem, 100% - 2.5rem);
   margin-inline: auto;
-  padding-block: clamp(2rem, 1.25rem + 2.5vw, 3.5rem) clamp(4rem, 2.5rem + 5vw, 7rem);
+  padding-block: clamp(2rem, 1.25rem + 2.5vw, 3.5rem) var(--section-pad);
 }
 
 /* ── Topic bar ──────────────────────────────────────────────────────────── */
@@ -488,7 +488,7 @@
   display: grid;
   max-inline-size: 45.8rem;
   gap: 1.75rem;
-  padding-block: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem) clamp(3rem, 2rem + 3vw, 5rem);
+  padding-block: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem) var(--section-pad);
   font-size: var(--text-lg);
   line-height: 1.6;
   color: var(--studio-text);
@@ -638,7 +638,7 @@
   inline-size: min(71.75rem, 100% - 2.5rem);
   display: grid;
   gap: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
-  padding-block: 0 clamp(4rem, 2.5rem + 5vw, 6.5rem);
+  padding-block: 0 var(--section-pad);
 }
 
 .guide-more__title {

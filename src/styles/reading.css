@@ -135,7 +135,7 @@
   --gutter: clamp(1.25rem, 5vw, 6rem);
 
   /* The opening's gutter, inside the same 112rem frame. */
-  padding: 0 max(var(--gutter), (100% - 112rem) / 2 + var(--gutter)) clamp(3.5rem, 2rem + 5vw, 7rem);
+  padding: 0 max(var(--gutter), (100% - 112rem) / 2 + var(--gutter)) var(--section-pad);
   background: var(--studio-floor);
 }
 

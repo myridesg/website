@@ -22,7 +22,7 @@
 .feature-explain,
 .feature-steps,
 .feature-related {
-  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem);
+  padding-block: var(--section-pad);
 }
 
 .feature-points,

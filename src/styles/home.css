@@ -667,7 +667,7 @@
   --notice-soft: light-dark(#5a5d66, #a9acb4);
   --object-shadow: drop-shadow(0 calc(var(--art) * 0.05) calc(var(--art) * 0.05) var(--studio-shadow-near));
 
-  padding-block: clamp(2.75rem, 1.5rem + 4vw, 5.5rem) clamp(3.5rem, 2rem + 5vw, 7rem);
+  padding-block: var(--section-pad);
   background: var(--color-paper);
 }
 
@@ -1091,7 +1091,7 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem) clamp(3rem, 1.5rem + 3.5vw, 5rem);
+  padding-block: var(--section-pad);
   background:
     radial-gradient(75% 50% at 50% 60%, var(--studio-glow) 0%, transparent 70%),
     linear-gradient(
@@ -1133,12 +1133,6 @@
 }
 
 @media (width >= 64rem) {
-  /* Tighter above and under the headline, so the whole lead fits a laptop
-     screen; see --fit on .bike__frame. */
-  .never {
-    padding-block-start: clamp(3rem, 1rem + 3vw, 4.5rem);
-  }
-
   .bike {
     margin-block-start: 0.75rem;
   }
@@ -1383,8 +1377,10 @@
   .bike__frame {
     /* As large as stays sharp, and no larger than lets the headline, the
        bike with its callouts and the row of tags share one laptop screen
-       under the slim header (--fit: what the rest of the part takes). */
-    --fit: 28.5rem;
+       under the slim header (--fit: what the rest of the part takes,
+       measured when the part's top padding was 1rem + 3vw; the one
+       section padding is taller, so the difference comes off the bike). */
+    --fit: calc(28.5rem + var(--section-pad) - clamp(3rem, 1rem + 3vw, 4.5rem));
     --bw: min(62cqi, clamp(520px, (100svh - var(--fit)) * 1.6, 680px));
     --by: 0.75rem;
     /* Down to the oil change label's foot, under the bike, and a breath
@@ -1673,7 +1669,7 @@
   --pillar-red: var(--color-red);
   --pillar-red-lo: color-mix(in oklab, var(--color-red) 70%, #000);
 
-  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem);
+  padding-block: var(--section-pad);
   background: var(--color-paper);
   /* The floor under the pillars runs 8% past the chart on each side; where
      the chart fills a narrow screen that would widen the page. */
@@ -1987,7 +1983,7 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem);
+  padding-block: var(--section-pad);
   background:
     radial-gradient(80% 60% at 50% 75%, var(--studio-glow) 0%, transparent 70%),
     linear-gradient(
@@ -2094,7 +2090,7 @@
   --history-floor: light-dark(rgb(30 32 40 / 0.07), rgb(255 255 255 / 0.035));
 
   overflow: clip;
-  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem) clamp(3rem, 2rem + 4vw, 6rem);
+  padding-block: var(--section-pad);
   background: var(--color-paper);
 }
 
@@ -2591,7 +2587,7 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  padding-block: clamp(3rem, 1.5rem + 5vw, 6rem);
+  padding-block: var(--section-pad);
   background:
     radial-gradient(80% 60% at 50% 70%, var(--studio-glow) 0%, transparent 70%),
     linear-gradient(

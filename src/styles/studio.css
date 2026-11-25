@@ -233,7 +233,7 @@
  * ==========================================================================*/
 
 .detail {
-  padding-block: clamp(3.5rem, 2rem + 4vw, 6rem);
+  padding-block: var(--section-pad);
   background: var(--color-paper);
 }
 
