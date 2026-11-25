@@ -90,6 +90,35 @@
   --radius-2xl: 2.75rem; /* 44px */
   --radius-3xl: 3.25rem; /* 52px */
   --radius-pill: 999px;
+
+  /* ── Spacing ladder ──────────────────────────────────────────────────────
+     Every gap, margin and padding picks a step from this list. Sections get
+     one height: --section-pad, 96px on desktop and 56px on a phone. Hero
+     sections and the dark download band keep their own. */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.5rem; /* 24px */
+  --space-6: 2rem; /* 32px */
+  --space-7: 3rem; /* 48px */
+  --section-pad: clamp(3.5rem, 2rem + 5vw, 6rem);
+
+  /* ── Type by role ────────────────────────────────────────────────────────
+     Text is sized by what it does, not by a number. Hero headlines keep
+     their own sizes; everything else takes one of these. */
+  --type-small: 0.875rem; /* 14px — notes, captions, meta */
+  --type-body: 1rem; /* 16px — every paragraph in a section or card */
+  --type-reading: 1.0625rem; /* 17px — long-form: guides, support, legal */
+  --type-lead: 1.25rem; /* 20px — the one line under a headline */
+  --type-label: 1.5rem; /* 24px display — card, step and point titles */
+  --type-title: clamp(2.5rem, 1.35rem + 4.4vw, 5rem); /* 80px display at desktop */
+
+  /* ── Cards ───────────────────────────────────────────────────────────────
+     A line on top means "read"; a card means "press". Cards are flat: the
+     shade behind them does the lifting, never a shadow. */
+  --radius-card: var(--radius-lg);
+  --card-pad: var(--space-6);
 }
 
 /* ============================================================================
