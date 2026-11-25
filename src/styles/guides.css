@@ -127,7 +127,7 @@
   display: -webkit-box;
   margin: 0;
   overflow: hidden;
-  font-size: var(--text-lg);
+  font-size: var(--type-body);
   line-height: 1.5;
   color: var(--studio-text);
   -webkit-box-orient: vertical;
@@ -309,7 +309,7 @@
 .guides-head__lead {
   max-inline-size: 38em;
   margin: 0;
-  font-size: var(--text-lg);
+  font-size: var(--type-reading);
   line-height: 1.6;
 }
 
@@ -356,7 +356,7 @@
 
 .guide-section__title {
   margin: 0;
-  font-size: clamp(2.5rem, 1.35rem + 4.4vw, 4rem);
+  font-size: var(--type-title);
   font-weight: 700;
   line-height: 0.92;
   letter-spacing: -0.01em;
@@ -391,7 +391,7 @@
 
 .topic-head__title {
   margin: 0;
-  font-size: clamp(2.75rem, 1.4rem + 5.6vw, 5rem);
+  font-size: var(--type-title);
   font-weight: 700;
   line-height: 0.9;
   letter-spacing: -0.015em;
@@ -489,7 +489,7 @@
   max-inline-size: 45.8rem;
   gap: 1.75rem;
   padding-block: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem) var(--section-pad);
-  font-size: var(--text-lg);
+  font-size: var(--type-reading);
   line-height: 1.6;
   color: var(--studio-text);
 }

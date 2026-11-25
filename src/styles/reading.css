@@ -201,7 +201,7 @@
 .prose-body ul,
 .prose-body ol {
   margin: 0 0 1.125rem;
-  font-size: var(--text-md);
+  font-size: var(--type-reading);
   line-height: 1.7;
   color: var(--studio-text);
 }
@@ -209,14 +209,6 @@
 .prose-body ul,
 .prose-body ol {
   padding-left: 1.375rem;
-}
-
-@media (width >= 64rem) {
-  .prose-body p,
-  .prose-body ul,
-  .prose-body ol {
-    font-size: var(--text-lg);
-  }
 }
 
 .prose-body ul {

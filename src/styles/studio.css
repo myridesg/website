@@ -97,9 +97,9 @@
 
 .home-title {
   margin: 0;
-  font-size: clamp(2.5rem, 1.35rem + 4.4vw, 5.5rem);
+  font-size: var(--type-title);
   font-weight: 700;
-  line-height: 0.88;
+  line-height: 0.9;
   letter-spacing: -0.01em;
   text-transform: uppercase;
   text-wrap: balance;
@@ -180,13 +180,10 @@
 }
 
 .tool__label {
-  /* Two lines tall whether it wraps or not, so the four labels make one
-     even row at every width. */
-  min-block-size: 2lh;
   font-family: var(--font-display);
-  font-size: clamp(1.125rem, 0.95rem + 0.6vw, 1.5rem);
+  font-size: var(--type-label);
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.08;
   text-transform: uppercase;
   text-wrap: balance;
 }
@@ -245,9 +242,6 @@
   padding-inline: clamp(1.25rem, 5vw, 6rem);
 }
 
-.detail__title {
-  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.75rem);
-}
 
 @media (width >= 64rem) {
   .detail__inner {
@@ -303,6 +297,8 @@
 
 .faq__text {
   max-inline-size: 36em;
+  font-size: var(--type-lead);
+  line-height: 1.4;
   text-wrap: pretty;
 }
 
@@ -359,8 +355,8 @@
   max-inline-size: 38em;
   margin: 0;
   padding-block: 0 clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
-  font-size: var(--text-md);
-  line-height: 1.6;
+  font-size: var(--type-body);
+  line-height: 1.5;
   color: var(--studio-text);
 }
 

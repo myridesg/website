@@ -32,3 +32,14 @@ test('tidy: every section uses the one section padding', () => {
     assert.match(rule(css, sel), /padding-block: var\(--section-pad\);/, sel)
   assert.ok(!/padding-block: clamp\(3\.5rem, 2rem \+ 5vw, 7rem\)/.test(home + feature), 'old 7rem section padding is gone')
 })
+
+test('tidy: text takes its size from a role', () => {
+  const studio = read('src/styles/studio.css'), home = read('src/styles/home.css'), feature = read('src/styles/feature.css')
+  assert.match(rule(studio, '.home-title'), /font-size: var\(--type-title\);/)
+  for (const [css, sel] of [[studio, '.tool__label'], [home, '.step__label'], [home, '.soon__title'], [feature, '.feature-label'], [feature, '.feature-step__label']])
+    assert.match(rule(css, sel), /font-size: var\(--type-label\);/, sel)
+  for (const [css, sel] of [[home, '.soon__line'], [home, '.costs__line'], [home, '.history__line'], [feature, '.feature-text'], [feature, '.feature-point__body'], [feature, '.feature-step__body'], [feature, '.feature-related__line']])
+    assert.match(rule(css, sel), /font-size: var\(--type-body\);/, sel)
+  for (const [css, sel] of [[home, '.promise__line'], [home, '.never__line'], [studio, '.faq__text']])
+    assert.match(rule(css, sel), /font-size: var\(--type-lead\);/, sel)
+})
