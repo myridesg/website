@@ -1,0 +1,28 @@
+/* Tidy-up preview: one ladder for text, space and shape. Fonts, colours, pictures untouched. */
+html body main.feature-page {
+  --t-space-1: 8px; --t-space-2: 16px; --t-space-3: 24px; --t-space-4: 32px; --t-space-5: 48px; --t-space-6: 96px;
+}
+/* 1. Text ladder: 14 / 16 / 20 / 24 */
+html body main.feature-page :is(.feature-point__body, .feature-text, .feature-related__line, .feature-step__body, .faq__a, .feature-related__more) { font-size: 16px; line-height: 24px; }
+html body main.feature-page :is(.feature-label, .feature-step__label, .tool__label) { font-size: 24px; line-height: 26px; letter-spacing: 0.02em; }
+html body main.feature-page .faq__text { font-size: 20px; line-height: 28px; }
+html body main.feature-page :is(.feature-hero__note, .ask__note, .feature-hero__ask p) { font-size: 14px; line-height: 20px; font-weight: 500; }
+/* 2. One section rhythm */
+html body main.feature-page :is(.feature-points, .feature-explain, .feature-steps, .feature-related, .detail) { padding-block: var(--t-space-6); }
+html body main.feature-page :is(.feature-points__inner, .feature-explain__inner, .feature-steps__inner, .feature-related__inner, .detail__inner) { row-gap: var(--t-space-5); column-gap: var(--t-space-5); }
+html body main.feature-page :is(.feature-points__head, .feature-explain__copy, .feature-related__head) { row-gap: var(--t-space-3); }
+html body main.feature-page :is(.feature-points__list, .feature-steps__list, .feature-related__list, .feature-guides) { gap: var(--t-space-4) var(--t-space-3); inline-size: 100%; }
+/* 3. Things you read: a line on top. Same for points and steps. */
+html body main.feature-page :is(.feature-point, .feature-step) { padding-top: var(--t-space-3); border-top: 1px solid var(--studio-rule); }
+html body main.feature-page :is(.feature-point__body, .feature-step__body) { margin-top: var(--t-space-2); }
+html body main.feature-page .feature-step__label { margin-top: var(--t-space-2); }
+/* 4. Things you press: one flat rounded card. Same for tools and guides. */
+html body main.feature-page :is(.feature-related__item, .feature-guides > .feature-point) {
+  padding: var(--t-space-4); border: 0; border-radius: var(--radius-lg); background: var(--color-paper);
+  display: flex; flex-direction: column; align-items: flex-start; text-align: left;
+}
+html body main.feature-page .feature-related__item .tool { align-items: flex-start; text-align: left; justify-items: start; }
+html body main.feature-page .feature-related__line { margin: var(--t-space-2) 0 0; text-align: left; }
+html body main.feature-page .feature-guides a { text-decoration: none; }
+/* 5. No shadows: the shade behind the card does the lifting */
+html body main.feature-page .feature-card { box-shadow: none; border: 0; padding: var(--t-space-4); }

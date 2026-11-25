@@ -1,0 +1,20 @@
+/* Tidy-up preview for the home page. Fonts, colours, pictures and drawings untouched. */
+/* 1. One section height */
+html body main :is(.steps, .never, .costs, .sg, .history, .next, .detail).home-part { padding-block: 96px; }
+/* 2. One headline size for every section */
+html body main .home-part:not(.promise):not(.ask) .home-title { font-size: 80px; line-height: 72px; }
+/* 3. Text ladder: 16 / 20 / 24 */
+html body main :is(.step__label, .tool__label, .soon__title) { font-size: 24px; line-height: 26px; }
+html body main :is(.costs__line, .history__line, .soon__line, .faq__a) { font-size: 16px; line-height: 24px; font-weight: 400; }
+html body main :is(.promise__line, .never__line) { font-size: 20px; line-height: 30px; }
+html body main .faq__text { font-size: 20px; line-height: 28px; }
+/* 4. Every section starts from the left edge */
+html body main .sg__title { justify-self: start; text-align: left; }
+html body main .sg__tools { justify-self: stretch; inline-size: 100%; gap: 24px; }
+/* 5. Things you press: one flat rounded card (same as the feature pages) */
+html body main .sg__tool { padding: 32px; border-radius: var(--radius-lg); background: var(--color-paper); }
+html body main .sg__tool .tool { justify-items: start; text-align: left; padding: 0; row-gap: 24px; }
+html body main .sg__tool .tool__art { justify-content: flex-start; }
+html body main .next__cards { gap: 24px; }
+html body main .soon { border-radius: var(--radius-lg); padding: 32px; row-gap: 24px; }
+html body main .soon__copy { row-gap: 8px; }
