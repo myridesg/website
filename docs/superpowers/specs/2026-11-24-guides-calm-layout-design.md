@@ -155,13 +155,22 @@ pass washed the pages in the brand's rose and red, which the owner rejected as
 template-looking. What stands, taken from where Wise's blog puts its colour
 and using our own palette only (`global.css`; `AGENTS.md` rule 4):
 
-| Rule (Wise) | Ours |
+| Rule | Ours |
 |---|---|
-| Colour in the frame: the topic bar in the brand's dark colour | Topic bar on `--color-black`, white links, the current topic underlined in `--color-ember-on-dark` |
-| Links and tags are dark text, underlined | Ink (`--studio-headline`) with a 2px underline in `--home-accent` (brand red on light, the lightened ember on dark): links in the text, topic tags, "See all", a card's title on hover |
-| One bright accent for markers | `--studio-dot` (ember): the callout's line (every tone) and the full stop after a topic page's h1. Bullets stay grey. |
+| The topic bar is the page's own ground | Hairlines above and below; quiet links; the current topic in ink with a 2px red line under it. (A black bar and a red bar were both tried. Ten red-brand sites were measured: none has a solid red menu; red sits on the logo, one button and small markers.) |
+| Links and tags are dark text, underlined | Ink (`--studio-headline`) with a 2px red underline: links in the text, topic tags, "See all", a card's title on hover |
+| One accent for markers | The callout's line (every tone) and the full stop after a topic page's h1. Bullets stay grey. |
 | Tints are quiet | The contents box's header on `--color-soft` |
 | The reading column stays white | Page ground `--color-paper`; text `--studio-text`; headings `--studio-headline`; quiet text `--studio-note`; hairlines `--studio-rule` |
+
+**One red.** Every red on the guide pages is `--color-red`, the red of the
+wordmark's "SG" (`#9b0f06`; the token's own `#d33722` in dark). No ember, no
+`--home-accent`, no `--studio-dot` in `guides.css`: the owner asked for a
+single brand red with no variations. It is used for lines and one large full
+stop, never as a text colour: as a line it clears 3:1 in both themes (8.5:1 on
+white, 3.9:1 on the dark page); as small text it would not in dark. The closing
+band (`FeatureAsk`, shared with the rest of the site) keeps its ember full
+stop; bringing the whole site to one red is a separate, site-wide change.
 
 **Picture panels are stand-ins.** Until guides carry photographs, a panel is
 the studio grey the objects were lit against (`--studio-wall-low`; the floor's

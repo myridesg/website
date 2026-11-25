@@ -107,7 +107,7 @@
   line-height: 1.4;
   color: var(--studio-headline);
   text-decoration: underline;
-  text-decoration-color: var(--home-accent);
+  text-decoration-color: var(--color-red);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.3em;
 }
@@ -138,7 +138,7 @@
 @media (hover: hover) {
   .guide-card:hover .guide-card__title {
     text-decoration: underline;
-    text-decoration-color: var(--home-accent);
+    text-decoration-color: var(--color-red);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.2em;
   }
@@ -232,8 +232,7 @@
 /* ── Topic bar ──────────────────────────────────────────────────────────── */
 
 .guide-nav {
-  background: var(--color-black);
-  color: var(--color-on-dark);
+  border-block: 1px solid var(--studio-rule);
 }
 
 .guide-nav__inner {
@@ -246,45 +245,44 @@
   padding-block: 0.25rem;
 }
 
+/* Quiet links on the page's own ground; where you are is ink with the brand
+   red under it, as a news site marks its current section. */
 .guide-nav a {
   display: inline-flex;
   align-items: center;
   min-block-size: 2.75rem;
   font-size: var(--text-md);
   font-weight: 500;
-  color: rgb(255 255 255 / 0.78);
+  color: var(--studio-text);
   text-decoration: none;
-  text-decoration-color: var(--color-ember-on-dark);
+  text-decoration-color: var(--studio-note);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.45em;
 }
 
-.guide-nav__home {
+.guide-nav a.guide-nav__home {
   font-size: var(--text-lg);
   font-weight: 700;
-}
-
-.guide-nav a.guide-nav__home,
-.guide-nav a[aria-current='page'],
-.guide-nav a.is-within {
-  color: var(--color-on-dark);
+  color: var(--studio-headline);
 }
 
 .guide-nav a[aria-current='page'],
 .guide-nav a.is-within {
   font-weight: 600;
+  color: var(--studio-headline);
   text-decoration-line: underline;
+  text-decoration-color: var(--color-red);
 }
 
 @media (hover: hover) {
   .guide-nav a:hover {
-    color: var(--color-on-dark);
+    color: var(--studio-headline);
     text-decoration-line: underline;
   }
 }
 
 .guide-nav a:focus-visible {
-  outline: 2px solid var(--color-on-dark);
+  outline: 2px solid var(--studio-headline);
   outline-offset: 2px;
   border-radius: var(--radius-xs);
 }
@@ -327,7 +325,7 @@
   font-weight: 600;
   color: var(--studio-headline);
   text-decoration: underline;
-  text-decoration-color: var(--home-accent);
+  text-decoration-color: var(--color-red);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.3em;
 }
@@ -468,7 +466,7 @@
   line-height: 1.4;
   color: var(--studio-headline);
   text-decoration: underline;
-  text-decoration-color: var(--home-accent);
+  text-decoration-color: var(--color-red);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.3em;
 }
@@ -565,13 +563,13 @@
   color: var(--studio-headline);
   text-decoration: underline;
   text-decoration-thickness: 2px;
-  text-decoration-color: var(--home-accent);
+  text-decoration-color: var(--color-red);
   text-underline-offset: 0.2em;
 }
 
 @media (hover: hover) {
   .guide-text a:hover {
-    color: var(--home-accent);
+    text-decoration-thickness: 3px;
   }
 }
 
@@ -663,9 +661,9 @@
 }
 
 .callout {
-  /* One accent line for every tone, as Wise's; a warning also says so in
+  /* One red line for every tone, as Wise's; a warning also says so in
      words (Callout.astro). */
-  --tone: var(--studio-dot);
+  --tone: var(--color-red);
 }
 
 .callout > * + * {
@@ -767,5 +765,5 @@
 }
 
 .topic-head__dot {
-  color: var(--studio-dot);
+  color: var(--color-red);
 }

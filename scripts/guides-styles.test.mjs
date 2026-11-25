@@ -29,7 +29,7 @@ test('guides.css: the brand colour is an underline, not a wash', () => {
   // No tinted panels, no coloured bullets, no red text: links and tags are
   // ink with the accent under them.
   assert.ok(!css.includes('var(--color-rose)'))
-  assert.match(css, /\.guide-text a \{[^}]*color: var\(--studio-headline\)[^}]*text-decoration-color: var\(--home-accent\)/)
+  assert.match(css, /\.guide-text a \{[^}]*color: var\(--studio-headline\)[^}]*text-decoration-color: var\(--color-red\)/)
   assert.ok(!/li::marker \{[^}]*--studio-dot/.test(css))
 })
 
@@ -46,4 +46,22 @@ test('guides.css: a question keeps its own gap above the answer', () => {
 
 test('guides.css: "More guides" is as wide as the card rows, not the article head', () => {
   assert.match(css, /\.guide-more \{[^}]*inline-size: min\(71\.75rem, 100% - 2\.5rem\)/)
+})
+
+test('guides.css: one red, the brand red of the wordmark', () => {
+  // Every red on the guide pages is --color-red (the "SG" of the logo). No
+  // ember, no second accent token, and never as a text colour: as a line it
+  // clears 3:1 in both themes, as text it would not in dark.
+  assert.ok(!/ember|--home-accent|--studio-dot/.test(css))
+  // The one red glyph is the large full stop after a topic title.
+  const redText = [...css.matchAll(/([^{}]+)\{[^{}]*\n  color: var\(--color-red\)/g)].map((m) => m[1].trim())
+  assert.deepEqual(redText, ['.topic-head__dot'])
+  assert.ok(css.match(/var\(--color-red\)/g).length >= 6)
+})
+
+test('guides.css: the topic bar is the page\'s own ground with a red marker', () => {
+  const bar = css.match(/\n\.guide-nav \{[^}]*\}/)[0]
+  assert.ok(!bar.includes('background'))
+  assert.match(bar, /border-block: 1px solid var\(--studio-rule\)/)
+  assert.match(css, /\.guide-nav a\[aria-current='page'\],\s*\.guide-nav a\.is-within \{[^}]*text-decoration-color: var\(--color-red\)/)
 })
