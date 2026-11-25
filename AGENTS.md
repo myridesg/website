@@ -50,7 +50,9 @@ src/
   lib/          home-content.ts (every home page string), faq-items.ts, seo.ts
   scripts/      client modules; scroll-progress.ts drives the home page motion
   assets/       images processed by astro:assets
-  styles/       global.css — Tailwind entry + @theme tokens
+  styles/       global.css — Tailwind entry + @theme tokens, incl. the one list of
+                spacing (--space-*, --section-pad), type roles (--type-*) and cards;
+                a line on top means "read", a flat card (no shadow) means "press"
                 studio.css — what home and feature pages share (wall, floor, finale)
                 home.css · feature.css — each imports studio.css first
   consts.ts     site config, store URLs, nav
