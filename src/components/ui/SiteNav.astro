@@ -236,6 +236,11 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     background: var(--guide-bar);
   }
 
+  /* The site's red focus ring would vanish on the red bar. */
+  :global(:root[data-header='deep']) .site-header :global(:focus-visible) {
+    outline-color: var(--color-on-dark);
+  }
+
   :global(:root[data-header='deep']) .site-header :global(.theme-toggle) {
     color: var(--bar-ink);
   }

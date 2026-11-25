@@ -178,9 +178,9 @@
 .promise__line {
   margin-top: clamp(0.875rem, 0.5rem + 1.2vw, 1.75rem);
   max-inline-size: 19.5em;
-  font-size: var(--type-lead);
+  font-size: clamp(0.96875rem, 0.85rem + 0.45vw, 1.3125rem);
   font-weight: 500;
-  line-height: 1.5;
+  line-height: 1.4;
   color: var(--studio-text);
 }
 
@@ -1125,6 +1125,13 @@
 }
 
 @media (width >= 64rem) {
+  /* The one section with its own top on a laptop: tighter than the shared
+     section padding, so the headline, the bike and its tags share one
+     screen; see --fit on .bike__frame. */
+  .never {
+    padding-block-start: clamp(3rem, 1rem + 3vw, 4.5rem);
+  }
+
   .bike {
     margin-block-start: 0.75rem;
   }
@@ -1369,10 +1376,8 @@
   .bike__frame {
     /* As large as stays sharp, and no larger than lets the headline, the
        bike with its callouts and the row of tags share one laptop screen
-       under the slim header (--fit: what the rest of the part takes,
-       measured when the part's top padding was 1rem + 3vw; the one
-       section padding is taller, so the difference comes off the bike). */
-    --fit: calc(28.5rem + var(--section-pad) - clamp(3rem, 1rem + 3vw, 4.5rem));
+       under the slim header (--fit: what the rest of the part takes). */
+    --fit: 28.5rem;
     --bw: min(62cqi, clamp(520px, (100svh - var(--fit)) * 1.6, 680px));
     --by: 0.75rem;
     /* Down to the oil change label's foot, under the bike, and a breath

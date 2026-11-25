@@ -40,7 +40,7 @@ test('tidy: text takes its size from a role', () => {
     assert.match(rule(css, sel), /font-size: var\(--type-label\);/, sel)
   for (const [css, sel] of [[home, '.soon__line'], [home, '.costs__line'], [home, '.history__line'], [feature, '.feature-text'], [feature, '.feature-point__body'], [feature, '.feature-step__body'], [feature, '.feature-related__line']])
     assert.match(rule(css, sel), /font-size: var\(--type-body\);/, sel)
-  for (const [css, sel] of [[home, '.promise__line'], [home, '.never__line'], [studio, '.faq__text']])
+  for (const [css, sel] of [[home, '.never__line'], [studio, '.faq__text']])
     assert.match(rule(css, sel), /font-size: var\(--type-lead\);/, sel)
 })
 
@@ -62,4 +62,23 @@ test('tidy: guides and reading pages hold no spacing or radius of their own', ()
     assert.ok(!/border-radius: \d/.test(css.replace(/border-radius: (50%|2px|0);/g, '')), `${path}: radius comes from a token`)
     assert.ok(!/(^|\s)gap: clamp\(/m.test(css), `${path}: gaps come from the ladder`)
   }
+})
+
+test('tidy (review): the home hero line and the bike stay as they were', () => {
+  const home = read('src/styles/home.css')
+  // The hero (.promise) is frozen: its line keeps its own size on phones.
+  assert.match(rule(home, '.promise__line'), /font-size: clamp\(0\.96875rem, 0\.85rem \+ 0\.45vw, 1\.3125rem\);/)
+  // The bike keeps its size; its part keeps the tighter laptop top so the
+  // headline, bike and tags still share one laptop screen.
+  assert.match(home, /--fit: 28\.5rem;/)
+  assert.match(home, /\.never \{\n    padding-block-start: clamp\(3rem, 1rem \+ 3vw, 4\.5rem\);/)
+})
+
+test('tidy (review): the guides red bar has a white focus ring', () => {
+  const nav = read('src/components/ui/SiteNav.astro')
+  assert.match(nav, /:global\(:root\[data-header='deep'\]\) \.site-header :global\(:focus-visible\)[^{]*\{[^}]*outline-color: var\(--color-on-dark\);/)
+})
+
+test('tidy (review): the reading panel is a flat card', () => {
+  assert.ok(!/box-shadow/.test(rule(read('src/styles/reading.css'), '.reading__panel')))
 })
