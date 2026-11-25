@@ -108,6 +108,13 @@ names kept as aliases for branches in review: do not use them in new work. The
 drawings of the app (`components/ui/app/`, the `--app-*` tokens) keep the app's
 own colours, including its deep header red.
 
+**One named exception: the guides header.** On `/guides/`, `/guides/topic/*`
+and `/guides/<slug>/` (BaseLayout `headerTone="deep"`) the site header stands on
+the app's deep header red, `--guide-bar: #9b0f06`, with the topic bar under it
+on `--guide-bar-low: #7d0c05`. It is a surface colour only: never text, never
+on any other page, declared once in `src/styles/guides.css`.
+`scripts/one-red.test.mjs` holds it to that.
+
 **5. `src/content/` is vendored.** It mirrors `@myridesg/{domain,data}` from the
 monorepo. Keep it in sync; do not refactor it, and do not put presentation
 there.

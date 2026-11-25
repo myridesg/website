@@ -212,6 +212,39 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     background: var(--color-paper);
   }
 
+  /* ── The guides' deep red bar ──────────────────────────────────────────
+     Guides pages only (<html data-header="deep">, set by BaseLayout's
+     headerTone): the bar stands on the app's header red at rest and when
+     scrolled, in both themes, with white type, a white "SG" and current
+     marker, and a white "Get the app" with red type. The phone menu sheet
+     under it keeps the page's own ground and ink. --guide-bar is declared
+     in guides.css. */
+  :global(:root[data-header='deep']) .site-header {
+    --bar-ink: var(--color-on-dark);
+    --bar-label: --alpha(var(--color-on-dark) / 82%);
+    --bar-sg: var(--color-on-dark);
+    --bar-cta-bg: var(--color-on-dark);
+    --bar-cta-ink: var(--guide-bar);
+    --bar-icon-ring: --alpha(var(--color-on-dark) / 30%);
+    --bar-hover: --alpha(var(--color-on-dark) / 14%);
+
+    background: var(--guide-bar);
+  }
+
+  :global(:root[data-header='deep']) .site-header[data-scrolled],
+  :global(:root[data-header='deep']) .site-header:has(.site-menu[open]) {
+    background: var(--guide-bar);
+  }
+
+  :global(:root[data-header='deep']) .site-header :global(.theme-toggle) {
+    color: var(--bar-ink);
+  }
+
+  :global(:root[data-header='deep']) .site-header :global(.theme-toggle:hover),
+  :global(:root[data-header='deep']) .site-menu > summary:hover {
+    background: var(--bar-hover);
+  }
+
   .site-header__bar {
     display: flex;
     align-items: center;

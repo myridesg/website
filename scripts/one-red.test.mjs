@@ -74,3 +74,12 @@ test('one red: small red text turns to the foreground where red would not pass',
   assert.match(global, /\.bg-soft \.text-red,\s*\.bg-rose \.text-red \{\s*color: var\(--color-ink\);/)
   assert.ok(!/need__due \{[^}]*color: var\(--(home-accent|color-red)\)/.test(read('src/styles/home.css')))
 })
+
+test('one red: the deep red exists once, as the guides header surface only', () => {
+  const uses = files('src')
+    // The drawings of the app keep the app's own colours, its header red included.
+    .filter((path) => !path.includes('/ui/app/'))
+    .flatMap((path) => read(path).split('\n').filter((l) => /#9b0f06|#7d0c05/i.test(l)).map(() => path))
+  assert.deepEqual([...new Set(uses)], ['src/styles/guides.css'])
+  assert.ok(contrast('#ffffff', '#9b0f06') >= 7)
+})

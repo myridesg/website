@@ -229,6 +229,17 @@
   padding-block: clamp(2rem, 1.25rem + 2.5vw, 3.5rem) var(--section-pad);
 }
 
+/* ── The deep red header ────────────────────────────────────────────────────
+   The guides pages only (BaseLayout headerTone="deep"): the site header sits
+   on the app's own home-header red (homeHeader.surface in myridesg-v2), the
+   topic bar under it a step deeper. The one exception to the site's one red:
+   a surface, never text, never anywhere else. White on #9b0f06 is 8.5:1.
+   SiteNav.astro reads --guide-bar; the same in both themes. */
+:root[data-header='deep'] {
+  --guide-bar: #9b0f06;
+  --guide-bar-low: #7d0c05;
+}
+
 /* ── Topic bar ──────────────────────────────────────────────────────────── */
 
 .guide-nav {
@@ -285,6 +296,39 @@
   outline: 2px solid var(--studio-headline);
   outline-offset: 2px;
   border-radius: var(--radius-xs);
+}
+
+/* Under the deep red header: the deeper red, white type, a white rule under
+   where you are. */
+:root[data-header='deep'] .guide-nav {
+  border-block: 0;
+  background: var(--guide-bar-low);
+}
+
+:root[data-header='deep'] .guide-nav a {
+  color: --alpha(var(--color-on-dark) / 82%);
+  text-decoration-color: --alpha(var(--color-on-dark) / 60%);
+}
+
+:root[data-header='deep'] .guide-nav a.guide-nav__home,
+:root[data-header='deep'] .guide-nav a[aria-current='page'],
+:root[data-header='deep'] .guide-nav a.is-within {
+  color: var(--color-on-dark);
+}
+
+:root[data-header='deep'] .guide-nav a[aria-current='page'],
+:root[data-header='deep'] .guide-nav a.is-within {
+  text-decoration-color: var(--color-on-dark);
+}
+
+@media (hover: hover) {
+  :root[data-header='deep'] .guide-nav a:hover {
+    color: var(--color-on-dark);
+  }
+}
+
+:root[data-header='deep'] .guide-nav a:focus-visible {
+  outline-color: var(--color-on-dark);
 }
 
 /* ── Guides home ────────────────────────────────────────────────────────── */

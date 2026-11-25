@@ -143,3 +143,10 @@ test('built page: a table is label and value rows in a frame', () => {
   assert.match(table, /<dd>Honda Wave, Yamaha Y15ZR/)
   assert.match(html, /<aside class="guide-related"[\s\S]*?Related guides[\s\S]*?<a href="\/guides\/motorcycle-chain-maintenance-singapore\/"/)
 })
+
+test('built page: guides pages ask for the deep header, and only they do', () => {
+  for (const page of ['guides/index.html', 'guides/topic/maintenance/index.html', 'guides/honda-cb400-problems/index.html'])
+    assert.match(read(`dist-guides/${page}`), /<html[^>]* data-header="deep"/, page)
+  for (const page of ['index.html', 'support/index.html', 'rider-tools/index.html'])
+    assert.ok(!/<html[^>]* data-header=/.test(read(`dist-guides/${page}`)), page)
+})
