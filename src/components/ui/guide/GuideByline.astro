@@ -1,12 +1,11 @@
 ---
-import { Image } from 'astro:assets'
-import appIcon from '@/assets/home/app-icon.png'
 import { readTimeLabel } from '@/lib/guides'
 
 /**
- * Who wrote it and when, as Wise sets it: a round picture, the name in bold,
- * one quiet line under it. The picture is the app's icon: the guides carry
- * no author portraits.
+ * Who wrote it and when: the name in bold, one quiet line under it. Wise
+ * leads this with the author's photograph; the guides carry no portraits, and
+ * a stand-in repeated on every card is noise, so there is no picture until
+ * there are real ones.
  */
 interface Props {
   name: string | null
@@ -26,9 +25,7 @@ const showUpdated = updatedText !== null && updatedText !== publishedText
 ---
 
 <div class={`guide-byline guide-byline--${size}`}>
-  <Image src={appIcon} alt="" width={96} height={96} class="guide-byline__pic" loading="lazy" />
-  <div class="guide-byline__text">
-    <span class="guide-byline__name">{name ?? 'MyRideSG'}</span>
+  <span class="guide-byline__name">{name ?? 'MyRideSG'}</span>
     <span class="guide-byline__meta">
       <time datetime={published.toISOString()}>{publishedText}</time>
       {showUpdated && updated && (
@@ -38,5 +35,4 @@ const showUpdated = updatedText !== null && updatedText !== publishedText
       )}
       {' · '}{readTimeLabel(readMinutes)}
     </span>
-  </div>
 </div>

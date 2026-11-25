@@ -18,8 +18,19 @@ test('guides.css: the large card is the grid\'s decision, not the card\'s class'
   assert.ok(!css.includes('.guide-card--feature .guide-card__title'))
 })
 
-test('guides.css: the download panel\'s links keep a visible focus ring', () => {
-  assert.match(css, /\.guide-text \.guide-cta a:focus-visible \{[^}]*outline-color: var\(--color-on-dark\)/)
+test('guides.css: the download prompt is a centred line, not a dark card', () => {
+  const block = css.match(/\n\.guide-cta \{[^}]*\}/)[0]
+  assert.ok(!block.includes('--color-black'))
+  assert.ok(!block.includes('border-radius'))
+  assert.match(block, /text-align: center/)
+})
+
+test('guides.css: the brand colour is an underline, not a wash', () => {
+  // No tinted panels, no coloured bullets, no red text: links and tags are
+  // ink with the accent under them.
+  assert.ok(!css.includes('var(--color-rose)'))
+  assert.match(css, /\.guide-text a \{[^}]*color: var\(--studio-headline\)[^}]*text-decoration-color: var\(--home-accent\)/)
+  assert.ok(!/li::marker \{[^}]*--studio-dot/.test(css))
 })
 
 test('test:guides builds into its own folder, so fixtures never reach dist/', () => {

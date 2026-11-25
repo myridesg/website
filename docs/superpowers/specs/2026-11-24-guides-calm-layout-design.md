@@ -150,24 +150,35 @@ one JSON-LD graph as a `FAQPage`; `FaqBlock` stops emitting a second
 
 ## Colour and theme
 
-Revised 25 Nov 2026 after the owner found the first build "grey and white".
-Wise's blog was measured for where its colour sits; the same five rules are
-applied with our own palette (`global.css`; nothing new, `AGENTS.md` rule 4):
+Revised twice on 25 Nov 2026. The first build was "grey and white"; a second
+pass washed the pages in the brand's rose and red, which the owner rejected as
+template-looking. What stands, taken from where Wise's blog puts its colour
+and using our own palette only (`global.css`; `AGENTS.md` rule 4):
 
 | Rule (Wise) | Ours |
 |---|---|
-| Colour in the frame: header and topic bar in the brand's dark colour | Topic bar on `--color-black`, white links, the current topic underlined in `--color-ember-on-dark` |
-| Tints carry the brand hue, not a neutral grey | Picture panels and the contents box's header on `--color-rose` |
-| Links and tags in the brand's dark colour | `--home-accent` (brand red on light, the lightened ember on dark): links in the text, topic tags, "See all", a card's title on hover |
-| One bright accent for markers | `--studio-dot` (ember): list bullets, the callout's line (every tone), the full stop after a topic page's h1 |
+| Colour in the frame: the topic bar in the brand's dark colour | Topic bar on `--color-black`, white links, the current topic underlined in `--color-ember-on-dark` |
+| Links and tags are dark text, underlined | Ink (`--studio-headline`) with a 2px underline in `--home-accent` (brand red on light, the lightened ember on dark): links in the text, topic tags, "See all", a card's title on hover |
+| One bright accent for markers | `--studio-dot` (ember): the callout's line (every tone) and the full stop after a topic page's h1. Bullets stay grey. |
+| Tints are quiet | The contents box's header on `--color-soft` |
 | The reading column stays white | Page ground `--color-paper`; text `--studio-text`; headings `--studio-headline`; quiet text `--studio-note`; hairlines `--studio-rule` |
 
-Contrast, measured: red on white 8.5:1, red on rose 7.2:1, body text on white
-11.0:1, quiet text on rose 5.5:1. Ember is 4.85:1 on white, so it is used for
-dots and lines only, never for small text.
+**Picture panels are stand-ins.** Until guides carry photographs, a panel is
+the studio grey the objects were lit against (`--studio-wall-low`; the floor's
+grey in dark), deliberately neutral. A real picture replaces the panel and its
+colour (post-form plan, phase 2).
 
-Both themes come from the tokens' own `light-dark()` values. Links are red on
-the guide pages only; the rest of the site keeps ink links.
+Three components were redrawn after the same review, each taking Wise's own
+device in place of a template one:
+
+- **Byline:** name and one quiet line. No picture: Wise shows the author's
+  photograph, we have none, and a stand-in repeated on every card is noise.
+- **Download block (`cta`):** the note in bold ink over the store buttons,
+  centred in the column, no box (Wise's centred sign-up line). An authored
+  link is the header's black button.
+- **Lists:** grey bullets, not ember.
+
+Both themes come from the tokens' own `light-dark()` values.
 
 Other departures from the sections above, settled in the build: card titles
 are h2 on a topic page (straight under its h1) and h3 elsewhere; "More guides"

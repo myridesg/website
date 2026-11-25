@@ -25,6 +25,8 @@ test('built page: a card is one link with its picture, topic, title and read tim
   assert.match(card, /Read time \d+ minutes?/)
   assert.match(card, /Hidayah/)
   assert.match(card, /12 May 2026/)
+  // One picture per card: the cover. No author portrait until there are real ones.
+  assert.equal(card.match(/<img/g).length, 1)
 })
 
 const read = (path) => readFileSync(path, 'utf8')
@@ -131,6 +133,7 @@ test('built page: the download block keeps the note and the store links', () => 
   const block = guide('motorcycle-oil-change-singapore').match(/<aside class="guide-cta"[\s\S]*?<\/aside>/)[0]
   assert.match(block, /Log your oil change/)
   assert.match(block, /apps\.apple\.com|testflight\.apple\.com|play\.google\.com/)
+  assert.ok(!/guide-cta__art/.test(block), 'no decorative object in the prompt')
 })
 
 test('built page: a table is label and value rows in a frame', () => {

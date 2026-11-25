@@ -11,9 +11,7 @@
  *
  * An explicitly authored href is honoured as written.
  */
-import { Image } from 'astro:assets'
 import StoreButtons from '@/components/ui/StoreButtons.astro'
-import { OBJECTS, objectWidths } from '@/components/ui/feature/objects'
 
 interface Props {
   node: {
@@ -34,29 +32,15 @@ const isExternal = Boolean(href && /^https?:\/\//i.test(href))
 ---
 
 <aside class="guide-cta">
-  <div class="guide-cta__body">
-    {note && <p class="guide-cta__note">{note}</p>}
+  {note && <p class="guide-cta__note">{note}</p>}
 
-    {
-      href ? (
-        <a
-          href={href}
-          rel={isExternal ? 'noreferrer' : undefined}
-          class="guide-cta__button"
-        >
-          {label ?? 'Open MyRideSG'}
-        </a>
-      ) : (
-        <StoreButtons tone="light" />
-      )
-    }
-  </div>
-  <Image
-    src={OBJECTS.receipt.image}
-    alt=""
-    widths={objectWidths('receipt')}
-    sizes="9.5rem"
-    loading="lazy"
-    class="guide-cta__art"
-  />
+  {
+    href ? (
+      <a href={href} rel={isExternal ? 'noreferrer' : undefined} class="guide-cta__button">
+        {label ?? 'Open MyRideSG'}
+      </a>
+    ) : (
+      <StoreButtons center />
+    )
+  }
 </aside>
