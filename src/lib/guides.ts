@@ -76,16 +76,18 @@ export function anchorHeadings<T extends object>(
   blocks: T[],
 ): { blocks: T[]; contents: Array<{ id: string; text: string }> } {
   const contents: Array<{ id: string; text: string }> = []
-  const used = new Map<string, number>()
+  const used = new Set<string>()
   const out = blocks.map((block) => {
     const b = block as Record<string, any>
     if (b._type !== 'block' || b.style !== 'h2') return block
     const text = plainText([b]).trim()
     const base = slugify(text)
     if (!base) return block
-    const seen = (used.get(base) ?? 0) + 1
-    used.set(base, seen)
-    const id = seen === 1 ? base : `${base}-${seen}`
+    // "costs", then "costs-2", "costs-3"…, skipping any id a heading already
+    // took by its own words ("Costs 2").
+    let id = base
+    for (let n = 2; used.has(id); n++) id = `${base}-${n}`
+    used.add(id)
     contents.push({ id, text })
     return { ...block, anchor: id }
   })

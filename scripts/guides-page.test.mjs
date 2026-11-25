@@ -49,7 +49,10 @@ test('built page: the home has the topic bar, one section per topic, five cards 
 test('built page: a topic page lists all its guides with its own head', () => {
   const page = read('dist-guides/guides/topic/troubleshooting/index.html')
   assert.match(page, /<title>Bike troubleshooting guides for Singapore riders/)
-  assert.match(page, /<h1[^>]*>Bike troubleshooting<\/h1>/)
+  assert.match(page, /<h1[^>]*>Bike troubleshooting<span[^>]*aria-hidden="true"[^>]*>\.<\/span><\/h1>/)
+  // Cards sit straight under the h1 here, so their titles are h2s.
+  assert.ok(!/<h3 class="guide-card__title"/.test(page))
+  assert.equal(page.match(/<h2 class="guide-card__title"/g).length, 14)
   assert.match(page, />14 guides</)
   assert.equal(cards(page), 14)
   assert.match(page, /<a[^>]+aria-current="page"[^>]*>\s*Troubleshooting\s*<\/a>/)
@@ -108,6 +111,7 @@ test('built page: questions show their answers and sit in the one JSON-LD graph'
 test('built page: more guides are cards, and an unlisted guide is in no row', () => {
   const html = guide('honda-cb400-problems')
   assert.match(html, /<h2[^>]*>More guides<\/h2>/)
+  assert.equal(html.match(/<h3 class="guide-card__title"/g).length, 3)
   assert.equal(cards(html), 3)
   for (const slug of ['motorcycle-oil-change-singapore', 'honda-cb400-problems']) {
     assert.ok(!guide(slug).includes('/guides/fixture-long-values/'))

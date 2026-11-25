@@ -129,3 +129,10 @@ test('guideBreadcrumbs only links a topic page that exists', () => {
     { name: 'A guide' },
   ])
 })
+
+test('anchorHeadings never repeats an id, even when a heading already ends in a number', () => {
+  const { contents } = anchorHeadings([p('Costs', 'h2'), p('Costs', 'h2'), p('Costs 2', 'h2')])
+  const ids = contents.map((c) => c.id)
+  assert.equal(new Set(ids).size, 3)
+  assert.deepEqual(ids.slice(0, 2), ['costs', 'costs-2'])
+})

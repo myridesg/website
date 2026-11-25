@@ -150,10 +150,28 @@ one JSON-LD graph as a `FAQPage`; `FaqBlock` stops emitting a second
 
 ## Colour and theme
 
-Every colour is an existing token; both themes come from `light-dark()` as
-today. Page ground `--color-paper`; text `--studio-text`; headings
-`--studio-headline`; quiet text `--studio-note`; hairlines `--studio-rule`;
-tinted header `--color-soft`; covers `--studio-wall-low`.
+Revised 25 Nov 2026 after the owner found the first build "grey and white".
+Wise's blog was measured for where its colour sits; the same five rules are
+applied with our own palette (`global.css`; nothing new, `AGENTS.md` rule 4):
+
+| Rule (Wise) | Ours |
+|---|---|
+| Colour in the frame: header and topic bar in the brand's dark colour | Topic bar on `--color-black`, white links, the current topic underlined in `--color-ember-on-dark` |
+| Tints carry the brand hue, not a neutral grey | Picture panels and the contents box's header on `--color-rose` |
+| Links and tags in the brand's dark colour | `--home-accent` (brand red on light, the lightened ember on dark): links in the text, topic tags, "See all", a card's title on hover |
+| One bright accent for markers | `--studio-dot` (ember): list bullets, the callout's line (every tone), the full stop after a topic page's h1 |
+| The reading column stays white | Page ground `--color-paper`; text `--studio-text`; headings `--studio-headline`; quiet text `--studio-note`; hairlines `--studio-rule` |
+
+Contrast, measured: red on white 8.5:1, red on rose 7.2:1, body text on white
+11.0:1, quiet text on rose 5.5:1. Ember is 4.85:1 on white, so it is used for
+dots and lines only, never for small text.
+
+Both themes come from the tokens' own `light-dark()` values. Links are red on
+the guide pages only; the rest of the site keeps ink links.
+
+Other departures from the sections above, settled in the build: card titles
+are h2 on a topic page (straight under its h1) and h3 elsewhere; "More guides"
+is as wide as the list pages' card rows; card pictures are 14rem high.
 
 ## Not in this change
 

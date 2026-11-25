@@ -12,14 +12,16 @@ import GuideCard from './GuideCard.astro'
  */
 interface Props {
   guides: GuideEntry[]
+  /** The card titles' level; see GuideCard. */
+  heading?: 'h2' | 'h3'
 }
 
-const { guides } = Astro.props
+const { guides, heading } = Astro.props
 const leads = leadCount(guides.length)
 ---
 
 <div
   class:list={['guide-grid', `guide-grid--lead${leads}`, guides.length % 2 === 1 && 'guide-grid--odd']}
 >
-  {guides.map((guide, i) => <GuideCard guide={guide} feature={leads > 0 && i === 0} />)}
+  {guides.map((guide, i) => <GuideCard guide={guide} feature={leads > 0 && i === 0} heading={heading} />)}
 </div>

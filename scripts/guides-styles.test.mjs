@@ -27,3 +27,12 @@ test('test:guides builds into its own folder, so fixtures never reach dist/', ()
   assert.match(scripts['test:guides'], /--outDir dist-guides/)
   assert.match(readFileSync('.gitignore', 'utf8'), /^dist-guides\/$/m)
 })
+
+test('guides.css: a question keeps its own gap above the answer', () => {
+  // The rule that pulls text up under a heading must not reach the FAQ's h3.
+  assert.match(css, /\.guide-text > :is\(h2, h3\) \{\s*margin-block-end: -1rem/)
+})
+
+test('guides.css: "More guides" is as wide as the card rows, not the article head', () => {
+  assert.match(css, /\.guide-more \{[^}]*inline-size: min\(71\.75rem, 100% - 2\.5rem\)/)
+})

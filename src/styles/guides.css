@@ -28,9 +28,9 @@
   place-items: center;
   block-size: var(--cover-h);
   border-radius: var(--radius-lg);
-  /* The wall's grey in light; the floor's, a step lighter than the page, in
-     dark, where the wall would vanish into it. */
-  background: light-dark(var(--studio-wall-low), var(--studio-floor));
+  /* The brand's tinted panel (rose; ember-3 in dark): the picture is where
+     a guide's colour comes from, as a post's photo is on Wise. */
+  background: var(--color-rose);
 }
 
 .guide-cover--hero {
@@ -122,7 +122,7 @@
   font-size: var(--text-sm);
   font-weight: 600;
   line-height: 1.4;
-  color: var(--studio-headline);
+  color: var(--home-accent);
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
@@ -152,6 +152,7 @@
 
 @media (hover: hover) {
   .guide-card:hover .guide-card__title {
+    color: var(--home-accent);
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
@@ -246,7 +247,8 @@
 /* ── Topic bar ──────────────────────────────────────────────────────────── */
 
 .guide-nav {
-  border-block: 1px solid var(--studio-rule);
+  background: var(--color-black);
+  color: var(--color-on-dark);
 }
 
 .guide-nav__inner {
@@ -265,33 +267,39 @@
   min-block-size: 2.75rem;
   font-size: var(--text-md);
   font-weight: 500;
-  color: var(--studio-text);
+  color: rgb(255 255 255 / 0.78);
   text-decoration: none;
-  text-underline-offset: 0.35em;
+  text-decoration-color: var(--color-ember-on-dark);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.45em;
 }
 
 .guide-nav__home {
   font-size: var(--text-lg);
   font-weight: 700;
-  color: var(--studio-headline);
+}
+
+.guide-nav a.guide-nav__home,
+.guide-nav a[aria-current='page'],
+.guide-nav a.is-within {
+  color: var(--color-on-dark);
 }
 
 .guide-nav a[aria-current='page'],
 .guide-nav a.is-within {
   font-weight: 600;
-  color: var(--studio-headline);
-  text-decoration: underline;
+  text-decoration-line: underline;
 }
 
 @media (hover: hover) {
   .guide-nav a:hover {
-    color: var(--studio-headline);
-    text-decoration: underline;
+    color: var(--color-on-dark);
+    text-decoration-line: underline;
   }
 }
 
 .guide-nav a:focus-visible {
-  outline: 2px solid var(--studio-headline);
+  outline: 2px solid var(--color-on-dark);
   outline-offset: 2px;
   border-radius: var(--radius-xs);
 }
@@ -332,7 +340,7 @@
 .guides-head__note a,
 .guide-section__all {
   font-weight: 600;
-  color: var(--studio-headline);
+  color: var(--home-accent);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.25em;
@@ -464,11 +472,15 @@
   gap: 0.25rem 1rem;
 }
 
-.guide-head__tags a {
+.guide-head__tags a,
+.guide-head__tags span {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.75rem;
   font-size: var(--text-sm);
   font-weight: 600;
   line-height: 1.4;
-  color: var(--studio-headline);
+  color: var(--home-accent);
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
@@ -530,8 +542,9 @@
   color: var(--studio-headline);
 }
 
-/* A heading belongs to what follows it: pull the text up to 1rem. */
-.guide-text :is(h2, h3) {
+/* A heading belongs to what follows it: pull the text up to 1rem. (Only the
+   body's own headings: a question keeps its own gap above its answer.) */
+.guide-text > :is(h2, h3) {
   margin-block-end: -1rem;
 }
 
@@ -551,7 +564,8 @@
 }
 
 .guide-text li::marker {
-  color: var(--studio-headline);
+  color: var(--studio-dot);
+  font-weight: 700;
 }
 
 .guide-text strong {
@@ -561,10 +575,10 @@
 
 .guide-text a {
   font-weight: 600;
-  color: var(--studio-headline);
+  color: var(--home-accent);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-decoration-color: var(--studio-note);
+  text-decoration-color: currentColor;
   text-underline-offset: 0.2em;
 }
 
@@ -594,7 +608,7 @@
   margin: 0;
   padding: 1.125rem 1.5rem;
   border-block-end: 1px solid var(--studio-rule);
-  background: var(--color-soft);
+  background: var(--color-rose);
   font-size: var(--text-md);
   font-weight: 700;
   line-height: 1.5;
@@ -603,7 +617,13 @@
 
 .guide-contents ul {
   margin: 0;
-  padding: 1.25rem 1.5rem 1.5rem 2.75rem;
+  padding: 1rem 1.5rem 1.25rem 2.75rem;
+  gap: 0.125rem;
+}
+
+/* Each row is tall enough to tap; the bullet stays on the first line. */
+.guide-contents li {
+  padding-block: 0.375rem;
 }
 
 /* Questions: a heading, then the answer, all showing. */
@@ -630,7 +650,8 @@
 /* ── More guides ────────────────────────────────────────────────────────── */
 
 .guide-more {
-  max-inline-size: 71.75rem;
+  /* As wide as the card rows on the list pages, not the article's head. */
+  inline-size: min(71.75rem, 100% - 2.5rem);
   display: grid;
   gap: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
   padding-block: 0 clamp(4rem, 2.5rem + 5vw, 6.5rem);
@@ -655,14 +676,9 @@
   border-inline-start: 2px solid var(--tone);
 }
 
-.callout--info,
-.callout--success {
-  /* The numeral grey is too faint for a line that has to be seen; the
-     eyebrow grey is the darkest quiet tone the studio has. */
-  --tone: var(--studio-eyebrow);
-}
-
-.callout--warn {
+.callout {
+  /* One accent line for every tone, as Wise's; a warning also says so in
+     words (Callout.astro). */
   --tone: var(--studio-dot);
 }
 
@@ -791,4 +807,8 @@
   margin: 0 0 0.75rem;
   font-weight: 700;
   color: var(--studio-headline);
+}
+
+.topic-head__dot {
+  color: var(--studio-dot);
 }

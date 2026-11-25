@@ -77,7 +77,7 @@ const structuredData = [
     <div class="guides-wrap">
       <header class="topic-head">
         <div class="topic-head__copy">
-          <h1 class="topic-head__title">{group.title}</h1>
+          <h1 class="topic-head__title">{group.title}<span class="topic-head__dot" aria-hidden="true">.</span></h1>
           <p class="guides-head__lead">{group.intro}</p>
           <p class="topic-head__count">{count} {count === 1 ? 'guide' : 'guides'}</p>
         </div>
@@ -92,7 +92,7 @@ const structuredData = [
         />
       </header>
 
-      <GuideGrid guides={guides} />
+      <GuideGrid guides={guides} heading="h2" />
     </div>
 
     <FeatureAsk
