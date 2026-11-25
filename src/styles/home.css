@@ -1315,9 +1315,11 @@
   color: var(--studio-text);
 }
 
+/* Bold, in the headline's ink: small red text would not clear 4.5:1 on the
+   studio wall, and the red marker beside it already says "next". */
 .need[data-nearest] .need__due {
   font-weight: 700;
-  color: var(--home-accent);
+  color: var(--studio-headline);
 }
 
 /* A tablet held upright: the list is a column under the bike, not a
@@ -1666,9 +1668,10 @@
   --pillar-light-hi: #ffffff;
   --pillar-light: #e3e5e9;
   --pillar-light-lo: #b4b8c0;
-  --pillar-red-hi: color-mix(in oklab, var(--color-ember) 70%, #fff);
-  --pillar-red: color-mix(in oklab, var(--color-red) 60%, var(--color-ember));
-  --pillar-red-lo: color-mix(in oklab, var(--color-red) 75%, #000);
+  /* The red pillar's three faces: the one red, lit and in shade. */
+  --pillar-red-hi: color-mix(in oklab, var(--color-red) 70%, #fff);
+  --pillar-red: var(--color-red);
+  --pillar-red-lo: color-mix(in oklab, var(--color-red) 70%, #000);
 
   padding-block: clamp(3.5rem, 2rem + 5vw, 7rem);
   background: var(--color-paper);
@@ -2240,7 +2243,7 @@
   --pp-rule-soft: #edebe3;
   --pp-tile: #f4f2eb;
   --pp-stripe: #faf9f5;
-  --pp-ember: var(--color-ember);
+  --pp-ember: var(--color-red);
 
   container-type: inline-size;
 }

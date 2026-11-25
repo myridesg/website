@@ -34,13 +34,18 @@
   --color-paper: #ffffff;
   --color-soft: #f0f1f3;
   --color-rose: #f4e9e7;
-  --color-red: #9b0f06;
-  --color-ember: #d6321c;
+  /* THE red. One value, both themes: the app's brand red (brandEmber in
+     myridesg-v2/packages/tokens/src/colors.ts). It is a fill, a line, a dot
+     or large type anywhere (3.6:1 or better on every ground the site has);
+     as small text it passes only on plain white (4.85:1), so small red text
+     turns to the foreground elsewhere: see "Red as TEXT" below. */
+  --color-red: #d6321c;
 
-  /* Ember is too dark to read on --color-black. v2 lightens it to this on
-     every dark band (connectedCopy, connectedProof, toolList, finalCopy).
-     Named for the constraint so it doesn't get used on light surfaces. */
-  --color-ember-on-dark: #f57c67;
+  /* Old names, kept so branches still in review keep building. Not for new
+     work: use --color-red. --color-ember-on-dark was a lighter red for small
+     text on the black bands; that text is plain white now. */
+  --color-ember: var(--color-red);
+  --color-ember-on-dark: var(--color-on-dark);
 
   /* Text sitting on a PERMANENTLY dark or brand-coloured surface — the black
      feature bands, an ember button. Identical in both themes,
@@ -131,8 +136,6 @@
   --ramp-charcoal: #2c2321; /* card     · raised surface */
   --ramp-ink: #fafafa; /* foreground */
   --ramp-muted: #a7a1a0; /* muted foreground */
-  --ramp-red: #d33722; /* ember-9  · brand, readable on dark */
-  --ramp-ember: #e55540; /* ember-10 · interaction */
 }
 
 /* Applied when the OS prefers dark and the reader has not overridden it. */
@@ -149,10 +152,7 @@
 
     --color-ink: var(--ramp-ink);
     --color-muted: var(--ramp-muted);
-
-    --color-red: var(--ramp-red);
-    --color-ember: var(--ramp-ember);
-    /* --color-ember-on-dark is ember-11, identical in both modes. */
+    /* --color-red is the same in both themes. */
   }
 }
 
@@ -169,35 +169,33 @@
 
   --color-ink: var(--ramp-ink);
   --color-muted: var(--ramp-muted);
-
-  --color-red: var(--ramp-red);
-  --color-ember: var(--ramp-ember);
 }
 
-/* ── Red as TEXT on dark ground ──────────────────────────────────────────────
-   In dark mode --color-red lands on ember-9 #d33722, which measures 3.86:1 on
-   the dark paper (#171110) and 3.68:1 on the dark soft band (#201513) — under
-   the 4.5:1 AA bar for the small text that carries it (.eyebrow labels, red
-   links). A dark ground needs a lighter ink, so text takes the lightened ember
-   the black feature bands already use (7.08:1 on dark paper); that is
-   --color-ember-on-dark, named for exactly this constraint. Fills and rules
-   are untouched — bg-red/border-red keep the brand value, because a red block
-   is graphics, not body copy, and repainting surfaces that never failed would
-   silently change the brand. The two selectors mirror the dark mapping above:
-   the media query covers OS dark where no attribute was set, the attribute
-   rule covers the explicit choice and is listed after so it wins when both
-   match. These are unlayered, so they also out-rank the utilities in
-   @layer utilities without !important. */
+/* ── Red as TEXT ─────────────────────────────────────────────────────────────
+   The red is one value everywhere. As small text it clears the 4.5:1 AA bar
+   only on plain white (4.85:1): it is 3.85:1 on the dark page, 4.29:1 on the
+   soft band and 4.08:1 on rose. So where small red text would fall short it
+   takes the foreground colour instead, and red stays what it is good at: a
+   fill, a rule, a mark. bg-red/border-red are untouched. The dark selectors
+   mirror the theme mapping above: the media query covers OS dark with no
+   attribute set, the attribute rule covers the explicit choice and is listed
+   after so it wins when both match. Unlayered, so these out-rank the
+   utilities in @layer utilities without !important. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) .text-red,
   :root:not([data-theme='light']) .hover\:text-red:hover {
-    color: var(--color-ember-on-dark);
+    color: var(--color-ink);
   }
 }
 
 :root[data-theme='dark'] .text-red,
 :root[data-theme='dark'] .hover\:text-red:hover {
-  color: var(--color-ember-on-dark);
+  color: var(--color-ink);
+}
+
+.bg-soft .text-red,
+.bg-rose .text-red {
+  color: var(--color-ink);
 }
 
 /* Explicit light needs no token overrides — @theme already holds the light
@@ -361,7 +359,7 @@
 
   /* Keyboard focus must stay visible everywhere. */
   :focus-visible {
-    outline: 2px solid var(--color-ember);
+    outline: 2px solid var(--color-red);
     outline-offset: 2px;
   }
 
@@ -429,7 +427,7 @@
     font-size: 1.5rem;
     font-weight: 300;
     line-height: 1;
-    color: var(--color-ember);
+    color: var(--color-red);
     transition: transform 640ms cubic-bezier(0.37, 0, 0.63, 1);
   }
 

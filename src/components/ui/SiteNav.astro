@@ -625,7 +625,9 @@ const MOBILE_SECTIONS = NAV.map((item) =>
   }
 
   .site-menu__panel a[aria-current='page'] {
-    color: light-dark(var(--color-red), var(--color-ember-on-dark));
+    /* Red on the light panel (4.85:1); the foreground on the dark one, where
+       red text would not pass. */
+    color: light-dark(var(--color-red), var(--color-ink));
   }
 
   /* Entry: the panel drops a short way and each row follows a beat behind,
