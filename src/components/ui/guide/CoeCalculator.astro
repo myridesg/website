@@ -1,7 +1,7 @@
 ---
 /**
- * `coeCalculator` block from the Sanity article body. One instance, in the COE
- * guide.
+ * The COE renewal calculator: the hero of /motorcycle-coe-calculator/, and
+ * the `coeCalculator` block in the COE guide's Sanity body.
  *
  * v2's version is a React island (packages/ui/src/calculators/COECalculator.tsx).
  * React is not installed here and AGENTS.md rule 2 says an island has to earn
@@ -14,15 +14,20 @@
  * every fortnight and PQP every month, so a baked-in number is a stale claim the
  * moment it ships (AGENTS.md rule 6). The reader supplies the figure; this only
  * does the arithmetic on it, and says where the real number comes from.
+ *
+ * Drawn as a studio card (feature.css's .feature-card), with its styles here
+ * rather than in feature.css: the guide article does not load that file. The
+ * studio neutrals are read where the page defines them (.feature-page) and
+ * fall back to the same values where it does not.
  */
 ---
 
-<div class="my-8 rounded-md border border-ink/12 px-6 py-6" data-coe-calc>
-  <span class="eyebrow block text-muted">COE cost calculator</span>
+<div class="coe-calc my-8" data-coe-calc>
+  <p class="coe-calc__title">COE cost calculator</p>
 
-  <div class="mt-4 grid gap-4 sm:grid-cols-2">
-    <label class="block">
-      <span class="text-sm font-semibold text-ink">COE / PQP paid (S$)</span>
+  <div class="coe-calc__inputs">
+    <label class="coe-calc__field">
+      <span class="coe-calc__label">COE / PQP paid (S$)</span>
       <input
         type="number"
         inputmode="numeric"
@@ -30,15 +35,12 @@
         step="100"
         placeholder="e.g. 10000"
         data-coe-price
-        class:list={[
-          'mt-1.5 block w-full rounded-xs border border-ink/20 bg-paper px-3 py-2',
-          'text-md text-ink placeholder:text-ink/65',
-        ]}
+        class="coe-calc__input"
       />
     </label>
 
-    <label class="block">
-      <span class="text-sm font-semibold text-ink">Years of COE</span>
+    <label class="coe-calc__field">
+      <span class="coe-calc__label">Years of COE</span>
       <input
         type="number"
         inputmode="numeric"
@@ -47,33 +49,132 @@
         step="1"
         placeholder="e.g. 5"
         data-coe-years
-        class:list={[
-          'mt-1.5 block w-full rounded-xs border border-ink/20 bg-paper px-3 py-2',
-          'text-md text-ink placeholder:text-ink/65',
-        ]}
+        class="coe-calc__input"
       />
     </label>
   </div>
 
-  <div class="mt-5 grid gap-4 rounded-xs bg-soft px-4 py-4 sm:grid-cols-2">
+  <div class="coe-calc__results">
     <div>
-      <span class="eyebrow block text-ink/75">Per year</span>
-      <output data-coe-annual class="mt-1 block text-xl font-semibold text-ink">—</output>
+      <span class="coe-calc__label">Per year</span>
+      <output data-coe-annual class="coe-calc__sum">—</output>
     </div>
 
     <div>
-      <span class="eyebrow block text-ink/75">Per month</span>
-      <output data-coe-monthly class="mt-1 block text-xl font-semibold text-ink">—</output>
+      <span class="coe-calc__label">Per month</span>
+      <output data-coe-monthly class="coe-calc__sum">—</output>
     </div>
   </div>
 
-  {/* ink/75, not muted: this note sits on the bg-soft results band, where
-      muted is 4.31:1 — under AA. ink/75 is 6.6:1 light, 10:1 dark. */}
-  <p class="mt-4 text-sm leading-relaxed text-ink/75">
+  <p class="coe-calc__note">
     Straight-line cost of the premium only — it excludes road tax, insurance and
     servicing. Check LTA for the current PQP before you rely on a figure.
   </p>
 </div>
+
+<style>
+  .coe-calc {
+    --calc-headline: var(--studio-headline, light-dark(var(--color-black), var(--color-ink)));
+    --calc-text: var(--studio-text, light-dark(#3a3c42, #cfd1d6));
+    --calc-note: var(--studio-note, light-dark(#5a5d66, #9fa2aa));
+    --calc-rule: var(--studio-rule, light-dark(rgb(30 32 40 / 0.16), rgb(255 255 255 / 0.12)));
+    --calc-shadow-far: var(--studio-shadow-far, light-dark(rgb(30 32 40 / 0.2), rgb(0 0 0 / 0.55)));
+    --calc-shadow-near: var(--studio-shadow-near, light-dark(rgb(30 32 40 / 0.16), rgb(0 0 0 / 0.5)));
+
+    container: coe-calc / inline-size;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border: 1px solid var(--calc-rule);
+    border-radius: var(--radius-lg);
+    background: var(--color-paper);
+    box-shadow:
+      0 1.5rem 3rem -1.25rem var(--calc-shadow-far),
+      0 0.25rem 0.75rem var(--calc-shadow-near);
+  }
+
+  /* As .feature-label: small condensed capitals. */
+  .coe-calc__title {
+    margin: 0 0 clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--calc-headline);
+  }
+
+  .coe-calc__inputs,
+  .coe-calc__results {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .coe-calc__field {
+    display: grid;
+    row-gap: 0.5rem;
+  }
+
+  /* As .card-rows dt: spaced small capitals. */
+  .coe-calc__label {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--calc-note);
+  }
+
+  .coe-calc__input {
+    inline-size: 100%;
+    min-block-size: 3.25rem;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--calc-rule);
+    border-radius: var(--radius-sm);
+    background: var(--color-soft);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--calc-headline);
+  }
+
+  .coe-calc__input::placeholder {
+    font-weight: 500;
+    color: var(--calc-note);
+  }
+
+  /* The sums under a hairline, in the headline's heavy condensed figures. */
+  .coe-calc__results {
+    margin-top: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+    padding-top: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+    border-top: 1px solid var(--calc-rule);
+  }
+
+  .coe-calc__sum {
+    display: block;
+    margin-top: 0.375rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 1.75rem + 1.5vw, 3rem);
+    font-weight: 700;
+    line-height: 0.95;
+    font-variant-numeric: tabular-nums;
+    color: var(--calc-headline);
+  }
+
+  .coe-calc__note {
+    margin: clamp(1.25rem, 1rem + 0.8vw, 1.75rem) 0 0;
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    color: var(--calc-note);
+  }
+
+  @container coe-calc (width >= 18rem) {
+    .coe-calc__inputs,
+    .coe-calc__results {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
 
 <script>
   // Enhancement only. With JavaScript off the reader still sees the inputs, the

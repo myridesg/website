@@ -502,3 +502,76 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* ── Tool pages (rider-tools.astro, motorcycle-coe-calculator.astro) ──────
+   Built from the same parts, but with several worked examples in a row. A
+   .tool-band wrapper sets each part's ground so the bands still alternate
+   wall and paper, and --flip puts the card on the left for a zigzag. The
+   wrapper also carries the id the home page links to. */
+
+.tool-band--paper .feature-explain {
+  background: var(--color-paper);
+}
+
+.tool-band--paper .feature-explain::after {
+  content: none;
+}
+
+.tool-band--wall .feature-steps {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background:
+    radial-gradient(80% 60% at 50% 75%, var(--studio-glow) 0%, transparent 70%),
+    linear-gradient(
+      180deg,
+      var(--studio-wall-top) 0%,
+      var(--studio-wall-mid) 45%,
+      var(--studio-wall-low) 75%,
+      var(--studio-floor) 100%
+    );
+}
+
+@media (width >= 64rem) {
+  .tool-band--flip .feature-explain__copy {
+    order: 2;
+  }
+}
+
+/* A link closing a card: ink, underlined, as the related notes' links. */
+.card-link {
+  display: inline-block;
+  margin-top: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--studio-headline);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* The COE page's stage: the calculator itself, standing on the floor in
+   place of a phone, with a line under it on where the PQP comes from. */
+.coe-stage {
+  display: grid;
+  row-gap: 1rem;
+  inline-size: 26rem;
+  max-inline-size: 100%;
+}
+
+.coe-stage .coe-calc {
+  margin: 0;
+}
+
+.coe-stage__note {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--studio-note);
+}
+
+.coe-stage__note a {
+  font-weight: 600;
+  color: var(--studio-headline);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
