@@ -1,0 +1,38 @@
+---
+import { readTimeLabel } from '@/lib/guides'
+
+/**
+ * Who wrote it and when: the name in bold, one quiet line under it. Wise
+ * leads this with the author's photograph; the guides carry no portraits, and
+ * a stand-in repeated on every card is noise, so there is no picture until
+ * there are real ones.
+ */
+interface Props {
+  name: string | null
+  published: Date
+  /** Shown, in brackets, only when it falls on a different day. */
+  updated?: Date
+  readMinutes: number
+  size: 'article' | 'card'
+}
+
+const { name, published, updated, readMinutes, size } = Astro.props
+
+const dateFormat = new Intl.DateTimeFormat('en-SG', { day: 'numeric', month: 'long', year: 'numeric' })
+const publishedText = dateFormat.format(published)
+const updatedText = updated ? dateFormat.format(updated) : null
+const showUpdated = updatedText !== null && updatedText !== publishedText
+---
+
+<div class={`guide-byline guide-byline--${size}`}>
+  <span class="guide-byline__name">{name ?? 'MyRideSG'}</span>
+    <span class="guide-byline__meta">
+      <time datetime={published.toISOString()}>{publishedText}</time>
+      {showUpdated && updated && (
+        <>
+          {' '}(updated <time datetime={updated.toISOString()}>{updatedText}</time>)
+        </>
+      )}
+      {' · '}{readTimeLabel(readMinutes)}
+    </span>
+</div>

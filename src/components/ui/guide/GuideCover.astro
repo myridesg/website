@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets'
+import { OBJECTS, objectWidths, type ObjectKey } from '@/components/ui/feature/objects'
+
+/**
+ * One of the app's 3D objects, standing on a panel in the studio wall's grey:
+ * the picture at the top of a guide and on each of its cards. The same
+ * objects as the home page; no new art. Decorative, so `alt` is empty.
+ */
+interface Props {
+  cover: ObjectKey
+  size: 'hero' | 'feature' | 'card'
+  /** The picture at the top of the page is the largest: load it first. */
+  eager?: boolean
+}
+
+const { cover, size, eager = false } = Astro.props
+const { image, k } = OBJECTS[cover]
+---
+
+<div class={`guide-cover guide-cover--${size}`} style={`--k: ${k}`} aria-hidden="true">
+  <Image
+    src={image}
+    alt=""
+    widths={objectWidths(cover)}
+    sizes="(min-width: 64rem) 16rem, 10rem"
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
+    class="guide-cover__img"
+  />
+</div>

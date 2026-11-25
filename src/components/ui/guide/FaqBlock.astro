@@ -1,17 +1,15 @@
 ---
 /**
- * `faq` block from the Sanity article body.
+ * `faq` block from the Sanity article body: each question as a heading with
+ * its answer under it, all showing, as Wise's guides do. No accordion.
  *
- * Native <details>, styled by the `faq-item` utility in global.css. They
- * disclose instantly rather than sliding; the `+` to `x` rotation is the only
- * motion.
- *
- * Also emits FAQPage structured data, as the home page does: these guides exist
- * to be found, and it is the cleanest format for search and AI crawlers to
- * extract.
+ * The FAQPage structured data is not emitted here: a page has one JSON-LD
+ * graph, and guides/[slug].astro builds the FAQPage into it from
+ * faqItemsOf(), the same function that decides which questions show below.
  */
 import { PortableText } from 'astro-portabletext'
 import type { PortableTextProps } from 'astro-portabletext/types'
+import { faqItemsOf } from '@/lib/guides'
 
 interface FaqItem {
   question?: string
@@ -24,60 +22,25 @@ interface Props {
 
 const { node } = Astro.props
 
+// Only questions with an answer, so the page shows exactly what the FAQPage
+// data says.
+const answered = new Set(faqItemsOf([{ _type: 'faq', ...node }]).map((item) => item.q))
 const items = (node.items ?? []).filter((item): item is FaqItem & { question: string } =>
-  Boolean(item?.question),
+  Boolean(item?.question && answered.has(item.question)),
 )
-
-/**
- * Flattens Portable Text spans to a plain string for the JSON-LD answer.
- * schema.org wants text, and structured data that disagrees with the visible
- * answer is worse than none — so this reads the same nodes the markup renders
- * rather than a separately authored summary.
- */
-function toPlainText(value: unknown): string {
-  if (!Array.isArray(value)) return ''
-  return value
-    .map((block: any) =>
-      block?._type === 'block' && Array.isArray(block.children)
-        ? block.children.map((child: any) => child?.text ?? '').join('')
-        : '',
-    )
-    .filter(Boolean)
-    .join('\n\n')
-}
-
-const answered = items
-  .map((item) => ({ question: item.question, text: toPlainText(item.answer) }))
-  .filter((item) => item.text)
-
-const faqSchema =
-  answered.length > 0
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: answered.map((item) => ({
-          '@type': 'Question',
-          name: item.question,
-          acceptedAnswer: { '@type': 'Answer', text: item.text },
-        })),
-      }
-    : null
 ---
 
 {
   items.length > 0 && (
-    <div class="my-8 border-t border-ink/12">
+    <section class="guide-faq">
       {items.map((item) => (
-        <details class="faq-item">
-          <summary>{item.question}</summary>
-
-          <div class="max-w-xl pb-5 [&>p:last-child]:mb-0">
+        <div class="guide-faq__item">
+          <h3>{item.question}</h3>
+          <div class="guide-faq__answer">
             <PortableText value={item.answer ?? []} />
           </div>
-        </details>
+        </div>
       ))}
-    </div>
+    </section>
   )
 }
-
-{faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />}

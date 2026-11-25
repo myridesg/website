@@ -1,0 +1,283 @@
+/* ============================================================================
+ * The reading pages: support, delete account, privacy, terms, and the 404
+ * (ProseLayout, PageHead). The guides have their own look: guides.css.
+ *
+ * The feature pages' look, carried on to long text: the opening is
+ * FeatureHero's own markup and classes (feature.css), and the reading column
+ * is a white page standing on the studio floor. Everything here is built from
+ * the studio tokens (studio.css), which <main class="feature-page"> carries.
+ * ==========================================================================*/
+
+@import './feature.css';
+
+/* ── Opening (PageHead.astro) ───────────────────────────────────────────── */
+
+/* Without a stage the opening ends sooner: the reading panel or the list is
+   what comes next, not a picture. */
+.page-head--plain .feature-hero__inner {
+  padding-block-end: clamp(2rem, 1.25rem + 2.5vw, 3.5rem);
+}
+
+/* The floor runs on under a plain opening into the band that follows, so
+   it keeps the wall's fall of light but not the glow or the darkened
+   corners: either would draw a seam where the two meet. */
+.page-head--plain {
+  background: linear-gradient(
+    180deg,
+    var(--studio-wall-top) 0%,
+    var(--studio-wall-mid) 45%,
+    var(--studio-wall-low) 75%,
+    var(--studio-floor) 100%
+  );
+}
+
+.page-head--plain::after {
+  display: none;
+}
+
+/* Guide titles run to seventy characters: a size down, and wider. */
+.page-head--long .feature-hero__title {
+  max-inline-size: 18em;
+  font-size: clamp(2.125rem, 1.3rem + 3.6vw, 4.5rem);
+  line-height: 0.92;
+}
+
+/* The 404's eyebrow, set as the breadcrumb is. */
+.page-head__eyebrow {
+  margin: 0 0 clamp(0.875rem, 0.5rem + 1vw, 1.5rem);
+  font-size: clamp(0.75rem, 0.6rem + 0.45vw, 0.875rem);
+  font-weight: 700;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--studio-eyebrow);
+}
+
+/* Author and dates: small, spaced, quiet. */
+.page-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem 1.25rem;
+  margin-top: clamp(1rem, 0.75rem + 0.8vw, 1.5rem);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--studio-note);
+}
+
+.page-head__more {
+  margin-top: clamp(1.25rem, 0.75rem + 1.4vw, 2rem);
+}
+
+.page-head__meta:empty,
+.page-head__more:empty {
+  display: none;
+}
+
+/* A line of links under the lead (the guides list). */
+.page-head__note {
+  max-inline-size: 36em;
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--studio-text);
+}
+
+/* Links on the wall: ink, underlined, never red. */
+.page-head__note a,
+.page-actions a:not(.page-button) {
+  font-weight: 600;
+  color: var(--studio-headline);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* The header's black button, at the size of a page action. */
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.75rem;
+}
+
+.page-button {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 3rem;
+  padding-inline: 1.5rem;
+  border-radius: 0.5rem;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 160ms ease;
+}
+
+.page-button:hover {
+  opacity: 0.86;
+}
+
+.page-button:focus-visible,
+.reading a:focus-visible,
+.page-head a:focus-visible {
+  outline: 2px solid var(--studio-headline);
+  outline-offset: 3px;
+}
+
+/* ── The reading column ─────────────────────────────────────────────────────
+   The floor the opening ends on, carried down, with the page standing on
+   it. */
+
+.reading {
+  --gutter: clamp(1.25rem, 5vw, 6rem);
+
+  /* The opening's gutter, inside the same 112rem frame. */
+  padding: 0 max(var(--gutter), (100% - 112rem) / 2 + var(--gutter)) clamp(3.5rem, 2rem + 5vw, 7rem);
+  background: var(--studio-floor);
+}
+
+/* The page itself: white, a hairline, the studio's soft shadow, as wide as
+   a comfortable line. Edge to edge on a phone, where a frame would only
+   cost reading width. */
+.reading__panel {
+  max-inline-size: 56rem;
+  padding: clamp(1.75rem, 1rem + 3vw, 4rem) clamp(1.25rem, 0.5rem + 4vw, 5rem);
+  border: 1px solid var(--studio-rule);
+  border-radius: var(--radius-lg);
+  background: var(--color-paper);
+  box-shadow:
+    0 1.5rem 3rem -1.25rem var(--studio-shadow-far),
+    0 0.25rem 0.75rem var(--studio-shadow-near);
+}
+
+@media (width < 40rem) {
+  .reading {
+    padding-inline: 0;
+  }
+
+  .reading__panel {
+    border-inline: 0;
+    border-radius: 0;
+  }
+}
+
+/* ── Prose ──────────────────────────────────────────────────────────────── */
+
+.prose-body > :first-child {
+  margin-top: 0;
+}
+
+.prose-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* Section heads in condensed capitals, as the feature pages' part titles,
+   a size for a column of text. */
+.prose-body h2 {
+  margin: clamp(2.5rem, 2rem + 1.5vw, 3.25rem) 0 0.875rem;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2.125rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--studio-headline);
+}
+
+.prose-body h3 {
+  margin: 2rem 0 0.5rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0;
+  color: var(--studio-headline);
+}
+
+.prose-body p,
+.prose-body ul,
+.prose-body ol {
+  margin: 0 0 1.125rem;
+  font-size: var(--text-md);
+  line-height: 1.7;
+  color: var(--studio-text);
+}
+
+.prose-body ul,
+.prose-body ol {
+  padding-left: 1.375rem;
+}
+
+@media (width >= 64rem) {
+  .prose-body p,
+  .prose-body ul,
+  .prose-body ol {
+    font-size: var(--text-lg);
+  }
+}
+
+.prose-body ul {
+  list-style: disc;
+}
+
+.prose-body ol {
+  list-style: decimal;
+}
+
+.prose-body li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+/* The headline's ember dot leads each bullet. */
+.prose-body ul > li::marker {
+  color: var(--studio-dot);
+}
+
+.prose-body ol > li::marker {
+  font-weight: 700;
+  color: var(--studio-note);
+}
+
+.prose-body strong {
+  font-weight: 700;
+  color: var(--studio-headline);
+}
+
+.prose-body a {
+  font-weight: 600;
+  color: var(--studio-headline);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--studio-note);
+  text-underline-offset: 0.2em;
+}
+
+@media (hover: hover) {
+  .prose-body a:hover {
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* ── 404 ────────────────────────────────────────────────────────────────── */
+
+/* The opening is the whole page: tall enough that the footer does not
+   ride up under it. */
+.page-head--lost .feature-hero__inner {
+  min-block-size: min(46rem, 78svh);
+  align-content: center;
+}
+
+@media (width >= 64rem) {
+  .page-head--lost .feature-hero__inner {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+}
+
+.page-head--lost .feature-hero__objects {
+  --icon: clamp(7rem, 5rem + 8vw, 13rem);
+}

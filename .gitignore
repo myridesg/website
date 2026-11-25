@@ -1,5 +1,7 @@
 # build output
 dist/
+# the fixture build of pnpm test:guides: never deploy it
+dist-guides/
 .astro/
 
 # dependencies

@@ -6,8 +6,8 @@
  * A <dl> rather than a <table>: every row in the dataset is a single
  * label/value pair, which is a description list, not tabular data.
  *
- * The wrapper scrolls on its own rather than letting a long value widen the
- * page — a guide read on a phone must never scroll horizontally as a whole.
+ * Label and value rows in the frame Wise puts round its tables (guides.css):
+ * stacked on a phone, side by side where the column has room.
  */
 interface Row {
   label?: string
@@ -29,17 +29,12 @@ const rows = (node.rows ?? []).filter(
 
 {
   rows.length > 0 && (
-    <div class="my-7 overflow-x-auto rounded-xs border border-ink/12">
-      <dl class="min-w-[20rem]">
-        {rows.map((row, i) => (
-          <div
-            class:list={[
-              'grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-4 px-4 py-3',
-              i > 0 && 'border-t border-ink/12',
-            ]}
-          >
-            <dt class="eyebrow self-center text-muted">{row.label}</dt>
-            <dd class="text-md leading-relaxed text-ink">{row.value}</dd>
+    <div class="spec-rows">
+      <dl>
+        {rows.map((row) => (
+          <div>
+            <dt>{row.label}</dt>
+            <dd>{row.value}</dd>
           </div>
         ))}
       </dl>

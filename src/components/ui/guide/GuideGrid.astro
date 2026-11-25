@@ -1,0 +1,27 @@
+---
+import { leadCount, type GuideEntry } from '@/lib/guides'
+import GuideCard from './GuideCard.astro'
+
+/**
+ * Cards in rows, so that no card ever sits alone in the last row. Three wide
+ * from 56rem: when the count leaves one over, the first card spans the row;
+ * when it leaves two, the first two share a row, two to one (leadCount()).
+ * Two wide from 40rem: an odd count puts the first card on a row of its own.
+ * One column below that. The first card of a grid with a lead is the large
+ * one.
+ */
+interface Props {
+  guides: GuideEntry[]
+  /** The card titles' level; see GuideCard. */
+  heading?: 'h2' | 'h3'
+}
+
+const { guides, heading } = Astro.props
+const leads = leadCount(guides.length)
+---
+
+<div
+  class:list={['guide-grid', `guide-grid--lead${leads}`, guides.length % 2 === 1 && 'guide-grid--odd']}
+>
+  {guides.map((guide, i) => <GuideCard guide={guide} feature={leads > 0 && i === 0} heading={heading} />)}
+</div>

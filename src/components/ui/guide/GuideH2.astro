@@ -1,0 +1,14 @@
+---
+import type { BlockProps } from 'astro-portabletext/types'
+
+/**
+ * An h2 in a guide's body. It carries the id that "In this guide" links to;
+ * anchorHeadings() (lib/guides.ts) put it on the block as `anchor`.
+ */
+type Props = BlockProps
+
+const { node } = Astro.props
+const { anchor } = node as typeof node & { anchor?: string }
+---
+
+<h2 id={anchor}><slot /></h2>

@@ -24,6 +24,9 @@ import {
   emptyContentRepository,
 } from '@/content/sanity/content-repository'
 import type { ContentRepository } from '@/content/entities'
+import type { ArticleDoc } from '@/content/sanity/mappers'
+import { readFileSync } from 'node:fs'
+import { fixtureContentRepository } from './content-fixture'
 
 /**
  * Shell environment first so CI can inject secrets without writing a file;
@@ -40,7 +43,13 @@ const dataset = env('SANITY_DATASET')
 /** Both are required; a project without a dataset cannot resolve a query. */
 export const isSanityConfigured = Boolean(projectId && dataset)
 
-export const contentRepo: ContentRepository = isSanityConfigured
+// Tests and local review only: build the guides from a JSON file instead of
+// Sanity. Never set in a deploy.
+const fixturePath = env('GUIDES_FIXTURE')
+
+export const contentRepo: ContentRepository = fixturePath
+  ? fixtureContentRepository(JSON.parse(readFileSync(fixturePath, 'utf8')) as ArticleDoc[])
+  : isSanityConfigured
   ? new SanityContentRepository(
       makeSanityClient({
         projectId: projectId!,
@@ -54,7 +63,9 @@ export const contentRepo: ContentRepository = isSanityConfigured
     )
   : emptyContentRepository
 
-if (!isSanityConfigured) {
+if (fixturePath) {
+  console.warn(`[content] GUIDES_FIXTURE is set — building guides from ${fixturePath}, not Sanity.`)
+} else if (!isSanityConfigured) {
   // Loud on purpose. An empty /guides that nobody notices in the build log is
   // how a site ships with its content silently missing.
   console.warn(

@@ -31,37 +31,16 @@ const note = node.note?.trim()
 const isExternal = Boolean(href && /^https?:\/\//i.test(href))
 ---
 
-<aside class="my-9 rounded-md bg-soft px-6 py-7">
-  {note && <p class="max-w-lg text-md leading-relaxed text-ink/75">{note}</p>}
+<aside class="guide-cta">
+  {note && <p class="guide-cta__note">{note}</p>}
 
   {
     href ? (
-      <a
-        href={href}
-        rel={isExternal ? 'noreferrer' : undefined}
-        class:list={[
-          'mt-5 inline-flex min-h-12 items-center rounded-pill bg-ember px-7',
-          // `!` beats ProseLayout's `.prose-body a`, which paints inline prose
-          // links red and underlines them. That rule is right for a link inside
-          // a sentence and wrong for a button.
-          'text-md font-semibold text-on-dark! no-underline! transition-opacity hover:opacity-85',
-        ]}
-      >
+      <a href={href} rel={isExternal ? 'noreferrer' : undefined} class="guide-cta__button">
         {label ?? 'Open MyRideSG'}
       </a>
     ) : (
-      <StoreButtons class="mt-5" />
+      <StoreButtons center />
     )
   }
 </aside>
-
-<style>
-  /* StoreButtons renders its own anchors, and ProseLayout's `.prose-body a`
-     would paint them red and underlined — correct for a link inside a sentence,
-     wrong for a download button. Scoped to this block, so prose links elsewhere
-     in the article keep their styling. */
-  aside :global(a) {
-    color: inherit;
-    text-decoration: none;
-  }
-</style>

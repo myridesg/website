@@ -25,6 +25,7 @@ import CtaBlock from './CtaBlock.astro'
 import SpecsTable from './SpecsTable.astro'
 import RelatedLinks from './RelatedLinks.astro'
 import CoeCalculator from './CoeCalculator.astro'
+import GuideH2 from './GuideH2.astro'
 
 interface Props {
   value: PortableTextProps['value']
@@ -32,9 +33,11 @@ interface Props {
 
 const { value } = Astro.props
 
-// Prose styling — h2/h3/p/ul/ol/li/strong/a — comes from `.prose-body` in
-// ProseLayout, so only the custom types need components.
+// Prose styling — h2/h3/p/ul/ol/li/strong/a — comes from `.guide-text` in
+// guides.css. Only the custom types need components, and the h2, which carries
+// the id the contents box links to.
 const components = {
+  block: { h2: GuideH2 },
   type: {
     callout: Callout,
     faq: FaqBlock,
