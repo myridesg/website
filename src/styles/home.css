@@ -2004,21 +2004,40 @@
   padding-inline: clamp(1.25rem, 5vw, 6rem);
 }
 
-/* The one centred part: a short beat between two left-led ones. */
+/* Every section starts at the left edge. */
 .sg__title {
-  justify-self: center;
-  text-align: center;
+  justify-self: start;
 }
 
 .sg__tools {
   display: grid;
-  justify-self: center;
-  inline-size: min(100%, 72rem);
+  justify-self: stretch;
+  inline-size: 100%;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2rem, 1rem + 3vw, 3rem) clamp(0.75rem, 3vw, 2rem);
+  gap: var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* Each tool is a link: one flat card, paper on the studio wall. */
+.sg__tool {
+  position: relative;
+  padding: var(--card-pad);
+  border-radius: var(--radius-card);
+  background: var(--studio-card);
+}
+
+/* On a phone two cards sit side by side: a step less padding and a
+   smaller object, or the object would not fit the card. */
+@media (width < 40rem) {
+  .sg {
+    --icon: 5.5rem;
+  }
+
+  .sg__tool {
+    padding: var(--space-4);
+  }
 }
 
 @media (width >= 48rem) {
@@ -2574,7 +2593,7 @@
   --next-art: 6.5rem;
   --next-panel: light-dark(rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.04));
   --next-badge: light-dark(rgb(30 32 40 / 0.07), rgb(255 255 255 / 0.08));
-  --soon-pad: 0.75rem;
+  --soon-pad: var(--card-pad);
 
   position: relative;
   isolation: isolate;
@@ -2611,7 +2630,7 @@
 .next__cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
+  gap: var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -2624,9 +2643,9 @@
 
   display: grid;
   grid-template-rows: auto 1fr;
-  row-gap: 0.75rem;
-  padding: var(--soon-pad);
-  border-radius: var(--radius-md);
+  row-gap: var(--space-5);
+  padding: var(--card-pad);
+  border-radius: var(--radius-card);
   background: var(--next-panel);
   overflow: clip;
 }
@@ -2756,7 +2775,7 @@
   display: grid;
   align-content: start;
   justify-items: start;
-  row-gap: 0.375rem;
+  row-gap: var(--space-2);
 }
 
 /* "In the works": a small neutral pill led by a half-filled disc. On a phone
@@ -2808,32 +2827,31 @@
   color: var(--studio-text);
 }
 
+/* Phones: two cards side by side, so a step less padding. */
+@media (width < 40rem) {
+  .next {
+    --soon-pad: var(--space-4);
+  }
+
+  .soon {
+    padding: var(--space-4);
+  }
+}
+
 /* Tablets: still two by two, roomier; the right-hand card of a row a beat
    after the left. */
 @media (width >= 40rem) {
   .next {
     --next-art: 9.5rem;
-    --soon-pad: clamp(1.25rem, 0.5rem + 2vw, 2rem);
-  }
-
-  .next__cards {
-    gap: clamp(0.75rem, 0.25rem + 1.25vw, 1.5rem);
   }
 
   .soon {
     --stagger: calc(var(--col) * 220ms);
-
-    row-gap: clamp(1rem, 0.5rem + 1vw, 1.5rem);
-    border-radius: var(--radius-3xl);
   }
 
   .soon__art--group {
     --tw: min(var(--next-art) * 1105 / 660, 34.5rem, 100cqi + var(--soon-pad));
     --ts: min(var(--tw) * 0.163, (100cqi - var(--tw)) / 2 + var(--soon-pad) * 0.3);
-  }
-
-  .soon__copy {
-    row-gap: 0.5rem;
   }
 
   .soon__badge {
@@ -2852,7 +2870,6 @@
 @media (width >= 68.75rem) {
   .next {
     --next-art: clamp(8rem, 11.5vw, 13.5rem);
-    --soon-pad: clamp(1.5rem, 0.5rem + 1.5vw, 2.5rem);
   }
 
   .next__cards {

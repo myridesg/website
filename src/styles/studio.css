@@ -71,6 +71,9 @@
   --studio-wall-mid: light-dark(#e4e6ea, #151111);
   --studio-wall-low: light-dark(#e8eaed, #191414);
   --studio-floor: light-dark(#eef0f2, #1d1817);
+  /* A card on the studio wall: paper in light; in dark, the ramp's raised
+     surface, since dark paper is the same near-black as the wall. */
+  --studio-card: light-dark(var(--color-paper), var(--ramp-charcoal));
   --studio-glow: light-dark(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.045));
   --studio-vignette: light-dark(rgb(20 22 30 / 0.14), rgb(0 0 0 / 0.45));
   --studio-horizon: light-dark(rgb(120 124 135 / 0.1), rgb(255 255 255 / 0.04));
@@ -115,17 +118,27 @@
 
 .tool {
   display: grid;
-  justify-items: center;
-  row-gap: clamp(1rem, 0.75rem + 0.8vw, 1.5rem);
-  padding: 0.5rem 0.25rem 0.75rem;
-  border-radius: var(--radius-lg);
-  text-align: center;
+  justify-items: start;
+  row-gap: var(--space-5);
+  text-align: left;
   text-decoration: none;
   color: var(--studio-headline);
   -webkit-tap-highlight-color: transparent;
 }
 
+/* The tile is a card; the link covers all of it. */
+.tool::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-card);
+}
+
 .tool:focus-visible {
+  outline: none;
+}
+
+.tool:focus-visible::after {
   outline: 2px solid var(--studio-headline);
   outline-offset: 4px;
 }
@@ -134,7 +147,7 @@
   position: relative;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-start;
   inline-size: calc(var(--icon) * var(--k) * var(--ratio));
   block-size: var(--icon);
 }

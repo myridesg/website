@@ -43,3 +43,15 @@ test('tidy: text takes its size from a role', () => {
   for (const [css, sel] of [[home, '.promise__line'], [home, '.never__line'], [studio, '.faq__text']])
     assert.match(rule(css, sel), /font-size: var\(--type-lead\);/, sel)
 })
+
+test('tidy: non-links get a line, links get one flat card, nothing gets a shadow', () => {
+  const feature = read('src/styles/feature.css'), home = read('src/styles/home.css')
+  assert.match(rule(feature, '.feature-step'), /border-top: 1px solid var\(--studio-rule\);/)
+  for (const [css, sel] of [[feature, '.feature-related__item'], [feature, '.feature-guides > .feature-point'], [home, '.sg__tool'], [home, '.soon']]) {
+    const r = rule(css, sel)
+    assert.match(r, /border-radius: var\(--radius-card\);/, sel)
+    assert.match(r, /padding: var\(--card-pad\);/, sel)
+  }
+  assert.ok(!/box-shadow/.test(rule(feature, '.feature-card')), 'example card is flat')
+  assert.ok(!/text-align: center|justify-self: center/.test(rule(home, '.sg__title')), 'tools headline starts at the left')
+})
