@@ -19,9 +19,8 @@
    which is what gives a move its weight; --home-ease-out is the plain
    deceleration for opacity and for things that should not bounce.
 
-   --home-accent is red for text and outlines: the brand red on light, the
-   lightened ember on dark, where the brand red is too dark to read. Fills
-   keep the brand red itself. */
+   --home-accent is the site's one red (--color-red, global.css), for fills,
+   rules and marks. Kept under this name for the parts that already use it. */
 .home-part,
 .feature-page {
   --home-ease: cubic-bezier(0.34, 1.32, 0.64, 1);
@@ -29,7 +28,7 @@
   --home-fast: 180ms;
   --home-base: 420ms;
   --home-slow: 900ms;
-  --home-accent: light-dark(var(--color-red), var(--color-ember-on-dark));
+  --home-accent: var(--color-red);
   /* The smallest text outside the app and passport drawings: spaced-caps
      labels such as "Sample data". */
   --home-label: var(--text-xs);
@@ -82,7 +81,7 @@
   --studio-eyebrow: light-dark(#4a4d55, #a9acb4);
   --studio-text: light-dark(#3a3c42, #cfd1d6);
   --studio-note: light-dark(#5a5d66, #9fa2aa);
-  --studio-dot: light-dark(var(--color-ember), var(--color-ember-on-dark));
+  --studio-dot: var(--color-red);
   /* Hairlines between rows, as in the questions. */
   --studio-rule: light-dark(rgb(30 32 40 / 0.16), rgb(255 255 255 / 0.12));
   /* Big quiet step numerals: 01, 02, 03. */
@@ -93,7 +92,7 @@
  * Part headlines (parts 2 to 8)
  *
  * Barlow Condensed 700 in capitals, tight, a step under part 1's h1 at every
- * width. No ember full stop: that is part 1's and part 9's alone.
+ * width. No red full stop: that is part 1's and part 9's alone.
  * ==========================================================================*/
 
 .home-title {
@@ -496,7 +495,7 @@
 }
 
 .ask__dot {
-  color: var(--color-ember-on-dark);
+  color: var(--color-red);
 }
 
 /* One quiet line under the buttons: smaller and greyer than either, so the

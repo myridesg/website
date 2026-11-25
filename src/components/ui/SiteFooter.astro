@@ -182,7 +182,7 @@ const year = new Date().getFullYear()
   }
 
   .site-footer__sg {
-    color: var(--color-ember-on-dark);
+    color: var(--color-red);
   }
 
   .site-footer__line {
@@ -196,11 +196,13 @@ const year = new Date().getFullYear()
     margin-top: 0.5rem;
   }
 
+  /* White with the red under it: small red text would not pass on black. */
   .site-footer__listed {
     font-weight: 700;
-    color: var(--color-ember-on-dark);
+    color: var(--color-on-dark);
     text-decoration: underline;
-    text-decoration-thickness: 1px;
+    text-decoration-color: var(--color-red);
+    text-decoration-thickness: 2px;
     text-underline-offset: 0.2em;
   }
 

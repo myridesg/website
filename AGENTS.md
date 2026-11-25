@@ -92,9 +92,16 @@ give the LCP image `loading="eager"` + `fetchpriority="high"`.
 **4. Brand comes from the monorepo.** Colours and fonts are lifted verbatim from
 `myridesg-v2/apps/web/app/(marketing)/` — Barlow + Barlow Condensed, and the
 nine-token palette declared on `.page` in `page.module.css`. They live in the
-`@theme` block of `src/styles/global.css`. Do not invent brand values. Note
-`--color-ember-on-dark` (`#f57c67`): ember is unreadable on black, so dark bands
-use the lightened value. Never use it on a light surface.
+`@theme` block of `src/styles/global.css`. Do not invent brand values.
+
+**The site has one red: `--color-red`, `#d6321c`**, the app's brand red
+(`brandEmber` in `myridesg-v2/packages/tokens`), the same value in both themes.
+Use it for fills, rules, marks and large type. As small text it passes AA only
+on plain white, so small red text elsewhere takes the foreground colour and the
+red goes under it as a line. `--color-ember` and `--color-ember-on-dark` are old
+names kept as aliases for branches in review: do not use them in new work. The
+drawings of the app (`components/ui/app/`, the `--app-*` tokens) keep the app's
+own colours, including its deep header red.
 
 **5. `src/content/` is vendored.** It mirrors `@myridesg/{domain,data}` from the
 monorepo. Keep it in sync; do not refactor it, and do not put presentation
