@@ -216,7 +216,7 @@ test('built page: part 8 is one accordion, all closed, one name, each question i
 test('built page: part 9 asks for the download, with the one quiet note', () => {
   const p = part('download')
   assert.ok(p.includes('Ride more. Worry less.'))
-  assert.ok(textOf(p).includes('Free to start. Your records are yours.'))
+  assert.ok(textOf(p).includes('Free to download and use. Your records are yours.'))
   assert.ok(p.includes('apps.apple.com'))
   assert.ok(p.includes('play.google.com'))
 })

@@ -8,7 +8,7 @@ test('copy matches the approved design', () => {
   assert.equal(c.PROMISE.eyebrow, 'Made in Singapore')
   assert.equal(c.PROMISE.headline, 'One app for Singapore riders.')
   assert.equal(c.PROMISE.line, 'What your bike needs and what you check before a ride, in one place.')
-  assert.equal(c.PROMISE.note, 'Free to start')
+  assert.equal(c.PROMISE.note, 'Free to download and use')
   assert.equal(c.STEPS.headline, 'Three steps to get sorted.')
   assert.deepEqual(c.STEPS.steps.map((s) => s.label), ['Add your bike', 'Snap as you go', 'Get reminded'])
   assert.equal(c.NEVER_MISS.headline, 'Always know what your bike needs next.')
@@ -37,7 +37,7 @@ test('copy matches the approved design', () => {
   assert.equal(c.DETAIL.faqHeading, 'Questions riders ask.')
   assert.deepEqual(c.DETAIL.groups.map((g) => g.title), ['Servicing', 'Money', 'Dates', 'Your bike', 'Tools', 'Also'])
   assert.equal(c.ASK.headline, 'Ride more. Worry less.')
-  assert.equal(c.ASK.note, 'Free to start. Your records are yours.')
+  assert.equal(c.ASK.note, 'Free to download and use. Your records are yours.')
   assert.deepEqual(c.SECTION_IDS, [
     'promise', 'how-it-works', 'never-miss', 'costs', 'singapore', 'history', 'next', 'detail', 'download',
   ])

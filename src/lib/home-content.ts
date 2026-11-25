@@ -14,7 +14,7 @@ export const PROMISE = {
   eyebrow: 'Made in Singapore',
   headline: 'One app for Singapore riders.',
   line: 'What your bike needs and what you check before a ride, in one place.',
-  note: 'Free to start',
+  note: 'Free to download and use',
 } as const
 
 export const STEPS = {
@@ -137,7 +137,7 @@ export const DETAIL = {
 
 export const ASK = {
   headline: 'Ride more. Worry less.',
-  note: 'Free to start. Your records are yours.',
+  note: 'Free to download and use. Your records are yours.',
 } as const
 
 export const SECTION_IDS = [

@@ -34,6 +34,22 @@ export const STORE = {
 } as const
 
 /**
+ * The App Store's numeric id, read off STORE.ios so the two cannot drift.
+ * Safari's smart app banner (BaseLayout's apple-itunes-app meta) needs it bare.
+ */
+export const IOS_APP_ID = STORE.ios.slice(STORE.ios.lastIndexOf('/id') + 3)
+
+/**
+ * The company's social accounts, in the footer and as the Organization's
+ * sameAs. Owner-confirmed on 24 Nov 2026.
+ */
+export const SOCIAL = [
+  { label: 'Instagram', href: 'https://www.instagram.com/myridesg/' },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@myridesg' },
+  { label: 'YouTube', href: 'https://www.youtube.com/@myridesg' },
+] as const
+
+/**
  * The listings do not share a flag, because they have not moved together —
  * though as of the App Store approval both are true. iOS was routed to the
  * public TestFlight build while its listing was in review. The flags stay so

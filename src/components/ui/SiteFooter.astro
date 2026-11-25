@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-import { NAV } from '@/consts'
+import { NAV, SOCIAL } from '@/consts'
 import appIcon from '@/assets/home/app-icon.png'
 
 /** A nav group's links, so the footer's labels never drift from the header's. */
@@ -60,6 +60,21 @@ const year = new Date().getFullYear()
         <p class="site-footer__line">
           Own a workshop? <a href={GET_LISTED_HREF} class="site-footer__listed">Get listed</a>
         </p>
+        {/* rel="me" tells each network this site and the account are the same
+            owner's; the label carries the network, so no logo is needed. */}
+        <nav aria-label="MyRideSG on social media" class="site-footer__social">
+          <ul>
+            {
+              SOCIAL.map((s) => (
+                <li>
+                  <a href={s.href} rel="me noopener" class="site-footer__social-link">
+                    {s.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
       </div>
 
       <div class="site-footer__cols">
@@ -208,6 +223,41 @@ const year = new Date().getFullYear()
 
   .site-footer__listed:hover {
     text-decoration-thickness: 2px;
+  }
+
+  /* ── Social: three small spaced-caps pills under the brand lines ── */
+  .site-footer__social {
+    margin-top: 1.5rem;
+  }
+
+  .site-footer__social ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .site-footer__social-link {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    padding-inline: 1rem;
+    border: 1px solid rgb(255 255 255 / 0.18);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-2xs);
+    font-weight: 700;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--foot-link);
+    transition:
+      color 160ms ease,
+      border-color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .site-footer__social-link:hover {
+    border-color: rgb(255 255 255 / 0.4);
+    background: rgb(255 255 255 / 0.06);
+    color: var(--foot-ink);
   }
 
   /* ── Link columns: two by two on a phone, four across from 768px ── */

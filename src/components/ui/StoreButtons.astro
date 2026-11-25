@@ -20,7 +20,10 @@ interface Props {
 const { tone = 'dark', center = false, class: className = '' } = Astro.props
 
 // Both listings are published, so the two stores carry equal weight — neither
-// platform should read as the preferred one. The web app button is gone: that
+// platform should read as the preferred one. Equal weight means equal height;
+// the order is Apple's rule, not a preference: its marketing guidelines put
+// the App Store badge first whenever both badges appear (Google asks only that
+// its badge is no smaller than others). The web app button is gone: that
 // product is switched off, and the page it now serves only tells the reader to
 // come back to a store.
 //
@@ -73,25 +76,6 @@ const appStoreBadge = onDark ? appStoreBadgeWhite : appStoreBadgeBlack
 <div class:list={['flex flex-col', center && 'items-center text-center', className]}>
   <div class:list={['flex flex-wrap items-center gap-3', center && 'justify-center']}>
     {
-      ANDROID_LIVE && (
-        <a
-          href={STORE.android}
-          data-store="android"
-          class="inline-flex transition-opacity hover:opacity-85"
-        >
-          <Image
-            src={googlePlayBadge}
-            alt="Get it on Google Play"
-            width={GOOGLE_W * 2}
-            height={96}
-            class="h-12 w-auto"
-            loading="eager"
-          />
-        </a>
-      )
-    }
-
-    {
       IOS_LIVE ? (
         <a
           href={STORE.ios}
@@ -109,6 +93,25 @@ const appStoreBadge = onDark ? appStoreBadgeWhite : appStoreBadgeBlack
       ) : (
         <a href={TESTFLIGHT} class:list={[base, secondary]} data-store="ios">
           iPhone — TestFlight
+        </a>
+      )
+    }
+
+    {
+      ANDROID_LIVE && (
+        <a
+          href={STORE.android}
+          data-store="android"
+          class="inline-flex transition-opacity hover:opacity-85"
+        >
+          <Image
+            src={googlePlayBadge}
+            alt="Get it on Google Play"
+            width={GOOGLE_W * 2}
+            height={96}
+            class="h-12 w-auto"
+            loading="eager"
+          />
         </a>
       )
     }

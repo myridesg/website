@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import StoreButtons from '@/components/ui/StoreButtons.astro'
+import { STORE } from '@/consts'
+import ride from '@/assets/home/main-on-bike-visor-up.png'
+import '@/styles/feature.css'
+
+/**
+ * Where the finale's QR code lands. A phone BaseLayout recognises goes
+ * straight on to its own store: its platform script has already put
+ * data-platform on <html> by the time the script below runs, so the user-agent
+ * test lives in one place. Anything else — a desktop, an unknown phone, no
+ * JavaScript — stays here and gets both badges, in the finale's dark band.
+ *
+ * noindex: it is a doorway to the stores, not a page anyone should find in a
+ * search.
+ */
+const rideWidths = [Math.round(ride.width / 2), ride.width]
+const rideSizes = '(min-width: 48rem) 34rem, 80vw'
+---
+
+<BaseLayout
+  title="Get the app"
+  description="Download MyRideSG from the App Store or Google Play."
+  noindex
+>
+  <script is:inline slot="head" define:vars={{ STORE }}>
+    ;(() => {
+      const platform = document.documentElement.dataset.platform
+      if (platform) location.replace(platform === 'ios' ? STORE.ios : STORE.android)
+    })()
+  </script>
+
+  <SiteNav />
+
+  <main class="feature-page get">
+    <section class="ask">
+      <div class="ask__inner">
+        <header class="ask__head">
+          <h1 class="ask__title">Get the app<span class="ask__dot">.</span></h1>
+          <StoreButtons tone="light" center class="ask__stores" />
+          <p class="ask__note">Free to download and use, on iPhone and Android.</p>
+        </header>
+
+        <div class="ask__stage" aria-hidden="true">
+          <span class="ask__mirror">
+            <Image src={ride} alt="" widths={rideWidths} sizes={rideSizes} class="ask__img" loading="eager" />
+          </span>
+          <span class="ask__ride">
+            <Image src={ride} alt="" widths={rideWidths} sizes={rideSizes} class="ask__img" loading="eager" />
+          </span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  /* The nav is transparent at rest and dark-on-light, so it gets a strip of
+     the page's own colour; the dark band starts under it, as the home page's
+     finale does once the bar has pinned. */
+  .get {
+    padding-block-start: var(--site-bar);
+    background: var(--color-paper);
+  }
+</style>
