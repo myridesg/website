@@ -208,7 +208,7 @@
   font-family: var(--font-display);
   font-size: var(--type-label);
   font-weight: 700;
-  line-height: 1.08;
+  line-height: var(--type-label-leading);
   text-transform: uppercase;
   text-wrap: balance;
 }
@@ -382,7 +382,7 @@
   margin: 0;
   padding-block: 0 clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
   font-size: var(--type-body);
-  line-height: 1.5;
+  line-height: var(--type-body-leading);
   color: var(--studio-text);
 }
 

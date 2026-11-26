@@ -131,6 +131,8 @@
    * a media query cannot see an attribute. Collapse them into one explicit tag.
    */
   function paintChrome(theme: Theme) {
+    // Guides pages: the bar is the deep red header, the same in both themes.
+    if (root.dataset.header === 'deep') return
     document
       .querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')
       .forEach((meta, i) => {

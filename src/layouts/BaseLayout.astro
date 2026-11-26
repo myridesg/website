@@ -177,8 +177,11 @@ const bingSiteVerification = envVar('BING_SITE_VERIFICATION')
     <link rel="preload" as="font" type="font/woff2" crossorigin href={barlow400Url} />
     <link rel="preload" as="font" type="font/woff2" crossorigin href={barlow700Url} />
 
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#171110" />
+    {/* The phone's address bar takes the colour of what sits under it: the
+        page ground, or on guides pages the deep red header (--guide-bar in
+        guides.css; one-red.test.mjs keeps the two the same). */}
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content={headerTone === 'deep' ? '#9b0f06' : '#ffffff'} />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content={headerTone === 'deep' ? '#9b0f06' : '#171110'} />
     <!-- Tells the UA to render form controls, scrollbars and the like in the
          scheme the page actually uses, rather than assuming light. -->
     <meta name="color-scheme" content="light dark" />

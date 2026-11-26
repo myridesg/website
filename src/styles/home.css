@@ -895,7 +895,7 @@
   font-family: var(--font-display);
   font-size: var(--type-label);
   font-weight: 700;
-  line-height: 1.08;
+  line-height: var(--type-label-leading);
   text-transform: uppercase;
   color: var(--studio-headline);
 }
@@ -1120,7 +1120,7 @@
   max-inline-size: 30em;
   font-size: var(--type-lead);
   font-weight: 500;
-  line-height: 1.5;
+  line-height: var(--type-lead-leading);
   color: var(--studio-text);
 }
 
@@ -1695,7 +1695,7 @@
   text-wrap: pretty;
   font-size: var(--type-body);
   font-weight: 500;
-  line-height: 1.5;
+  line-height: var(--type-body-leading);
   color: var(--studio-text);
 }
 
@@ -2032,6 +2032,14 @@
   }
 }
 
+/* Under 360px a card is 96px inside, and "CALCULATOR" at 24px is 110px:
+   the label steps down to 20px there, and only there. */
+@media (width < 22.5rem) {
+  .sg .tool__label {
+    font-size: 1.25rem;
+  }
+}
+
 @media (width >= 48rem) {
   .sg__tools {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2116,7 +2124,7 @@
   text-wrap: pretty;
   font-size: var(--type-body);
   font-weight: 500;
-  line-height: 1.5;
+  line-height: var(--type-body-leading);
   color: var(--studio-text);
 }
 
@@ -2801,7 +2809,7 @@
   font-family: var(--font-display);
   font-size: var(--type-label);
   font-weight: 700;
-  line-height: 1.08;
+  line-height: var(--type-label-leading);
   text-transform: uppercase;
   color: var(--studio-headline);
 }
@@ -2812,7 +2820,7 @@
   text-wrap: pretty;
   font-size: var(--type-body);
   font-weight: 500;
-  line-height: 1.5;
+  line-height: var(--type-body-leading);
   color: var(--studio-text);
 }
 

@@ -81,8 +81,18 @@ test('one red: small red text turns to the foreground where red would not pass',
 
 test('one red: the deep red exists once, as the guides header surface only', () => {
   const uses = sources.filter(({ text }) => /#9b0f06|#7d0c05/i.test(text)).map(({ path }) => path)
-  assert.deepEqual(uses, ['src/styles/guides.css'])
+  // BaseLayout repeats it for the phone address bar over that header: a
+  // <meta> is read before any CSS, so it cannot take the value from guides.css.
+  assert.deepEqual(uses, ['src/layouts/BaseLayout.astro', 'src/styles/guides.css'])
   assert.ok(contrast('#ffffff', '#9b0f06') >= 7)
+})
+
+test('one red: the address bar over the deep red header is that same red', () => {
+  const bar = read('src/styles/guides.css').match(/--guide-bar: (#[0-9a-f]{6});/i)[1]
+  const layout = read('src/layouts/BaseLayout.astro')
+  const tints = [...layout.matchAll(/name="theme-color"[^>]*headerTone === 'deep' \? '(#[0-9a-f]{6})'/gi)].map((m) => m[1])
+  assert.deepEqual(tints, [bar, bar])
+  assert.match(read('src/components/ui/ThemeToggle.astro'), /if \(root\.dataset\.header === 'deep'\) return/)
 })
 
 test('one red: its job is the main action, so every main button is red with white type', () => {
