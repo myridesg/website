@@ -14,7 +14,7 @@ import HomeAsk from '@/components/ui/home/HomeAsk.astro'
 import { getImage } from 'astro:assets'
 import ogSource from '@/assets/og-default.png'
 import { FAQ_ITEMS } from '@/lib/faq-items'
-import { entityId, faqPageEntity, webPageEntity, APP_PATH } from '@/lib/seo'
+import { entityId, faqPageEntity, webPageEntity, APP_PATH, OG_IMAGE } from '@/lib/seo'
 import { SITE } from '@/consts'
 import '@/styles/home.css'
 
@@ -23,7 +23,7 @@ const pagePath = '/'
 
 // The page's image for search engines: the same 1200x630 JPEG BaseLayout
 // builds for the default og:image, so both point at one asset.
-const ogImage = await getImage({ src: ogSource, width: 1200, height: 630, fit: 'cover', format: 'jpeg' })
+const ogImage = await getImage({ src: ogSource, ...OG_IMAGE })
 
 const structuredData = [
   webPageEntity(Astro.site!, {
@@ -34,8 +34,8 @@ const structuredData = [
     image: {
       '@type': 'ImageObject',
       url: new URL(ogImage.src, Astro.site).href,
-      width: 1200,
-      height: 630,
+      width: OG_IMAGE.width,
+      height: OG_IMAGE.height,
     },
   }),
   // The same array HomeDetail.astro renders below, so schema and visible text agree.

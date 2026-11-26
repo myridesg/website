@@ -2,7 +2,7 @@
 import '@/styles/global.css'
 import { getImage } from 'astro:assets'
 import { IOS_APP_ID, IOS_LIVE, SITE, STORE } from '@/consts'
-import { buildGraph, serializeJsonLd } from '@/lib/seo'
+import { buildGraph, serializeJsonLd, OG_IMAGE } from '@/lib/seo'
 import defaultOgSource from '@/assets/og-default.png'
 
 // The three faces that render above the fold: Barlow Condensed 700 for the
@@ -24,8 +24,17 @@ interface Props {
   /** Page title. Rendered as "<title> — MyRideSG"; omit on the home page. */
   title?: string
   description?: string
-  /** Absolute or root-relative path to the social image. */
-  ogImage?: string
+  /**
+   * The picture shown when the page is shared (WhatsApp, Facebook, X). A
+   * remote URL from an allowed image domain; it is cropped to 1200x630 at
+   * build time. Omit for the default card.
+   */
+  ogImage?: { src: string; alt: string }
+  /**
+   * Set on an article: the share preview and search engines read its dates,
+   * section and tags from these, and og:type becomes "article".
+   */
+  article?: { published: Date; modified: Date; section: string; tags: string[] }
   /** Set true only on pages that must stay out of the index. */
   noindex?: boolean
   /**
@@ -46,6 +55,7 @@ const {
   title,
   description = SITE.description,
   ogImage,
+  article,
   noindex = false,
   canonical: canonicalOverride,
   structuredData = [],
@@ -117,18 +127,13 @@ const canonical = canonicalOverride
   ? new URL(canonicalOverride, Astro.site).href
   : new URL(Astro.url.pathname, Astro.site).href
 
-// Default card: the home page's headline, rider and four props on the studio
-// grey, drawn at the 1200x630 Open Graph size. Converted at build time to JPEG
-// rather than WebP because social crawlers handle it reliably.
-const defaultOg = ogImage
-  ? undefined
-  : await getImage({ src: defaultOgSource, width: 1200, height: 630, fit: 'cover', format: 'jpeg' })
-const socialImage = ogImage
-  ? new URL(ogImage, Astro.site).href
-  : new URL(defaultOg!.src, Astro.site).href
-const socialImageAlt = defaultOg
-  ? 'One app for Singapore riders. The MyRideSG rider in a black full-face helmet presents a map, a chart, a fuel pump and a receipt.'
-  : undefined
+// The share card (OG_IMAGE). Without a page picture it is the default card:
+// the home page's headline, rider and four props on the studio grey.
+const socialCard = await getImage({ src: ogImage?.src ?? defaultOgSource, ...OG_IMAGE })
+const socialImage = new URL(socialCard.src, Astro.site).href
+const socialImageAlt =
+  ogImage?.alt ??
+  'One app for Singapore riders. The MyRideSG rider in a black full-face helmet presents a map, a chart, a fuel pump and a receipt.'
 
 const graph = buildGraph(Astro.site!, structuredData)
 
@@ -188,7 +193,7 @@ const bingSiteVerification = envVar('BING_SITE_VERIFICATION')
 
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={pageTitle} />
     {/* Full copy, not the clamped one: a social card renders far more than a
@@ -197,16 +202,26 @@ const bingSiteVerification = envVar('BING_SITE_VERIFICATION')
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={SITE.locale} />
     <meta property="og:image" content={socialImage} />
-    {defaultOg && <meta property="og:image:type" content="image/jpeg" />}
-    {defaultOg && <meta property="og:image:width" content="1200" />}
-    {defaultOg && <meta property="og:image:height" content="630" />}
-    {socialImageAlt && <meta property="og:image:alt" content={socialImageAlt} />}
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content={String(OG_IMAGE.width)} />
+    <meta property="og:image:height" content={String(OG_IMAGE.height)} />
+    <meta property="og:image:alt" content={socialImageAlt} />
+    {
+      article && (
+        <>
+          <meta property="article:published_time" content={article.published.toISOString()} />
+          <meta property="article:modified_time" content={article.modified.toISOString()} />
+          <meta property="article:section" content={article.section} />
+          {article.tags.map((tag) => <meta property="article:tag" content={tag} />)}
+        </>
+      )
+    }
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
-    {socialImageAlt && <meta name="twitter:image:alt" content={socialImageAlt} />}
+    <meta name="twitter:image:alt" content={socialImageAlt} />
 
     <script type="application/ld+json" is:inline set:html={serializeJsonLd(graph)} />
 

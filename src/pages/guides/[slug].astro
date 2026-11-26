@@ -86,8 +86,8 @@ const canonical = new URL(article.seo.canonicalUrl ?? `/guides/${article.slug}/`
 // matching the canonical link either way.
 const site = Astro.site!
 // Sanity dates only: publishedAt/updatedAt come straight from the CMS entity,
-// never invented here. The Article carries no image field, so no image is
-// claimed; if a real author is attributed in Sanity they are cited, otherwise
+// never invented here. The image is claimed only when Sanity has a hero photo;
+// if a real author is attributed in Sanity they are cited, otherwise
 // authorship falls back to the publishing organization.
 const structuredData = [
   webPageEntity(site, {
@@ -107,6 +107,7 @@ const structuredData = [
     datePublished: article.publishedAt.toISOString(),
     dateModified: article.updatedAt.toISOString(),
     inLanguage: 'en-SG',
+    ...(article.heroImage ? { image: article.heroImage.url } : {}),
     ...(hasAuthor
       ? { author: { '@type': 'Person', name: article.author.name } }
       : { author: { '@id': entityId(site, ORGANIZATION_PATH) } }),

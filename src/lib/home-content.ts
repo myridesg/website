@@ -75,6 +75,9 @@ export const NEXT = {
 export const DETAIL = {
   featuresQuestion: 'What can the app do today?',
   faqHeading: 'Questions riders ask.',
+  /** Questions shown after the features row; the rest fold under "Show N more questions". */
+  questionsShown: 4,
+  moreQuestions: (count: number) => `Show ${count} more questions`,
   groups: [
     {
       title: 'Servicing',

@@ -124,6 +124,13 @@ export default defineConfig({
   // Sources MUST live in src/assets/ so astro:assets can process them. Anything
   // placed in public/ is copied byte-for-byte with NO optimisation, which on a
   // 2.7 MB hero is a silent performance regression.
+  //
+  // The one remote source is a guide's hero photo, which lives in Sanity. It is
+  // fetched at build time and processed like a local image, so the page still
+  // serves it from this origin (img-src 'self' in the CSP below stays true).
+  image: {
+    domains: ['cdn.sanity.io'],
+  },
 
   // Local dev and `astro preview` only. There is no server in production, so
   // nothing here ships — it exists so the site can be shared for review.

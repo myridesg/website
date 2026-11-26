@@ -1,0 +1,26 @@
+---
+/**
+ * The down chevron on everything that opens: menus and folds. Decorative.
+ * The rest props carry the caller's data-astro-cid-* attribute, so the
+ * caller's scoped styles reach the svg.
+ */
+interface Props {
+  class: string
+}
+
+const { class: className, ...rest } = Astro.props
+---
+
+<svg
+  class={className}
+  viewBox="0 0 16 16"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  {...rest}
+>
+  <path d="m4 6 4 4 4-4" />
+</svg>

@@ -1,6 +1,8 @@
 ---
 import { DETAIL, SECTION_IDS } from '@/lib/home-content'
 import { FAQ_ITEMS } from '@/lib/faq-items'
+import Chevron from '@/components/ui/Chevron.astro'
+import FaqRow from './FaqRow.astro'
 
 /**
  * Part 8, the detail for those who want it: the questions riders ask, one
@@ -12,18 +14,24 @@ import { FAQ_ITEMS } from '@/lib/faq-items'
  * of features (owner decision, 22 Nov 2026: the always-open list was too
  * many words). It is this page's own row, not part of FAQ_ITEMS, so the page's
  * FAQPage structured data leaves it out.
+ *
+ * After the features row only the first DETAIL.questionsShown questions show;
+ * the rest fold under one "Show N more questions" row (owner decision,
+ * 27 Nov 2026: thirteen rows ran past a screen). It is a <details> too, so no script. Once open its row
+ * hides, since the questions it held now carry on the list. The folded rows
+ * keep the shared name, stay in the HTML and in the FAQPage data, and a
+ * browser's find-in-page opens the fold to reach them.
  */
+
+const visible = FAQ_ITEMS.slice(0, DETAIL.questionsShown)
+const folded = FAQ_ITEMS.slice(DETAIL.questionsShown)
 ---
 
 <section id={SECTION_IDS[7]} data-progress class="home-part detail">
   <div class="detail__inner">
     <h2 class="home-title detail__title home-enter">{DETAIL.faqHeading}</h2>
     <div class="faqs home-enter" style="--i: 1">
-      <details class="faq" name="questions">
-        <summary class="faq__q">
-          <span class="faq__text">{DETAIL.featuresQuestion}</span>
-          <span class="faq__mark" aria-hidden="true" />
-        </summary>
+      <FaqRow q={DETAIL.featuresQuestion}>
         <div class="faq__a features">
           {
             DETAIL.groups.map((group) => (
@@ -36,17 +44,28 @@ import { FAQ_ITEMS } from '@/lib/faq-items'
             ))
           }
         </div>
-      </details>
+      </FaqRow>
       {
-        FAQ_ITEMS.map((item) => (
-          <details class="faq" name="questions">
-            <summary class="faq__q">
-              <span class="faq__text">{item.q}</span>
-              <span class="faq__mark" aria-hidden="true" />
-            </summary>
+        visible.map((item) => (
+          <FaqRow q={item.q}>
             <p class="faq__a">{item.a}</p>
-          </details>
+          </FaqRow>
         ))
+      }
+      {
+        folded.length > 0 && (
+          <details class="faq faqs__more">
+            <summary class="faq__q faqs__more-q">
+              {DETAIL.moreQuestions(folded.length)}
+              <Chevron class="faqs__more-chevron" />
+            </summary>
+            {folded.map((item) => (
+              <FaqRow q={item.q}>
+                <p class="faq__a">{item.a}</p>
+              </FaqRow>
+            ))}
+          </details>
+        )
       }
     </div>
   </div>

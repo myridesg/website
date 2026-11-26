@@ -4,7 +4,11 @@
  * The GROQ is copied verbatim apart from two projections. Keep it that way — if
  * a query drifts, the two sites start disagreeing about what a guide is.
  *
- *   1. No image projections, which this site does not map (see ./mappers.ts).
+ *   1. `heroImage` is projected through its asset to { url, width, height,
+ *      alt, credit, sourceUrl } (see ./mappers.ts). v2 fetches the raw image
+ *      and builds a URL with @sanity/image-url; this site needs the asset's
+ *      size and credit line as well, and the asset document already has both.
+ *      Author avatars and seo.ogImage are still not fetched.
  *   2. `body[]` dereferences the references inside a `relatedLinks` block to
  *      { slug, title, category }. Unprojected they arrive as bare _ref strings
  *      and the block cannot render a link, which is exactly the state v2 is in:
@@ -30,6 +34,14 @@ import {
 const ARTICLE_BY_SLUG = /* groq */ `
   *[_type == "article" && slug.current == $slug][0]{
     _id, title, slug, category, description,
+    "heroImage": heroImage.asset->{
+      url,
+      "width": metadata.dimensions.width,
+      "height": metadata.dimensions.height,
+      "alt": altText,
+      "credit": creditLine,
+      "sourceUrl": source.url
+    },
     body[]{
       ...,
       _type == "relatedLinks" => {

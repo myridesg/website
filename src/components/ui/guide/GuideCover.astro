@@ -1,31 +1,57 @@
 ---
 import { Image } from 'astro:assets'
 import { OBJECTS, objectWidths, type ObjectKey } from '@/components/ui/feature/objects'
+import type { ArticleImage } from '@/content/entities'
+import { forBuild } from '@/lib/build-image'
 
 /**
- * One of the app's 3D objects, standing on a panel in the studio wall's grey:
- * the picture at the top of a guide and on each of its cards. The same
- * objects as the home page; no new art. Decorative, so `alt` is empty.
+ * The picture at the top of a guide and on each of its cards. A guide with a
+ * hero photo in Sanity shows that photo, filling the panel. One without shows
+ * one of the app's 3D objects standing on the studio wall's grey, the same
+ * objects as the home page.
+ *
+ * Only the hero describes its photo: a card is a link whose text is the
+ * title, so its photo is decorative, as the object always is.
  */
 interface Props {
   cover: ObjectKey
+  photo?: ArticleImage | null
   size: 'hero' | 'feature' | 'card'
   /** The picture at the top of the page is the largest: load it first. */
   eager?: boolean
 }
 
-const { cover, size, eager = false } = Astro.props
+const { cover, photo, size, eager = false } = Astro.props
 const { image, k } = OBJECTS[cover]
+
+// Cards run one, two, then three to a row (guides.css); the hero and the
+// feature card fill the reading width.
+const photoSizes =
+  size === 'card'
+    ? '(min-width: 56rem) 22rem, (min-width: 40rem) 50vw, 100vw'
+    : '(min-width: 56rem) 55.5rem, 100vw'
+const built = photo ? forBuild(photo) : null
+const picture = built
+  ? {
+      ...built,
+      alt: size === 'hero' ? photo!.alt : '',
+      widths: [480, 800, 1200, built.width].filter((w) => w <= built.width),
+      sizes: photoSizes,
+      class: 'guide-cover__photo',
+    }
+  : {
+      src: image,
+      alt: '',
+      widths: objectWidths(cover),
+      sizes: '(min-width: 64rem) 16rem, 10rem',
+      class: 'guide-cover__img',
+    }
 ---
 
-<div class={`guide-cover guide-cover--${size}`} style={`--k: ${k}`} aria-hidden="true">
-  <Image
-    src={image}
-    alt=""
-    widths={objectWidths(cover)}
-    sizes="(min-width: 64rem) 16rem, 10rem"
-    loading={eager ? 'eager' : 'lazy'}
-    fetchpriority={eager ? 'high' : undefined}
-    class="guide-cover__img"
-  />
+<div
+  class:list={['guide-cover', `guide-cover--${size}`, { 'guide-cover--photo': photo }]}
+  style={photo ? undefined : `--k: ${k}`}
+  aria-hidden={photo ? undefined : 'true'}
+>
+  <Image {...picture} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} />
 </div>

@@ -171,13 +171,19 @@ test('built page: part 7 is four things in the works, with no dates', async () =
 // is now the first row of the questions, closed like the others, and not
 // part of the FAQ data.
 const unescape = (text) => text.replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&')
-const accordion = (p) => [...p.matchAll(/<details\b([^>]*)>\s*<summary\b[^>]*>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)]
+// The question rows only: the "Show more" fold is a <details> of its own.
+const accordion = (p) => [...p.matchAll(/<details\b([^>]*\bclass="faq"[^>]*)>\s*<summary\b[^>]*>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)]
+// The fold: its opening tag's attributes, its summary text, and what follows.
+const fold = (p) => p.match(/<details\b([^>]*\bfaqs__more\b[^>]*)>\s*<summary\b[^>]*>([\s\S]*?)<\/summary>([\s\S]*)/)
 
 test('built page: part 8 has no open feature list; its first row holds every feature', async () => {
   const { DETAIL } = await import('../src/lib/home-content.ts')
   const p = part('detail')
   // part() starts inside the section's own tag: drop the rest of it.
-  const outside = p.replace(/^[^>]*>/, '').replace(/<details\b[\s\S]*?<\/details>/g, '')
+  const outside = p
+    .replace(/^[^>]*>/, '')
+    .replace(/<details\b[^>]*\bclass="faq"[\s\S]*?<\/details>/g, '')
+    .replace(/<summary\b[^>]*\bfaqs__more-q\b[\s\S]*?<\/summary>/, '')
   assert.equal(unescape(textOf(outside)).trim(), DETAIL.faqHeading, 'only the heading is outside the accordion')
   assert.doesNotMatch(outside, /<(ul|h3)\b/, 'no feature grid outside the accordion')
   const [first] = accordion(p)
@@ -195,7 +201,7 @@ test('built page: part 8 is one accordion, all closed, one name, each question i
   const p = part('detail')
   const rows = accordion(p)
   assert.equal(rows.length, FAQ_ITEMS.length + 1)
-  assert.equal((p.match(/<details\b/g) ?? []).length, FAQ_ITEMS.length + 1)
+  assert.equal((p.match(/<details\b/g) ?? []).length, FAQ_ITEMS.length + 2, 'the rows and the fold')
   const names = new Set()
   rows.forEach(([, attrs], i) => {
     assert.doesNotMatch(attrs, /\bopen\b/, `row ${i + 1} is closed`)
@@ -224,4 +230,21 @@ test('built page: part 9 asks for the download, with the one quiet note', () => 
 test('built page: the words drawn in parts 7 to 9 pass the claim rules', async () => {
   const { findBannedClaims } = await import('./check-claims.mjs')
   for (const id of ['next', 'detail', 'download']) assert.deepEqual(findBannedClaims(textOf(part(id))), [], id)
+})
+
+// Owner decision, 27 Nov 2026: thirteen rows ran past a screen.
+test('built page: part 8 shows the first rows and folds the rest under one closed row', async () => {
+  const { DETAIL } = await import('../src/lib/home-content.ts')
+  const { FAQ_ITEMS } = await import('../src/lib/faq-items.ts')
+  const p = part('detail')
+  const more = fold(p)
+  assert.ok(more, 'there is a fold')
+  const [, attrs, label, after] = more
+  const before = p.slice(0, more.index)
+  assert.equal(accordion(before).length, DETAIL.questionsShown + 1, 'the features row, then the shown questions')
+  const hidden = FAQ_ITEMS.length - DETAIL.questionsShown
+  assert.equal(accordion(after).length, hidden)
+  assert.doesNotMatch(attrs, /\bopen\b/, 'the fold starts closed')
+  assert.equal(unescape(textOf(label)).trim(), DETAIL.moreQuestions(hidden))
+  assert.ok(jsonLd().includes(FAQ_ITEMS.at(-1).q), 'folded questions stay in the FAQPage data')
 })

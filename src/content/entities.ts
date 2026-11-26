@@ -23,11 +23,27 @@ export interface ArticleAuthorRef {
   name: string
 }
 
+/**
+ * A picture stored in Sanity. v2 carries only `heroImageUrl`; this site also
+ * needs the size (for astro:assets) and the credit its licence asks for.
+ */
+export interface ArticleImage {
+  url: string
+  width: number
+  height: number
+  alt: string
+  /** e.g. "Rainmaker47, CC BY-SA 3.0, via Wikimedia Commons" */
+  credit: string | null
+  /** The page the credit links to: where the picture and its licence live. */
+  sourceUrl: string | null
+}
+
 export interface Article {
   slug: string
   title: string
   description: string
   category: 'guide' | 'bike-model' | 'news'
+  heroImage: ArticleImage | null
   author: ArticleAuthorRef
   publishedAt: Date
   updatedAt: Date

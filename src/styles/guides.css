@@ -28,9 +28,9 @@
   place-items: center;
   block-size: var(--cover-h);
   border-radius: var(--radius-card);
-  /* A stand-in until guides carry photographs: the grey the objects were
-     lit against (the floor's, a step off the page, in dark). Neutral on
-     purpose; a real picture replaces the panel and its colour. */
+  /* The grey the objects were lit against (the floor's, a step off the
+     page, in dark). Neutral on purpose: a guide with a hero photo covers
+     the panel with it, see .guide-cover--photo. */
   background: light-dark(var(--studio-wall-low), var(--studio-floor));
 }
 
@@ -46,6 +46,18 @@
   .guide-cover--hero {
     --cover-h: 26rem;
   }
+}
+
+/* A photo fills the panel; the grey behind it shows only while it loads. */
+.guide-cover--photo {
+  overflow: hidden;
+}
+
+.guide-cover__photo {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
 }
 
 .guide-cover__img {
@@ -498,8 +510,10 @@
   padding-block: clamp(1.5rem, 1rem + 1.5vw, 2rem) 0;
 }
 
-.guide-head .guide-cover--hero {
-  margin-block-end: 0.75rem;
+.guide-head__picture {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 0.75rem;
 }
 
 @media (width < 40rem) {
@@ -508,6 +522,16 @@
     margin-inline: -1.25rem;
     border-radius: 0;
   }
+}
+
+.guide-head__credit {
+  font-size: var(--type-small);
+  line-height: 1.4;
+  color: var(--studio-note);
+}
+
+.guide-head__credit a {
+  color: inherit;
 }
 
 .guide-head__tags {

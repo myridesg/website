@@ -1,0 +1,20 @@
+---
+/**
+ * One row of the home page's questions: the question as the summary, the
+ * slot as the answer. Every row shares one name, so opening one closes the
+ * one that was open.
+ */
+interface Props {
+  q: string
+}
+
+const { q } = Astro.props
+---
+
+<details class="faq" name="questions">
+  <summary class="faq__q">
+    <span class="faq__text">{q}</span>
+    <span class="faq__mark" aria-hidden="true" />
+  </summary>
+  <slot />
+</details>
