@@ -99,6 +99,7 @@ test('toGuideEntry reads topic, cover, read time and whether the guide is listed
     title: 'Oil change',
     description: 'd',
     category: 'guide',
+    heroImage: null,
     author: { slug: 'hidayah', name: 'Hidayah' },
     publishedAt: new Date('2026-05-12'),
     updatedAt: new Date('2026-05-12'),

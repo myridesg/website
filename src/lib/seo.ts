@@ -249,3 +249,7 @@ export function buildGraph(site: URL, pageEntities: Entity[] = []) {
 
   return { '@context': 'https://schema.org', '@graph': [...shared, ...own] }
 }
+
+/** The share card's size and format: 1200x630, the Open Graph size, as JPEG
+ *  because social crawlers handle it reliably. */
+export const OG_IMAGE = { width: 1200, height: 630, fit: 'cover', format: 'jpeg' } as const

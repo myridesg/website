@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets'
+import Chevron from './Chevron.astro'
 import { NAV } from '@/consts'
 import type { NavItem } from '@/consts'
 import ThemeToggle from './ThemeToggle.astro'
@@ -30,23 +31,11 @@ const groupIsCurrent = (item: NavItem) =>
   'children' in item && item.children.some((child) => isCurrent(child.href))
 
 /**
- * The mobile panel renders NAV as labelled sections: an eyebrow, then its
- * links. Each link carries its row index as it is counted out, so the entry
- * stagger scales with the panel's real length instead of a hand-written
- * nth-child list that breaks the moment a group changes size.
+ * The mobile panel lists NAV as rows. A group (Features) is a row that opens
+ * in place, closed unless the reader is on one of its pages. Each row carries
+ * its index for the entry stagger: top rows count across the panel, a group's
+ * links count from zero again, because they enter when the group opens.
  */
-let row = 0
-const MOBILE_SECTIONS = NAV.map((item) =>
-  'children' in item
-    ? {
-        eyebrow: item.label,
-        links: item.children.map((child) => ({ ...child, row: row++ })),
-      }
-    : {
-        eyebrow: null,
-        links: [{ label: item.label, href: item.href, row: row++ }],
-      },
-)
 ---
 
 <header class="site-header" data-site-header>
@@ -71,18 +60,7 @@ const MOBILE_SECTIONS = NAV.map((item) =>
               <details class:list={['nav-drop', { 'nav-drop--current': groupIsCurrent(item) }]}>
                 <summary class="nav-top">
                   {item.label}
-                  <svg
-                    class="nav-drop__chevron"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="m4 6 4 4 4-4" />
-                  </svg>
+                  <Chevron class="nav-drop__chevron" />
                 </summary>
 
                 <div class="nav-drop__panel">
@@ -129,26 +107,44 @@ const MOBILE_SECTIONS = NAV.map((item) =>
         </summary>
 
         <div class="site-menu__panel">
-          {
-            MOBILE_SECTIONS.map((section) => (
-              <div class:list={['site-menu__group', { 'site-menu__group--plain': !section.eyebrow }]}>
-                {section.eyebrow && <p class="site-menu__eyebrow">{section.eyebrow}</p>}
-                <ul>
-                  {section.links.map((link) => (
-                    <li>
-                      <a
-                        href={link.href}
-                        style={`--i: ${link.row}`}
-                        aria-current={isCurrent(link.href) ? 'page' : undefined}
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          }
+          <ul>
+            {
+              NAV.map((item, row) => (
+                <li>
+                  {'children' in item ? (
+                    <details class="site-menu__group" open={groupIsCurrent(item)}>
+                      <summary class="site-menu__row" style={`--i: ${row}`}>
+                        {item.label}
+                        <Chevron class="site-menu__chevron" />
+                      </summary>
+                      <ul class="site-menu__children">
+                        {item.children.map((child, i) => (
+                          <li>
+                            <a
+                              href={child.href}
+                              style={`--i: ${i}`}
+                              aria-current={isCurrent(child.href) ? 'page' : undefined}
+                            >
+                              {child.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  ) : (
+                    <a
+                      class="site-menu__row"
+                      href={item.href}
+                      style={`--i: ${row}`}
+                      aria-current={isCurrent(item.href) ? 'page' : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
         </div>
       </details>
     </div>
@@ -583,37 +579,23 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     clip-path: inset(0 0 -100vmax 0);
   }
 
-  .site-menu__group + .site-menu__group {
-    margin-top: 0.75rem;
+  .site-menu__panel > ul,
+  .site-menu__children {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  /* Guides and Support carry no eyebrow; a hairline sets them apart from
-     the Features group above, and the two of them read as one block. */
-  .site-menu__group--plain {
-    padding-top: 0.75rem;
+  /* A hairline between the top rows. */
+  .site-menu__panel > ul > li + li {
     border-top: 1px solid --alpha(var(--color-ink) / 10%);
   }
 
-  .site-menu__group--plain + .site-menu__group--plain {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: 0;
-  }
-
-  .site-menu__eyebrow {
-    margin: 0;
-    padding-block: 0.75rem 0.25rem;
-    font-size: var(--text-2xs);
-    font-weight: 700;
-    letter-spacing: var(--tracking-eyebrow);
-    text-transform: uppercase;
-    color: --alpha(var(--color-ink) / 66%);
-  }
-
-  .site-menu__panel a {
+  .site-menu__row {
     display: flex;
     align-items: center;
-    min-block-size: 3rem;
+    justify-content: space-between;
+    min-block-size: 3.5rem;
     font-family: var(--font-display);
     font-size: 1.5rem;
     font-weight: 700;
@@ -621,13 +603,49 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     letter-spacing: 0.005em;
     text-transform: uppercase;
     color: var(--color-ink);
+    cursor: pointer;
+    list-style: none;
   }
 
-  .site-menu__panel a:hover {
+  .site-menu__row::-webkit-details-marker {
+    display: none;
+  }
+
+  .site-menu__chevron {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    transition: rotate 200ms ease;
+  }
+
+  .site-menu__group[open] .site-menu__chevron {
+    rotate: 180deg;
+  }
+
+  /* A group's links sit under its row, smaller and indented, on a rule that
+     ties them to it. */
+  .site-menu__children {
+    /* after the reset above, so these win */
+    margin-block-end: 0.75rem;
+    padding-inline-start: 1rem;
+    border-inline-start: 2px solid --alpha(var(--color-ink) / 12%);
+  }
+
+  .site-menu__children a {
+    display: flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .site-menu__row:hover,
+  .site-menu__children a:hover {
     color: --alpha(var(--color-ink) / 72%);
   }
 
-  .site-menu__panel a[aria-current='page'] {
+  .site-menu__row[aria-current='page'],
+  .site-menu__children a[aria-current='page'] {
     /* Red on the light panel (4.85:1); the foreground on the dark one, where
        red text would not pass. */
     color: light-dark(var(--color-red), var(--color-ink));
@@ -641,7 +659,8 @@ const MOBILE_SECTIONS = NAV.map((item) =>
       animation: menu-panel-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
-    .site-menu[open] .site-menu__panel a,
+    .site-menu[open] .site-menu__row,
+    .site-menu__group[open] .site-menu__children a,
     .nav-drop[open] .nav-drop__panel a {
       animation: menu-row-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
       animation-delay: min(calc(40ms + var(--i, 0) * 30ms), 300ms);

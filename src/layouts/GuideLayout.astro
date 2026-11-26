@@ -8,13 +8,16 @@ import GuideByline from '@/components/ui/guide/GuideByline.astro'
 import FeatureAsk from '@/components/ui/feature/FeatureAsk.astro'
 import { GUIDE_GROUPS, topicPath, type GuideGroupId } from '@/lib/guide-navigation'
 import type { GuideEntry } from '@/lib/guides'
+import { parsePhotoCredit } from '@/lib/photo-credit'
+import { forBuild } from '@/lib/build-image'
 import '@/styles/guides.css'
 
 /**
- * The guide article's page: the topic bar, a picture, two tags, the title and
- * the byline in a wide head, then the text in a narrower column under it. The
- * default slot is the body; "after" is whatever follows the text (more
- * guides). The page ends on the closing band.
+ * The guide article's page: the topic bar, a picture (with its credit when it
+ * is a photo), two tags, the title and the byline in a wide head, then the
+ * text in a narrower column under it. The default slot is the body; "after"
+ * is whatever follows the text (more guides). The page ends on the closing
+ * band.
  */
 interface Props {
   guide: GuideEntry
@@ -30,6 +33,8 @@ interface Props {
 
 const { guide, topics, seoTitle, description, noindex, canonical, structuredData } = Astro.props
 const { article, topic, cover, readMinutes } = guide
+const photo = article.heroImage
+const credit = photo?.credit ? parsePhotoCredit(photo.credit) : null
 const group = GUIDE_GROUPS.find((g) => g.id === topic)!
 const name = article.author.name.trim() && article.author.name !== 'Unknown' ? article.author.name : null
 ---
@@ -41,6 +46,13 @@ const name = article.author.name.trim() && article.author.name !== 'Unknown' ? a
   canonical={canonical}
   structuredData={structuredData}
   headerTone="deep"
+  ogImage={photo ? { src: forBuild(photo).src, alt: photo.alt } : undefined}
+  article={{
+    published: article.publishedAt,
+    modified: article.updatedAt,
+    section: group.label,
+    tags: article.tags,
+  }}
 >
   <SiteNav />
 
@@ -48,7 +60,21 @@ const name = article.author.name.trim() && article.author.name !== 'Unknown' ? a
     <GuideNav topics={topics} within={topic} />
 
     <header class="guide-head">
-      <GuideCover cover={cover} size="hero" eager />
+      <figure class="guide-head__picture">
+        <GuideCover cover={cover} photo={photo} size="hero" eager />
+        {credit && (
+          <figcaption class="guide-head__credit">
+            Photo: {photo?.sourceUrl ? <a href={photo.sourceUrl} rel="noopener">{credit.author}</a> : credit.author}
+            {credit.licence && (
+              <>
+                , <a href={credit.licence.url} rel="license noopener">{credit.licence.name}</a>
+              </>
+            )}
+            {credit.rest}
+            {credit.licence && ', cropped'}
+          </figcaption>
+        )}
+      </figure>
       <div class="guide-head__tags">
         <a href="/guides/">Guides</a>
         {topics.includes(topic) ? <a href={topicPath(topic)}>{group.label}</a> : <span>{group.label}</span>}

@@ -2950,3 +2950,31 @@
     translate 900ms var(--home-ease-out);
   transition-delay: calc(300ms + var(--stagger));
 }
+
+/* "Show N more questions": a question row (.faq, .faq__q) read as an action
+   by the red line under it. Once open it hides, and the folded rows carry on
+   the list. */
+.faqs__more[open] {
+  border-block-start: 0;
+}
+
+.faqs__more[open] > .faqs__more-q {
+  display: none;
+}
+
+.faqs__more-q {
+  justify-content: start;
+  gap: 0.5rem;
+  font-size: var(--type-body);
+  line-height: var(--type-body-leading);
+  text-decoration: underline;
+  text-decoration-color: var(--color-red);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+
+.faqs__more-chevron {
+  flex: none;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+}

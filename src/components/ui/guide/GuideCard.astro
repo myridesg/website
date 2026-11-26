@@ -23,7 +23,7 @@ const name = article.author.name.trim() && article.author.name !== 'Unknown' ? a
 ---
 
 <a class:list={['guide-card', feature && 'guide-card--feature']} href={`/guides/${article.slug}/`}>
-  <GuideCover cover={cover} size={feature ? 'feature' : 'card'} />
+  <GuideCover cover={cover} photo={article.heroImage} size={feature ? 'feature' : 'card'} />
   <span class="guide-card__topic">{label}</span>
   <Heading class="guide-card__title">{article.title}</Heading>
   <p class="guide-card__text">{article.description}</p>

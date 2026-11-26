@@ -3,18 +3,33 @@
  *
  * Differences from the monorepo, both deliberate:
  *
- *   - No image mapping. The v2 guide routes do not render heroImage either, so
- *     carrying @sanity/image-url across just to drop the result would be a
- *     dependency for nothing. Add it back with the field when a guide layout
- *     actually needs the art.
- *   - No `avatar` on the author ref, for the same reason.
+ *   - heroImage maps to an ArticleImage (url, size, alt, credit) rather than
+ *     v2's `heroImageUrl` string. The GROQ projects it through the asset, so
+ *     no @sanity/image-url: there is no crop or hotspot to apply, only a URL.
+ *   - No `avatar` on the author ref: nothing here shows one.
  *
  * Everything else — field names, the publishedAt/updatedAt fallback, the
  * 'unknown' author null-object — matches, so guides read identically on both
  * sites.
  */
 
-import type { Article, ArticleAuthorRef, ArticleSeo, ArticleSummary } from '../entities'
+import type {
+  Article,
+  ArticleAuthorRef,
+  ArticleImage,
+  ArticleSeo,
+  ArticleSummary,
+} from '../entities'
+
+/** heroImage as content-repository.ts projects it: the asset's fields. */
+export interface ArticleImageDoc {
+  url: string
+  width: number
+  height: number
+  alt?: string | null
+  credit?: string | null
+  sourceUrl?: string | null
+}
 
 interface ArticleAuthorRefDoc {
   slug?: { current?: string } | null
@@ -27,6 +42,7 @@ export interface ArticleDoc {
   slug: { current: string }
   category: 'guide' | 'bike-model' | 'news'
   description: string
+  heroImage?: ArticleImageDoc | null
   author?: ArticleAuthorRefDoc | null
   body: unknown[]
   publishedAt: string
@@ -62,6 +78,18 @@ function mapSeo(doc: ArticleDoc): ArticleSeo {
   }
 }
 
+export function mapArticleImage(doc: ArticleImageDoc | null | undefined): ArticleImage | null {
+  if (!doc?.url) return null
+  return {
+    url: doc.url,
+    width: doc.width,
+    height: doc.height,
+    alt: doc.alt ?? '',
+    credit: doc.credit ?? null,
+    sourceUrl: doc.sourceUrl ?? null,
+  }
+}
+
 export function mapArticleAuthorRef(
   raw: ArticleAuthorRefDoc | null | undefined,
 ): ArticleAuthorRef {
@@ -78,6 +106,7 @@ export function mapArticleDoc(doc: ArticleDoc): Article {
     title: doc.title,
     description: doc.description,
     category: doc.category,
+    heroImage: mapArticleImage(doc.heroImage),
     author: mapArticleAuthorRef(doc.author),
     publishedAt: new Date(doc.publishedAt),
     updatedAt: new Date(doc.updatedAt ?? doc.publishedAt),
