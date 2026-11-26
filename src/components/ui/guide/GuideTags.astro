@@ -1,0 +1,25 @@
+---
+import { tagPath, type GuideTag } from '@/lib/guide-tags'
+
+/** The article's tags, each a link to the guides that share it. */
+interface Props {
+  tags: GuideTag[]
+}
+
+const { tags } = Astro.props
+---
+
+{
+  tags.length > 0 && (
+    <nav class="guide-tags" aria-labelledby="guide-tags-label">
+      <p class="guide-end__label" id="guide-tags-label">More on</p>
+      <ul class="guide-tags__list">
+        {tags.map((tag) => (
+          <li>
+            <a href={tagPath(tag.slug)}>{tag.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

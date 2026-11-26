@@ -534,6 +534,10 @@
   color: inherit;
 }
 
+.guide-head__caption {
+  color: var(--studio-text);
+}
+
 .guide-head__tags {
   display: flex;
   flex-wrap: wrap;
@@ -660,6 +664,55 @@
   outline: 2px solid var(--studio-headline);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+/* The article's end: its tags, then the share links, under a line. Tags are
+   links like the ones in the text; the share links are flat pills in ink, not
+   red, since red is kept for the main action. */
+
+.guide-end {
+  display: grid;
+  gap: var(--space-5);
+  padding-block-start: var(--space-6);
+  border-block-start: 1px solid var(--studio-rule);
+}
+
+.guide-end__label {
+  margin: 0 0 var(--space-2);
+  font-size: var(--type-small);
+  font-weight: 600;
+  color: var(--studio-note);
+}
+
+.guide-text .guide-tags__list,
+.guide-text .guide-share__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guide-text .guide-share__links {
+  gap: var(--space-2);
+}
+
+.guide-text .guide-share__link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  padding-inline: var(--space-4);
+  border: 1px solid var(--studio-rule);
+  border-radius: var(--radius-pill);
+  font-size: var(--type-small);
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .guide-text .guide-share__link:hover {
+    border-color: var(--studio-headline);
+  }
 }
 
 /* The frame Wise puts round its contents list and its tables: a rounded

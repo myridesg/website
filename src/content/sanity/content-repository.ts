@@ -5,9 +5,10 @@
  * a query drifts, the two sites start disagreeing about what a guide is.
  *
  *   1. `heroImage` is projected through its asset to { url, width, height,
- *      alt, credit, sourceUrl } (see ./mappers.ts). v2 fetches the raw image
- *      and builds a URL with @sanity/image-url; this site needs the asset's
- *      size and credit line as well, and the asset document already has both.
+ *      alt, caption, credit, sourceUrl } (see ./mappers.ts). v2 fetches the
+ *      raw image and builds a URL with @sanity/image-url; this site needs the
+ *      asset's size, caption (the asset's `description`) and credit line as
+ *      well, and the asset document already has all three.
  *      Author avatars and seo.ogImage are still not fetched.
  *   2. `body[]` dereferences the references inside a `relatedLinks` block to
  *      { slug, title, category }. Unprojected they arrive as bare _ref strings
@@ -39,6 +40,7 @@ const ARTICLE_BY_SLUG = /* groq */ `
       "width": metadata.dimensions.width,
       "height": metadata.dimensions.height,
       "alt": altText,
+      "caption": description,
       "credit": creditLine,
       "sourceUrl": source.url
     },

@@ -7,6 +7,7 @@ const photo = (width: number, height: number) => ({
   width,
   height,
   alt: '',
+  caption: null,
   credit: null,
   sourceUrl: null,
 })

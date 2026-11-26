@@ -1,0 +1,55 @@
+---
+import { shareLinks } from '@/lib/share-links'
+
+/**
+ * Share the guide: WhatsApp, Telegram, and the address itself. The first two
+ * are plain links into each app's share screen, so nothing loads from either
+ * company. "Copy link" is the page's own address: a few lines below copy it
+ * on a click, and without them it is still a link a reader can press and hold
+ * (or right-click) to copy.
+ */
+interface Props {
+  /** The guide's canonical address, absolute. */
+  url: string
+  title: string
+}
+
+const { url, title } = Astro.props
+const links = shareLinks(url, title)
+---
+
+<div class="guide-share">
+  <p class="guide-end__label" id="guide-share-label">Share this guide</p>
+  <ul class="guide-share__links" aria-labelledby="guide-share-label">
+    <li><a class="guide-share__link" href={links.whatsapp} rel="noopener" target="_blank">WhatsApp</a></li>
+    <li><a class="guide-share__link" href={links.telegram} rel="noopener" target="_blank">Telegram</a></li>
+    <li>
+      <a class="guide-share__link" href={url} data-copy-link>
+        <span data-copy-label>Copy link</span>
+      </a>
+    </li>
+  </ul>
+  <p class="sr-only" role="status" data-copy-status></p>
+</div>
+
+<script>
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-copy-link]')) {
+    const label = link.querySelector('[data-copy-label]')!
+    const status = link.closest('.guide-share')!.querySelector('[data-copy-status]')!
+    const say = (text: string) => {
+      label.textContent = text
+      status.textContent = text
+    }
+    link.addEventListener('click', async (event) => {
+      event.preventDefault()
+      try {
+        await navigator.clipboard.writeText(link.href)
+        say('Link copied')
+      } catch {
+        // No clipboard (an old browser, or one that refuses): the link is
+        // still the address, so say how to copy it by hand.
+        say('Press and hold to copy')
+      }
+    })
+  }
+</script>
