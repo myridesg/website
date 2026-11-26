@@ -105,8 +105,8 @@
   min-block-size: 3rem;
   padding-inline: 1.5rem;
   border-radius: var(--radius-xs);
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-red);
+  color: var(--color-on-dark);
   font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.1em;

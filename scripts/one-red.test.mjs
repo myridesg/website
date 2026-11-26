@@ -83,3 +83,16 @@ test('one red: the deep red exists once, as the guides header surface only', () 
   assert.deepEqual([...new Set(uses)], ['src/styles/guides.css'])
   assert.ok(contrast('#ffffff', '#9b0f06') >= 7)
 })
+
+test('one red: its job is the main action, so every main button is red with white type', () => {
+  const nav = read('src/components/ui/SiteNav.astro')
+  assert.match(nav, /--bar-cta-bg: var\(--color-red\);\s*--bar-cta-ink: var\(--color-on-dark\);/)
+  for (const [path, selector] of [
+    ['src/styles/reading.css', '.page-button {'],
+    ['src/styles/guides.css', '.guide-text .guide-cta .guide-cta__button {'],
+  ]) {
+    const css = read(path)
+    const rule = css.slice(css.indexOf(selector), css.indexOf('}', css.indexOf(selector)))
+    assert.match(rule, /background: var\(--color-red\);\s*color: var\(--color-on-dark\);/, selector)
+  }
+})

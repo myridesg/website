@@ -103,7 +103,9 @@ nine-token palette declared on `.page` in `page.module.css`. They live in the
 
 **The site has one red: `--color-red`, `#d6321c`**, the app's brand red
 (`brandEmber` in `myridesg-v2/packages/tokens`), the same value in both themes.
-Use it for fills, rules, marks and large type. As small text it passes AA only
+Use it for fills, rules, marks and large type. Its job is the main action:
+every main button is red with white type (the header's "Get the app", the
+guides' download button, the 404 button). Do not add red as decoration. As small text it passes AA only
 on plain white, so small red text elsewhere takes the foreground colour and the
 red goes under it as a line. `--color-ember` and `--color-ember-on-dark` are old
 names kept as aliases for branches in review: do not use them in new work. The

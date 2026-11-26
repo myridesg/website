@@ -181,8 +181,9 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     --bar-ink: var(--color-ink);
     --bar-label: --alpha(var(--color-ink) / 80%);
     --bar-sg: var(--color-red);
-    --bar-cta-bg: var(--color-ink);
-    --bar-cta-ink: var(--color-paper);
+    /* Red has one job on the site: the main action. */
+    --bar-cta-bg: var(--color-red);
+    --bar-cta-ink: var(--color-on-dark);
     /* The app icon is black: a hairline lets it read on a near-black bar. */
     --bar-icon-ring: light-dark(transparent, rgb(255 255 255 / 0.2));
     --gutter: var(--site-header-gutter, 1.25rem);
