@@ -1,15 +1,13 @@
 ---
-import { Image } from 'astro:assets'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
 import StoreButtons from '@/components/ui/StoreButtons.astro'
-import { OBJECTS, objectStyle, objectWidths, type ObjectKey } from './objects'
 
 /**
  * A feature page's opening, on the home page's studio wall: the breadcrumb
  * as the eyebrow, the headline in heavy capitals with its full stop in
  * ember (as the home page's h1), the lead and the store buttons. Beside it
- * (under it, on a phone) the stage: a row of the page's 3D objects on the
- * floor, over the app preview.
+ * (under it, on a phone) the stage: the app preview. The row of 3D objects
+ * over the phone is the home page's alone.
  *
  * The preview is the page's own <figure>, passed in as the slot and left
  * exactly as the page wrote it: the app screenshots are replaced there,
@@ -21,10 +19,9 @@ interface Props {
   /** One sentence ending in a full stop. */
   headline: string
   lead: string
-  objects: ObjectKey[]
 }
 
-const { crumb, headline, lead, objects } = Astro.props
+const { crumb, headline, lead } = Astro.props
 const words = headline.replace(/\.$/, '')
 ---
 
@@ -43,24 +40,6 @@ const words = headline.replace(/\.$/, '')
     </div>
 
     <div class="feature-hero__stage">
-      <ul class="feature-hero__objects" role="list" aria-hidden="true">
-        {
-          objects.map((key) => (
-            <li class="tool__art" style={objectStyle(key)}>
-              <span class="tool__drop">
-                <Image
-                  src={OBJECTS[key].image}
-                  alt=""
-                  widths={objectWidths(key)}
-                  sizes="(min-width: 64rem) 7rem, 4.5rem"
-                  loading="eager"
-                  class="tool__icon"
-                />
-              </span>
-            </li>
-          ))
-        }
-      </ul>
       <slot />
     </div>
   </div>

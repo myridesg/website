@@ -82,3 +82,8 @@ test('tidy (review): the guides red bar has a white focus ring', () => {
 test('tidy (review): the reading panel is a flat card', () => {
   assert.ok(!/box-shadow/.test(rule(read('src/styles/reading.css'), '.reading__panel')))
 })
+
+test('tidy: the FAQ headline column is never narrower than its longest word', () => {
+  // At 80px, "MAINTENANCE" ran into the questions in a 0.8fr column at 1280.
+  assert.match(read('src/styles/studio.css'), /grid-template-columns: minmax\(min-content, 0\.8fr\) minmax\(0, 2\.2fr\);/)
+})

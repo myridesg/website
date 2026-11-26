@@ -258,7 +258,9 @@
 
 @media (width >= 64rem) {
   .detail__inner {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 2.2fr);
+    /* At least as wide as the headline's longest word, so it never runs
+       into the questions. */
+    grid-template-columns: minmax(min-content, 0.8fr) minmax(0, 2.2fr);
     align-items: start;
     column-gap: clamp(2.5rem, 4vw, 5rem);
   }

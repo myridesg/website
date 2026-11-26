@@ -267,6 +267,14 @@
   }
 }
 
+/* The lost page's one object on the floor, where a feature page has its
+   phone. */
 .page-head--lost .feature-hero__objects {
   --icon: clamp(7rem, 5rem + 8vw, 13rem);
+
+  display: flex;
+  align-items: flex-end;
+  margin: 0;
+  padding: 0 0 calc(var(--icon) * 0.08);
+  list-style: none;
 }
