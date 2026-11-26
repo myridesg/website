@@ -113,6 +113,10 @@
   --type-lead: 1.25rem; /* 20px — the one line under a headline */
   --type-label: 1.5rem; /* 24px display — card, step and point titles */
   --type-title: clamp(2.5rem, 1.35rem + 4.4vw, 5rem); /* 80px display at desktop */
+  /* The line-height each of these is set with. */
+  --type-body-leading: 1.5;
+  --type-lead-leading: 1.5;
+  --type-label-leading: 1.08;
 
   /* ── Cards ───────────────────────────────────────────────────────────────
      A line on top means "read"; a card means "press". Cards are flat: the

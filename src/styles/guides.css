@@ -128,7 +128,7 @@
   margin: 0;
   overflow: hidden;
   font-size: var(--type-body);
-  line-height: 1.5;
+  line-height: var(--type-body-leading);
   color: var(--studio-text);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;

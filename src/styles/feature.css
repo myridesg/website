@@ -76,7 +76,7 @@
   max-inline-size: 34em;
   margin: 0;
   font-size: var(--type-body);
-  line-height: 1.5;
+  line-height: var(--type-body-leading);
   color: var(--studio-text);
 }
 
@@ -86,7 +86,7 @@
   font-family: var(--font-display);
   font-size: var(--type-label);
   font-weight: 700;
-  line-height: 1.08;
+  line-height: var(--type-label-leading);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--studio-headline);
@@ -198,7 +198,7 @@
 .feature-point__body {
   margin: var(--space-2) 0 0;
   font-size: var(--type-body);
-  line-height: 1.5;
+  line-height: var(--type-body-leading);
   color: var(--studio-text);
 }
 
@@ -370,7 +370,7 @@
   font-family: var(--font-display);
   font-size: var(--type-label);
   font-weight: 700;
-  line-height: 1.08;
+  line-height: var(--type-label-leading);
   text-transform: uppercase;
   color: var(--studio-headline);
 }
@@ -379,7 +379,7 @@
   max-inline-size: 30em;
   margin: var(--space-2) 0 0;
   font-size: var(--type-body);
-  line-height: 1.5;
+  line-height: var(--type-body-leading);
   color: var(--studio-text);
 }
 
@@ -414,7 +414,7 @@
   max-inline-size: 22em;
   margin: var(--space-2) 0 0;
   font-size: var(--type-body);
-  line-height: 1.5;
+  line-height: var(--type-body-leading);
   color: var(--studio-text);
 }
 
@@ -423,7 +423,7 @@
   max-inline-size: 42em;
   margin: 0;
   font-size: var(--type-body);
-  line-height: 1.5;
+  line-height: var(--type-body-leading);
   color: var(--studio-text);
 }
 

@@ -51,6 +51,25 @@ test('tidy: text takes its size from a role', () => {
     assert.match(rule(css, sel), /font-size: var\(--type-lead\);/, sel)
 })
 
+test('tidy: each text role brings its own line-height', () => {
+  for (const decl of ['--type-body-leading: 1.5;', '--type-lead-leading: 1.5;', '--type-label-leading: 1.08;'])
+    assert.ok(global.includes(decl), decl)
+  // Any rule sized by a role takes that role's leading; the FAQ answers keep
+  // their tighter 1.4 on purpose.
+  for (const [path, css] of [['studio', studio], ['home', home], ['feature', feature], ['guides', guides]]) {
+    for (const [block] of css.matchAll(/[^{}]*\{[^{}]*\}/g)) {
+      const role = block.match(/font-size: var\(--type-(body|lead|label)\);/)?.[1]
+      const leading = block.match(/line-height: ([^;]+);/)?.[1]
+      if (!role || !leading || /\.faq__text \{/.test(block)) continue
+      assert.equal(leading, `var(--type-${role}-leading)`, `${path}: ${block.trim().split('\n')[0]}`)
+    }
+  }
+})
+
+test('tidy: on the narrowest phones the two-up tool labels step down so they fit', () => {
+  assert.match(home, /@media \(width < 22\.5rem\) \{\s*\.sg \.tool__label \{\s*font-size: 1\.25rem;/)
+})
+
 test('tidy: non-links get a line, links get one flat card, nothing gets a shadow', () => {
   assert.match(rule(feature, '.feature-step'), /border-top: 1px solid var\(--studio-rule\);/)
   const card = rule(studio, '.studio-card')
