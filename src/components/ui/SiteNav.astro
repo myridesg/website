@@ -181,10 +181,16 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     --bar-ink: var(--color-ink);
     --bar-label: --alpha(var(--color-ink) / 80%);
     --bar-sg: var(--color-red);
-    --bar-cta-bg: var(--color-ink);
-    --bar-cta-ink: var(--color-paper);
+    /* Red has one job on the site: the main action. */
+    --bar-cta-bg: var(--color-red);
+    --bar-cta-ink: var(--color-on-dark);
     /* The app icon is black: a hairline lets it read on a near-black bar. */
     --bar-icon-ring: light-dark(transparent, rgb(255 255 255 / 0.2));
+    --bar-hover: --alpha(var(--color-ink) / 7%);
+    /* The ground at rest (none) and once pinned. A page tone (guides.css)
+       sets these tokens; nothing outside this file restyles the bar. */
+    --bar-bg: transparent;
+    --bar-bg-pinned: var(--color-paper);
     --gutter: var(--site-header-gutter, 1.25rem);
 
     position: absolute;
@@ -192,6 +198,7 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     top: 0;
     z-index: 50;
     color: var(--bar-ink);
+    background: var(--bar-bg);
   }
 
   @media (width >= 48rem) {
@@ -209,7 +216,7 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     --bar-h: var(--site-bar-slim);
     /* A shadow, not a border: the hairline adds nothing to the bar's height. */
     box-shadow: 0 1px 0 --alpha(var(--color-ink) / 10%);
-    background: var(--color-paper);
+    background: var(--bar-bg-pinned);
   }
 
   .site-header__bar {
@@ -461,10 +468,6 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     }
   }
 
-  .site-header__actions :global(.theme-toggle) {
-    color: var(--bar-ink);
-  }
-
   .site-header__cta {
     display: inline-flex;
     align-items: center;
@@ -518,7 +521,7 @@ const MOBILE_SECTIONS = NAV.map((item) =>
   }
 
   .site-menu > summary:hover {
-    background: --alpha(var(--color-ink) / 7%);
+    background: var(--bar-hover);
   }
 
   /* Three bars that fold into a cross. Transform-only. */
@@ -585,7 +588,7 @@ const MOBILE_SECTIONS = NAV.map((item) =>
   }
 
   /* Guides and Support carry no eyebrow; a hairline sets them apart from
-     the Tools group above, and the two of them read as one block. */
+     the Features group above, and the two of them read as one block. */
   .site-menu__group--plain {
     padding-top: 0.75rem;
     border-top: 1px solid --alpha(var(--color-ink) / 10%);

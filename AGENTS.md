@@ -50,7 +50,9 @@ src/
   lib/          home-content.ts (every home page string), faq-items.ts, seo.ts
   scripts/      client modules; scroll-progress.ts drives the home page motion
   assets/       images processed by astro:assets
-  styles/       global.css — Tailwind entry + @theme tokens
+  styles/       global.css — Tailwind entry + @theme tokens, incl. the one list of
+                spacing (--space-*, --section-pad), type roles (--type-*) and cards;
+                a line on top means "read", a flat card (no shadow) means "press"
                 studio.css — what home and feature pages share (wall, floor, finale)
                 home.css · feature.css — each imports studio.css first
   consts.ts     site config, store URLs, nav
@@ -101,12 +103,21 @@ nine-token palette declared on `.page` in `page.module.css`. They live in the
 
 **The site has one red: `--color-red`, `#d6321c`**, the app's brand red
 (`brandEmber` in `myridesg-v2/packages/tokens`), the same value in both themes.
-Use it for fills, rules, marks and large type. As small text it passes AA only
+Use it for fills, rules, marks and large type. Its job is the main action:
+every main button is red with white type (the header's "Get the app", the
+guides' download button, the 404 button). Do not add red as decoration. As small text it passes AA only
 on plain white, so small red text elsewhere takes the foreground colour and the
 red goes under it as a line. `--color-ember` and `--color-ember-on-dark` are old
 names kept as aliases for branches in review: do not use them in new work. The
 drawings of the app (`components/ui/app/`, the `--app-*` tokens) keep the app's
 own colours, including its deep header red.
+
+**One named exception: the guides header.** On `/guides/`, `/guides/topic/*`
+and `/guides/<slug>/` (BaseLayout `headerTone="deep"`) the site header stands on
+the app's deep header red, `--guide-bar: #9b0f06`, with the topic bar under it
+on `--guide-bar-low: #7d0c05`. It is a surface colour only: never text, never
+on any other page, declared once in `src/styles/guides.css`.
+`scripts/one-red.test.mjs` holds it to that.
 
 **5. `src/content/` is vendored.** It mirrors `@myridesg/{domain,data}` from the
 monorepo. Keep it in sync; do not refactor it, and do not put presentation

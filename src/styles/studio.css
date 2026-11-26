@@ -71,6 +71,9 @@
   --studio-wall-mid: light-dark(#e4e6ea, #151111);
   --studio-wall-low: light-dark(#e8eaed, #191414);
   --studio-floor: light-dark(#eef0f2, #1d1817);
+  /* A card on the studio wall: paper in light; in dark, the ramp's raised
+     surface, since dark paper is the same near-black as the wall. */
+  --studio-card: light-dark(var(--color-paper), var(--ramp-charcoal));
   --studio-glow: light-dark(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.045));
   --studio-vignette: light-dark(rgb(20 22 30 / 0.14), rgb(0 0 0 / 0.45));
   --studio-horizon: light-dark(rgb(120 124 135 / 0.1), rgb(255 255 255 / 0.04));
@@ -97,13 +100,23 @@
 
 .home-title {
   margin: 0;
-  font-size: clamp(2.5rem, 1.35rem + 4.4vw, 5.5rem);
+  font-size: var(--type-title);
   font-weight: 700;
-  line-height: 0.88;
+  line-height: 0.9;
   letter-spacing: -0.01em;
   text-transform: uppercase;
   text-wrap: balance;
   color: var(--studio-headline);
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────────
+   The one card: links (tool tiles, related links, guides, coming next) and
+   the worked example. Flat: the shade behind it lifts it, never a shadow. */
+.studio-card {
+  position: relative;
+  padding: var(--card-pad);
+  border-radius: var(--radius-card);
+  background: var(--studio-card);
 }
 
 /* ============================================================================
@@ -115,17 +128,30 @@
 
 .tool {
   display: grid;
-  justify-items: center;
-  row-gap: clamp(1rem, 0.75rem + 0.8vw, 1.5rem);
-  padding: 0.5rem 0.25rem 0.75rem;
-  border-radius: var(--radius-lg);
-  text-align: center;
+  justify-items: start;
+  row-gap: var(--space-5);
   text-decoration: none;
   color: var(--studio-headline);
   -webkit-tap-highlight-color: transparent;
 }
 
-.tool:focus-visible {
+/* A card is pressed: its one link covers all of it (the tool tiles here,
+   the guide titles in feature.css), and the focus ring goes round the card. */
+.tool::after,
+.feature-guide a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-card);
+}
+
+.tool:focus-visible,
+.feature-guide a:focus-visible {
+  outline: none;
+}
+
+.tool:focus-visible::after,
+.feature-guide a:focus-visible::after {
   outline: 2px solid var(--studio-headline);
   outline-offset: 4px;
 }
@@ -134,7 +160,6 @@
   position: relative;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
   inline-size: calc(var(--icon) * var(--k) * var(--ratio));
   block-size: var(--icon);
 }
@@ -180,13 +205,10 @@
 }
 
 .tool__label {
-  /* Two lines tall whether it wraps or not, so the four labels make one
-     even row at every width. */
-  min-block-size: 2lh;
   font-family: var(--font-display);
-  font-size: clamp(1.125rem, 0.95rem + 0.6vw, 1.5rem);
+  font-size: var(--type-label);
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.08;
   text-transform: uppercase;
   text-wrap: balance;
 }
@@ -233,7 +255,7 @@
  * ==========================================================================*/
 
 .detail {
-  padding-block: clamp(3.5rem, 2rem + 4vw, 6rem);
+  padding-block: var(--section-pad);
   background: var(--color-paper);
 }
 
@@ -245,13 +267,11 @@
   padding-inline: clamp(1.25rem, 5vw, 6rem);
 }
 
-.detail__title {
-  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.75rem);
-}
-
 @media (width >= 64rem) {
   .detail__inner {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 2.2fr);
+    /* At least as wide as the headline's longest word, so it never runs
+       into the questions. */
+    grid-template-columns: minmax(min-content, 0.8fr) minmax(0, 2.2fr);
     align-items: start;
     column-gap: clamp(2.5rem, 4vw, 5rem);
   }
@@ -303,6 +323,8 @@
 
 .faq__text {
   max-inline-size: 36em;
+  font-size: var(--type-lead);
+  line-height: 1.4;
   text-wrap: pretty;
 }
 
@@ -359,8 +381,8 @@
   max-inline-size: 38em;
   margin: 0;
   padding-block: 0 clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
-  font-size: var(--text-md);
-  line-height: 1.6;
+  font-size: var(--type-body);
+  line-height: 1.5;
   color: var(--studio-text);
 }
 

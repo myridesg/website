@@ -27,7 +27,7 @@
   display: grid;
   place-items: center;
   block-size: var(--cover-h);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   /* A stand-in until guides carry photographs: the grey the objects were
      lit against (the floor's, a step off the page, in dark). Neutral on
      purpose; a real picture replaces the panel and its colour. */
@@ -88,7 +88,7 @@
 .guide-card {
   display: grid;
   align-content: start;
-  gap: 0.875rem;
+  gap: var(--space-4);
   min-inline-size: 0;
   color: inherit;
   text-decoration: none;
@@ -98,7 +98,7 @@
 .guide-card:focus-visible {
   outline: 2px solid var(--studio-headline);
   outline-offset: 4px;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
 }
 
 .guide-card__topic {
@@ -127,7 +127,7 @@
   display: -webkit-box;
   margin: 0;
   overflow: hidden;
-  font-size: var(--text-lg);
+  font-size: var(--type-body);
   line-height: 1.5;
   color: var(--studio-text);
   -webkit-box-orient: vertical;
@@ -146,7 +146,7 @@
 
 .guide-grid {
   display: grid;
-  gap: 3rem 1rem;
+  gap: var(--space-7) var(--space-4);
 }
 
 /* Two wide: six tracks, a card spans three. An odd count gives the first
@@ -226,7 +226,34 @@
 .guides-wrap {
   inline-size: min(71.75rem, 100% - 2.5rem);
   margin-inline: auto;
-  padding-block: clamp(2rem, 1.25rem + 2.5vw, 3.5rem) clamp(4rem, 2.5rem + 5vw, 7rem);
+  padding-block: clamp(2rem, 1.25rem + 2.5vw, 3.5rem) var(--section-pad);
+}
+
+/* ── The deep red header ────────────────────────────────────────────────────
+   The guides pages only (BaseLayout headerTone="deep"): the site header sits
+   on the app's own home-header red (homeHeader.surface in myridesg-v2), the
+   topic bar under it a step deeper. The one exception to the site's one red:
+   a surface, never text, never anywhere else. White on #9b0f06 is 8.5:1.
+   The same in both themes. The bar takes the tone through SiteNav's own
+   tokens: white type, "SG" and current marker, a white "Get the app" with
+   red type, a white focus ring. The phone menu sheet keeps the page's
+   ground and ink. */
+:root[data-header='deep'] {
+  --guide-bar: #9b0f06;
+  --guide-bar-low: #7d0c05;
+}
+
+:root[data-header='deep'] .site-header {
+  --bar-bg: var(--guide-bar);
+  --bar-bg-pinned: var(--guide-bar);
+  --bar-ink: var(--color-on-dark);
+  --bar-label: --alpha(var(--color-on-dark) / 82%);
+  --bar-sg: var(--color-on-dark);
+  --bar-cta-bg: var(--color-on-dark);
+  --bar-cta-ink: var(--guide-bar);
+  --bar-icon-ring: --alpha(var(--color-on-dark) / 30%);
+  --bar-hover: --alpha(var(--color-on-dark) / 14%);
+  --focus-ring: var(--color-on-dark);
 }
 
 /* ── Topic bar ──────────────────────────────────────────────────────────── */
@@ -239,7 +266,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.25rem 1.75rem;
+  gap: var(--space-1) var(--space-6);
   inline-size: min(81rem, 100% - 2.5rem);
   margin-inline: auto;
   padding-block: 0.25rem;
@@ -287,11 +314,44 @@
   border-radius: var(--radius-xs);
 }
 
+/* Under the deep red header: the deeper red, white type, a white rule under
+   where you are. */
+:root[data-header='deep'] .guide-nav {
+  border-block: 0;
+  background: var(--guide-bar-low);
+}
+
+:root[data-header='deep'] .guide-nav a {
+  color: --alpha(var(--color-on-dark) / 82%);
+  text-decoration-color: --alpha(var(--color-on-dark) / 60%);
+}
+
+:root[data-header='deep'] .guide-nav a.guide-nav__home,
+:root[data-header='deep'] .guide-nav a[aria-current='page'],
+:root[data-header='deep'] .guide-nav a.is-within {
+  color: var(--color-on-dark);
+}
+
+:root[data-header='deep'] .guide-nav a[aria-current='page'],
+:root[data-header='deep'] .guide-nav a.is-within {
+  text-decoration-color: var(--color-on-dark);
+}
+
+@media (hover: hover) {
+  :root[data-header='deep'] .guide-nav a:hover {
+    color: var(--color-on-dark);
+  }
+}
+
+:root[data-header='deep'] .guide-nav a:focus-visible {
+  outline-color: var(--color-on-dark);
+}
+
 /* ── Guides home ────────────────────────────────────────────────────────── */
 
 .guides-head {
   display: grid;
-  gap: 1rem;
+  gap: var(--space-4);
   margin-block-end: clamp(3rem, 2rem + 3vw, 5.5rem);
 }
 
@@ -309,7 +369,7 @@
 .guides-head__lead {
   max-inline-size: 38em;
   margin: 0;
-  font-size: var(--text-lg);
+  font-size: var(--type-reading);
   line-height: 1.6;
 }
 
@@ -350,13 +410,13 @@
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 0.75rem 1.5rem;
+  gap: var(--space-3) var(--space-5);
   margin-block-end: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
 }
 
 .guide-section__title {
   margin: 0;
-  font-size: clamp(2.5rem, 1.35rem + 4.4vw, 4rem);
+  font-size: var(--type-title);
   font-weight: 700;
   line-height: 0.92;
   letter-spacing: -0.01em;
@@ -378,7 +438,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: var(--space-6);
   margin-block-end: clamp(3rem, 2rem + 3vw, 5rem);
 }
 
@@ -386,12 +446,12 @@
   display: grid;
   flex: 1 1 28rem;
   min-inline-size: 0;
-  gap: 1.25rem;
+  gap: var(--space-5);
 }
 
 .topic-head__title {
   margin: 0;
-  font-size: clamp(2.75rem, 1.4rem + 5.6vw, 5rem);
+  font-size: var(--type-title);
   font-weight: 700;
   line-height: 0.9;
   letter-spacing: -0.015em;
@@ -434,7 +494,7 @@
 
 .guide-head {
   display: grid;
-  gap: 1.25rem;
+  gap: var(--space-5);
   padding-block: clamp(1.5rem, 1rem + 1.5vw, 2rem) 0;
 }
 
@@ -453,7 +513,7 @@
 .guide-head__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1rem;
+  gap: var(--space-1) var(--space-4);
 }
 
 .guide-head__tags a,
@@ -487,16 +547,15 @@
 .guide-text {
   display: grid;
   max-inline-size: 45.8rem;
-  gap: 1.75rem;
-  padding-block: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem) clamp(3rem, 2rem + 3vw, 5rem);
-  font-size: var(--text-lg);
+  gap: var(--space-6);
+  padding-block: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem) var(--section-pad);
+  font-size: var(--type-reading);
   line-height: 1.6;
   color: var(--studio-text);
 }
 
 @media (width >= 40rem) {
   .guide-text {
-    gap: 2rem;
     font-size: 1.125rem;
     line-height: 1.555;
   }
@@ -537,7 +596,7 @@
 .guide-text ul,
 .guide-text ol {
   display: grid;
-  gap: 0.625rem;
+  gap: var(--space-3);
   padding-inline-start: 1.375rem;
 }
 
@@ -584,13 +643,13 @@
 
 .guide-contents {
   border: 1px solid var(--studio-rule);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   overflow: hidden;
 }
 
 .guide-contents__title {
   margin: 0;
-  padding: 1.125rem 1.5rem;
+  padding: var(--space-4) var(--space-5);
   border-block-end: 1px solid var(--studio-rule);
   background: var(--color-soft);
   font-size: var(--text-md);
@@ -602,7 +661,7 @@
 .guide-contents ul {
   margin: 0;
   padding: 1rem 1.5rem 1.25rem 2.75rem;
-  gap: 0.125rem;
+  gap: var(--space-1);
 }
 
 /* Each row is tall enough to tap; the bullet stays on the first line. */
@@ -614,17 +673,17 @@
 
 .guide-faq {
   display: grid;
-  gap: 1.75rem;
+  gap: var(--space-6);
 }
 
 .guide-faq__item {
   display: grid;
-  gap: 0.625rem;
+  gap: var(--space-3);
 }
 
 .guide-faq__answer {
   display: grid;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .guide-faq__answer > * {
@@ -637,8 +696,8 @@
   /* As wide as the card rows on the list pages, not the article's head. */
   inline-size: min(71.75rem, 100% - 2.5rem);
   display: grid;
-  gap: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
-  padding-block: 0 clamp(4rem, 2.5rem + 5vw, 6.5rem);
+  gap: var(--space-6);
+  padding-block: 0 var(--section-pad);
 }
 
 .guide-more__title {
@@ -683,14 +742,14 @@
 .spec-rows dl {
   margin: 0;
   border: 1px solid var(--studio-rule);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   overflow: hidden;
 }
 
 .spec-rows dl > div {
   display: grid;
-  gap: 0.25rem;
-  padding: 1.125rem 1.5rem;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-5);
 }
 
 .spec-rows dl > div + div {
@@ -713,7 +772,7 @@
   .spec-rows dl > div {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: baseline;
-    gap: 1.5rem;
+    gap: var(--space-5);
   }
 }
 
@@ -723,7 +782,7 @@
 .guide-cta {
   display: grid;
   justify-items: center;
-  gap: 1.125rem;
+  gap: var(--space-4);
   padding-block: 0.5rem;
   text-align: center;
 }
@@ -741,15 +800,15 @@
   text-decoration: none;
 }
 
-/* An authored link: the header's black button. */
+/* An authored link: the header's red button. */
 .guide-text .guide-cta .guide-cta__button {
   display: inline-flex;
   align-items: center;
   min-block-size: 3rem;
   padding-inline: 1.5rem;
-  border-radius: 0.5rem;
-  background: var(--color-ink);
-  color: var(--color-paper);
+  border-radius: var(--radius-xs);
+  background: var(--color-red);
+  color: var(--color-on-dark);
   font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.1em;

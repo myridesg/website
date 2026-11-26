@@ -63,7 +63,8 @@
     inline-size: 2.75rem; /* 44px — full touch target, matches the menu button */
     block-size: 2.75rem;
     border-radius: 9999px;
-    color: var(--color-ink);
+    /* The header's ink and hover when it sits in one (SiteNav sets them). */
+    color: var(--bar-ink, var(--color-ink));
     cursor: pointer;
     transition: background-color 200ms ease;
   }
@@ -73,7 +74,7 @@
   }
 
   .theme-toggle:hover {
-    background: --alpha(var(--color-ink) / 7%);
+    background: var(--bar-hover, --alpha(var(--color-ink) / 7%));
   }
 
   /* The two icons share one cell so the swap is a cross-fade in place rather

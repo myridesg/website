@@ -22,7 +22,7 @@
 .feature-explain,
 .feature-steps,
 .feature-related {
-  padding-block: clamp(3.5rem, 2rem + 5vw, 7rem);
+  padding-block: var(--section-pad);
 }
 
 .feature-points,
@@ -72,16 +72,11 @@
   background: radial-gradient(130% 100% at 50% 45%, transparent 60%, var(--studio-vignette) 100%);
 }
 
-/* Part headlines: the size home parts 2 and 8 use. */
-.feature-title {
-  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.75rem);
-}
-
 .feature-text {
   max-inline-size: 34em;
   margin: 0;
-  font-size: var(--text-lg);
-  line-height: 1.6;
+  font-size: var(--type-body);
+  line-height: 1.5;
   color: var(--studio-text);
 }
 
@@ -89,9 +84,9 @@
 .feature-label {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
+  font-size: var(--type-label);
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.08;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--studio-headline);
@@ -161,19 +156,6 @@
   row-gap: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
 }
 
-/* The page's objects in one row on the floor (the tool tiles' art, without
-   the link), over the app preview. */
-.feature-hero__objects {
-  --icon: clamp(4.5rem, 3.5rem + 3vw, 7rem);
-
-  display: flex;
-  align-items: flex-end;
-  gap: clamp(1.25rem, 0.5rem + 3vw, 2.75rem);
-  margin: 0;
-  padding: 0 0 calc(var(--icon) * 0.08);
-  list-style: none;
-}
-
 /* The preview's caption, read on the wall. */
 .feature-hero__stage figcaption {
   color: var(--studio-note);
@@ -201,21 +183,22 @@
 
 .feature-points__list {
   display: grid;
-  gap: clamp(1.75rem, 1rem + 2vw, 2.5rem) clamp(1.5rem, 3vw, 3rem);
+  gap: var(--space-6) var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+/* Points and steps are read, not pressed: a line on top, no box. */
 .feature-point {
-  padding-top: 1.25rem;
+  padding-top: var(--space-5);
   border-top: 1px solid var(--studio-rule);
 }
 
 .feature-point__body {
-  margin: 0.75rem 0 0;
-  font-size: var(--text-md);
-  line-height: 1.6;
+  margin: var(--space-2) 0 0;
+  font-size: var(--type-body);
+  line-height: 1.5;
   color: var(--studio-text);
 }
 
@@ -238,13 +221,6 @@
 
 .feature-card {
   container: feature-card / inline-size;
-  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-  border: 1px solid var(--studio-rule);
-  border-radius: var(--radius-lg);
-  background: var(--color-paper);
-  box-shadow:
-    0 1.5rem 3rem -1.25rem var(--studio-shadow-far),
-    0 0.25rem 0.75rem var(--studio-shadow-near);
 }
 
 .feature-card__title {
@@ -366,7 +342,7 @@
 .feature-steps__list {
   counter-reset: feature-step;
   display: grid;
-  row-gap: clamp(1.75rem, 1rem + 2vw, 2.5rem);
+  gap: var(--space-6) var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -374,6 +350,8 @@
 
 .feature-step {
   counter-increment: feature-step;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--studio-rule);
 }
 
 .feature-step::before {
@@ -388,50 +366,54 @@
 }
 
 .feature-step__label {
-  margin: 0.5rem 0 0;
+  margin: var(--space-2) 0 0;
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  font-size: var(--type-label);
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.08;
   text-transform: uppercase;
   color: var(--studio-headline);
 }
 
 .feature-step__body {
   max-inline-size: 30em;
-  margin: 0.75rem 0 0;
-  font-size: var(--text-md);
-  line-height: 1.6;
+  margin: var(--space-2) 0 0;
+  font-size: var(--type-body);
+  line-height: 1.5;
   color: var(--studio-text);
 }
 
 @media (width >= 40rem) {
   .feature-steps__list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: clamp(1.5rem, 3vw, 3.5rem);
   }
 }
 
 /* ── Related links ────────────────────────────────────────────────────────
-   Home part 5's tiles, three in a row from 768px, each with a line under
-   it. */
+   Home part 5's cards, three in a row from 768px, each with a line under
+   its label. A card is pressed: the whole of it is the link. */
 
 .feature-related__list {
   --icon: clamp(6.5rem, 5rem + 4vw, 9rem);
 
   display: grid;
-  gap: clamp(2.25rem, 1rem + 3vw, 3rem) clamp(1rem, 3vw, 2.5rem);
-  inline-size: min(100%, 72rem);
+  gap: var(--space-6) var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.feature-related__item,
+.feature-guide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .feature-related__line {
   max-inline-size: 22em;
-  margin: 0.25rem auto 0;
-  text-align: center;
-  font-size: var(--text-base);
+  margin: var(--space-2) 0 0;
+  font-size: var(--type-body);
   line-height: 1.5;
   color: var(--studio-text);
 }
@@ -440,13 +422,13 @@
 .feature-related__more {
   max-inline-size: 42em;
   margin: 0;
-  font-size: var(--text-base);
-  line-height: 1.6;
+  font-size: var(--type-body);
+  line-height: 1.5;
   color: var(--studio-text);
 }
 
 .feature-related__more--small {
-  font-size: var(--text-sm);
+  font-size: var(--type-small);
   color: var(--studio-note);
 }
 
@@ -474,11 +456,12 @@
 }
 
 /* ── Further reading (FeaturedGuides.astro, maintenance page) ─────────────
-   Text links under hairlines, as the points; three in a row from 768px. */
+   Links, so cards, as the related links; three in a row from 768px. The
+   title's link covers the whole card (studio.css). */
 
 .feature-guides {
   display: grid;
-  gap: clamp(1.75rem, 1rem + 2vw, 2.5rem) clamp(1.5rem, 3vw, 3rem);
+  gap: var(--space-6) var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -486,14 +469,13 @@
 
 .feature-guides a {
   color: inherit;
-  text-decoration: underline;
-  text-decoration-color: var(--studio-rule);
-  text-underline-offset: 0.2em;
+  text-decoration: none;
 }
 
 @media (hover: hover) {
   .feature-guides a:hover {
-    text-decoration-color: currentColor;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 }
 
@@ -515,6 +497,11 @@
 
 .tool-band--paper .feature-explain::after {
   content: none;
+}
+
+/* On a paper band the card takes the studio wall instead. */
+.tool-band--paper {
+  --studio-card: light-dark(var(--studio-wall-mid), var(--ramp-charcoal));
 }
 
 .tool-band--wall .feature-steps {

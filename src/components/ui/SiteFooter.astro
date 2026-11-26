@@ -1,20 +1,17 @@
 ---
 import { Image } from 'astro:assets'
-import { NAV, SOCIAL } from '@/consts'
+import { FEATURE_LINKS, SOCIAL, TOOL_LINKS } from '@/consts'
 import appIcon from '@/assets/home/app-icon.png'
 
-/** A nav group's links, so the footer's labels never drift from the header's. */
-const navGroup = (label: string) =>
-  NAV.flatMap((item) => ('children' in item && item.label === label ? item.children : []))
-
-// Every link resolves to a page that is built or an id on the home page. Each
-// destination appears once; labels name what is there now, so nothing here
-// promises a section the site does not have.
+// The feature and tool links are the header's own lists, so their labels
+// never drift from it. Every link resolves to a page that is built or an id
+// on the home page. Each destination appears once; labels name what is there
+// now, so nothing here promises a section the site does not have.
 const COLUMNS = [
-  { heading: 'Features', links: navGroup('Features') },
+  { heading: 'Features', links: FEATURE_LINKS },
   {
     heading: 'Tools & guides',
-    links: [...navGroup('Tools'), { label: 'Riding guides', href: '/guides/' }],
+    links: [...TOOL_LINKS, { label: 'Riding guides', href: '/guides/' }],
   },
   {
     heading: 'The app',

@@ -17,6 +17,12 @@ const files = (dir) =>
     return statSync(path).isDirectory() ? files(path) : /\.(css|astro)$/.test(name) ? [path] : []
   })
 
+// Every .css and .astro file under src/ but the drawings of the app, which
+// keep the app's own colours. Read once for the tests that scan them all.
+const sources = files('src')
+  .filter((path) => !path.includes('/ui/app/'))
+  .map((path) => ({ path, text: read(path) }))
+
 function luminance(hex) {
   const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
   const f = (c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
@@ -42,11 +48,9 @@ test('one red: the old names are aliases, kept only for branches still in review
 })
 
 test('one red: nothing on main still asks for an old red by name', () => {
-  const stale = files('src')
-    // The drawings of the app keep the app's own colours.
-    .filter((path) => !path.includes('/ui/app/'))
-    .flatMap((path) =>
-      read(path)
+  const stale = sources
+    .flatMap(({ path, text }) =>
+      text
         .split('\n')
         .map((line, i) => ({ path, line, n: i + 1 }))
         .filter(({ line }) => /var\(--color-ember|var\(--ramp-red|var\(--ramp-ember|ember-on-dark\)/.test(line))
@@ -73,4 +77,27 @@ test('one red: small red text turns to the foreground where red would not pass',
   assert.match(global, /\[data-theme='dark'\] \.text-red,[^{]*\{\s*color: var\(--color-ink\);/)
   assert.match(global, /\.bg-soft \.text-red,\s*\.bg-rose \.text-red \{\s*color: var\(--color-ink\);/)
   assert.ok(!/need__due \{[^}]*color: var\(--(home-accent|color-red)\)/.test(read('src/styles/home.css')))
+})
+
+test('one red: the deep red exists once, as the guides header surface only', () => {
+  const uses = sources.filter(({ text }) => /#9b0f06|#7d0c05/i.test(text)).map(({ path }) => path)
+  assert.deepEqual(uses, ['src/styles/guides.css'])
+  assert.ok(contrast('#ffffff', '#9b0f06') >= 7)
+})
+
+test('one red: its job is the main action, so every main button is red with white type', () => {
+  const nav = read('src/components/ui/SiteNav.astro')
+  assert.match(nav, /--bar-cta-bg: var\(--color-red\);/)
+  assert.match(nav, /--bar-cta-ink: var\(--color-on-dark\);/)
+  for (const [path, selector] of [
+    ['src/styles/reading.css', '.page-button {'],
+    ['src/styles/guides.css', '.guide-text .guide-cta .guide-cta__button {'],
+  ]) {
+    const css = read(path)
+    const at = css.indexOf(selector)
+    assert.notEqual(at, -1, `no rule for ${selector}`)
+    const rule = css.slice(at, css.indexOf('}', at))
+    assert.match(rule, /background: var\(--color-red\);/, selector)
+    assert.match(rule, /color: var\(--color-on-dark\);/, selector)
+  }
 })

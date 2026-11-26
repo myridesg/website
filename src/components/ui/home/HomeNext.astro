@@ -50,7 +50,7 @@ const trioSizes = '(min-width: 68.75rem) 21rem, (min-width: 40rem) 23.5rem, 45vw
         NEXT.cards.map((card, i) => {
           const object = card.title === 'Community' ? undefined : OBJECTS[card.title]
           return (
-            <li class="soon" data-card={card.title} data-progress style={`--i: ${i}; --col: ${i % 2}`}>
+            <li class="soon studio-card" data-card={card.title} data-progress style={`--i: ${i}; --col: ${i % 2}`}>
               <div class={`soon__art soon__art--${object ? object.key : 'group'}`} aria-hidden="true">
                 {object ? (
                   <span class="soon__obj">

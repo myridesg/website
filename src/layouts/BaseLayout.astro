@@ -35,6 +35,11 @@ interface Props {
   canonical?: string
   /** Page-specific schema.org entities, merged with the shared Organization and WebSite. */
   structuredData?: Record<string, unknown>[]
+  /**
+   * "deep" puts the site header on the app's deep red (guides pages only).
+   * Written to <html data-header> so SiteNav and the topic bar can follow it.
+   */
+  headerTone?: 'deep'
 }
 
 const {
@@ -44,6 +49,7 @@ const {
   noindex = false,
   canonical: canonicalOverride,
   structuredData = [],
+  headerTone,
 } = Astro.props
 
 /**
@@ -141,7 +147,7 @@ const bingSiteVerification = envVar('BING_SITE_VERIFICATION')
 ---
 
 <!doctype html>
-<html lang="en-SG">
+<html lang="en-SG" data-header={headerTone}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

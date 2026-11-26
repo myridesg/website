@@ -126,54 +126,54 @@ export type NavItem = { label: string; href: string } | {
 
 /**
  * Primary navigation, page links only. The scroll anchors (/#never-miss,
- * /#detail) live in the footer, and every feature page is reachable from the
- * Features group.
+ * /#detail) live in the footer. One Features menu holds every feature page
+ * and the tools: a separate two-link Tools menu cost a click and a header
+ * slot for little.
  */
 // TODO: add these back as each page lands — linking before then ships nav items
 // that 404:
 //   { label: 'Catalog', href: '/catalog' }  — needs the catalog index page
 //   { label: 'Demo',    href: '/demo' }     — lives on feat/demo
+/** What the app does: one page each. */
+export const FEATURE_LINKS: readonly NavChild[] = [
+  {
+    label: 'Maintenance tracker',
+    href: '/motorcycle-maintenance-app/',
+    description: 'Log servicing, mileage and costs in one service history.',
+  },
+  {
+    label: 'Expense & fuel tracker',
+    href: '/motorcycle-expense-tracker/',
+    description: 'Log fuel fill-ups, mileage and running costs in SGD.',
+  },
+  {
+    label: 'Renewal reminders',
+    href: '/motorcycle-renewal-reminders/',
+    description: 'Reminders ahead of your COE, road tax and insurance expiry.',
+  },
+  {
+    label: 'Workshop directory',
+    href: '/motorcycle-workshop-directory/',
+    description: 'Find a workshop by area or service, then call or get directions.',
+  },
+]
+
+/** The app's rider tools, then the COE calculator, which also works on its page. */
+export const TOOL_LINKS: readonly NavChild[] = [
+  {
+    label: 'Rider tools',
+    href: '/rider-tools/',
+    description: 'Causeway cameras and RON95 petrol prices in one place.',
+  },
+  {
+    label: 'COE calculator',
+    href: '/motorcycle-coe-calculator/',
+    description: 'Work out the total, yearly and monthly cost of a COE renewal.',
+  },
+]
+
 export const NAV: readonly NavItem[] = [
-  {
-    label: 'Features',
-    children: [
-      {
-        label: 'Maintenance tracker',
-        href: '/motorcycle-maintenance-app/',
-        description: 'Log servicing, mileage and costs in one service history.',
-      },
-      {
-        label: 'Expense & fuel tracker',
-        href: '/motorcycle-expense-tracker/',
-        description: 'Log fuel fill-ups, mileage and running costs in SGD.',
-      },
-      {
-        label: 'Renewal reminders',
-        href: '/motorcycle-renewal-reminders/',
-        description: 'Reminders ahead of your COE, road tax and insurance expiry.',
-      },
-      {
-        label: 'Workshop directory',
-        href: '/motorcycle-workshop-directory/',
-        description: 'Find a workshop by area or service, then call or get directions.',
-      },
-    ],
-  },
-  {
-    label: 'Tools',
-    children: [
-      {
-        label: 'COE calculator',
-        href: '/motorcycle-coe-calculator/',
-        description: 'Work out the total, yearly and monthly cost of a COE renewal.',
-      },
-      {
-        label: 'Rider tools',
-        href: '/rider-tools/',
-        description: 'Causeway cameras and RON95 petrol prices in one place.',
-      },
-    ],
-  },
+  { label: 'Features', children: [...FEATURE_LINKS, ...TOOL_LINKS] },
   { label: 'Guides', href: '/guides/' },
   { label: 'Support', href: '/support/' },
 ]

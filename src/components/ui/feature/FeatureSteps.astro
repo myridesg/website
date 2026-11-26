@@ -16,7 +16,7 @@ const { headline, steps } = Astro.props
 
 <section class="feature-steps">
   <div class="feature-steps__inner">
-    <h2 class="home-title feature-title">{headline}</h2>
+    <h2 class="home-title">{headline}</h2>
     <ol class="feature-steps__list" role="list">
       {
         steps.map(([label, body]) => (
