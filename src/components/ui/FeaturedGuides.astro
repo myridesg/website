@@ -22,7 +22,7 @@ const guides = fetched.filter((guide) => guide !== null && !guide.seo.noIndex)
   <section class="feature-related" aria-labelledby="maintenance-reading-title">
     <div class="feature-related__inner">
       <div class="feature-related__head">
-        <h2 id="maintenance-reading-title" class="home-title feature-title">
+        <h2 id="maintenance-reading-title" class="home-title">
           Keep learning about your motorcycle.
         </h2>
         <p class="feature-text">
@@ -31,7 +31,7 @@ const guides = fetched.filter((guide) => guide !== null && !guide.seo.noIndex)
       </div>
       <ul class="feature-guides" role="list">
         {guides.map((guide) => (
-          <li class="feature-point">
+          <li class="feature-guide studio-card">
             <h3 class="feature-label">
               <a href={`/guides/${guide!.slug}/`}>{guide!.title}</a>
             </h3>

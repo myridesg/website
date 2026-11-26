@@ -2016,8 +2016,6 @@
 
 .sg__tools {
   display: grid;
-  justify-self: stretch;
-  inline-size: 100%;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-5);
   margin: 0;
@@ -2025,23 +2023,12 @@
   list-style: none;
 }
 
-/* Each tool is a link: one flat card, paper on the studio wall. */
-.sg__tool {
-  position: relative;
-  padding: var(--card-pad);
-  border-radius: var(--radius-card);
-  background: var(--studio-card);
-}
-
 /* On a phone two cards sit side by side: a step less padding and a
    smaller object, or the object would not fit the card. */
 @media (width < 40rem) {
   .sg {
     --icon: 5.5rem;
-  }
-
-  .sg__tool {
-    padding: var(--space-4);
+    --card-pad: var(--space-4);
   }
 }
 
@@ -2598,7 +2585,6 @@
   --next-art: 6.5rem;
   --next-panel: light-dark(rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.04));
   --next-badge: light-dark(rgb(30 32 40 / 0.07), rgb(255 255 255 / 0.08));
-  --soon-pad: var(--card-pad);
 
   position: relative;
   isolation: isolate;
@@ -2649,8 +2635,6 @@
   display: grid;
   grid-template-rows: auto 1fr;
   row-gap: var(--space-5);
-  padding: var(--card-pad);
-  border-radius: var(--radius-card);
   background: var(--next-panel);
   overflow: clip;
 }
@@ -2835,11 +2819,7 @@
 /* Phones: two cards side by side, so a step less padding. */
 @media (width < 40rem) {
   .next {
-    --soon-pad: var(--space-4);
-  }
-
-  .soon {
-    padding: var(--space-4);
+    --card-pad: var(--space-4);
   }
 }
 
@@ -2855,8 +2835,8 @@
   }
 
   .soon__art--group {
-    --tw: min(var(--next-art) * 1105 / 660, 34.5rem, 100cqi + var(--soon-pad));
-    --ts: min(var(--tw) * 0.163, (100cqi - var(--tw)) / 2 + var(--soon-pad) * 0.3);
+    --tw: min(var(--next-art) * 1105 / 660, 34.5rem, 100cqi + var(--card-pad));
+    --ts: min(var(--tw) * 0.163, (100cqi - var(--tw)) / 2 + var(--card-pad) * 0.3);
   }
 
   .soon__badge {
@@ -2868,7 +2848,6 @@
   .soon__title {
     margin-block-start: 0.25rem;
   }
-
 }
 
 /* One row of four, left to right. */

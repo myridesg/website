@@ -109,6 +109,16 @@
   color: var(--studio-headline);
 }
 
+/* ── Card ─────────────────────────────────────────────────────────────────
+   The one card: links (tool tiles, related links, guides, coming next) and
+   the worked example. Flat: the shade behind it lifts it, never a shadow. */
+.studio-card {
+  position: relative;
+  padding: var(--card-pad);
+  border-radius: var(--radius-card);
+  background: var(--studio-card);
+}
+
 /* ============================================================================
  * A glossy object on the studio floor over its label, the whole tile a link
  * (home part 5, the feature pages' related links). The list around it sets
@@ -120,25 +130,28 @@
   display: grid;
   justify-items: start;
   row-gap: var(--space-5);
-  text-align: left;
   text-decoration: none;
   color: var(--studio-headline);
   -webkit-tap-highlight-color: transparent;
 }
 
-/* The tile is a card; the link covers all of it. */
-.tool::after {
+/* A card is pressed: its one link covers all of it (the tool tiles here,
+   the guide titles in feature.css), and the focus ring goes round the card. */
+.tool::after,
+.feature-guide a::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: var(--radius-card);
 }
 
-.tool:focus-visible {
+.tool:focus-visible,
+.feature-guide a:focus-visible {
   outline: none;
 }
 
-.tool:focus-visible::after {
+.tool:focus-visible::after,
+.feature-guide a:focus-visible::after {
   outline: 2px solid var(--studio-headline);
   outline-offset: 4px;
 }
@@ -147,7 +160,6 @@
   position: relative;
   display: flex;
   align-items: flex-end;
-  justify-content: flex-start;
   inline-size: calc(var(--icon) * var(--k) * var(--ratio));
   block-size: var(--icon);
 }
@@ -254,7 +266,6 @@
   margin-inline: auto;
   padding-inline: clamp(1.25rem, 5vw, 6rem);
 }
-
 
 @media (width >= 64rem) {
   .detail__inner {

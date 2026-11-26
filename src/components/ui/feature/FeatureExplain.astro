@@ -17,10 +17,10 @@ const { headline, paragraphs, cardTitle } = Astro.props
 <section class="feature-explain">
   <div class="feature-explain__inner">
     <div class="feature-explain__copy">
-      <h2 class="home-title feature-title">{headline}</h2>
+      <h2 class="home-title">{headline}</h2>
       {paragraphs.map((text) => <p class="feature-text">{text}</p>)}
     </div>
-    <div class="feature-card">
+    <div class="feature-card studio-card">
       <h3 class="feature-label feature-card__title">{cardTitle}</h3>
       <slot />
     </div>

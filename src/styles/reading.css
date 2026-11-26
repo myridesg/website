@@ -269,7 +269,7 @@
 
 /* The lost page's one object on the floor, where a feature page has its
    phone. */
-.page-head--lost .feature-hero__objects {
+.lost__objects {
   --icon: clamp(7rem, 5rem + 8vw, 13rem);
 
   display: flex;

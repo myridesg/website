@@ -186,6 +186,11 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     --bar-cta-ink: var(--color-on-dark);
     /* The app icon is black: a hairline lets it read on a near-black bar. */
     --bar-icon-ring: light-dark(transparent, rgb(255 255 255 / 0.2));
+    --bar-hover: --alpha(var(--color-ink) / 7%);
+    /* The ground at rest (none) and once pinned. A page tone (guides.css)
+       sets these tokens; nothing outside this file restyles the bar. */
+    --bar-bg: transparent;
+    --bar-bg-pinned: var(--color-paper);
     --gutter: var(--site-header-gutter, 1.25rem);
 
     position: absolute;
@@ -193,6 +198,7 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     top: 0;
     z-index: 50;
     color: var(--bar-ink);
+    background: var(--bar-bg);
   }
 
   @media (width >= 48rem) {
@@ -210,45 +216,7 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     --bar-h: var(--site-bar-slim);
     /* A shadow, not a border: the hairline adds nothing to the bar's height. */
     box-shadow: 0 1px 0 --alpha(var(--color-ink) / 10%);
-    background: var(--color-paper);
-  }
-
-  /* ── The guides' deep red bar ──────────────────────────────────────────
-     Guides pages only (<html data-header="deep">, set by BaseLayout's
-     headerTone): the bar stands on the app's header red at rest and when
-     scrolled, in both themes, with white type, a white "SG" and current
-     marker, and a white "Get the app" with red type. The phone menu sheet
-     under it keeps the page's own ground and ink. --guide-bar is declared
-     in guides.css. */
-  :global(:root[data-header='deep']) .site-header {
-    --bar-ink: var(--color-on-dark);
-    --bar-label: --alpha(var(--color-on-dark) / 82%);
-    --bar-sg: var(--color-on-dark);
-    --bar-cta-bg: var(--color-on-dark);
-    --bar-cta-ink: var(--guide-bar);
-    --bar-icon-ring: --alpha(var(--color-on-dark) / 30%);
-    --bar-hover: --alpha(var(--color-on-dark) / 14%);
-
-    background: var(--guide-bar);
-  }
-
-  :global(:root[data-header='deep']) .site-header[data-scrolled],
-  :global(:root[data-header='deep']) .site-header:has(.site-menu[open]) {
-    background: var(--guide-bar);
-  }
-
-  /* The site's red focus ring would vanish on the red bar. */
-  :global(:root[data-header='deep']) .site-header :global(:focus-visible) {
-    outline-color: var(--color-on-dark);
-  }
-
-  :global(:root[data-header='deep']) .site-header :global(.theme-toggle) {
-    color: var(--bar-ink);
-  }
-
-  :global(:root[data-header='deep']) .site-header :global(.theme-toggle:hover),
-  :global(:root[data-header='deep']) .site-menu > summary:hover {
-    background: var(--bar-hover);
+    background: var(--bar-bg-pinned);
   }
 
   .site-header__bar {
@@ -500,10 +468,6 @@ const MOBILE_SECTIONS = NAV.map((item) =>
     }
   }
 
-  .site-header__actions :global(.theme-toggle) {
-    color: var(--bar-ink);
-  }
-
   .site-header__cta {
     display: inline-flex;
     align-items: center;
@@ -557,7 +521,7 @@ const MOBILE_SECTIONS = NAV.map((item) =>
   }
 
   .site-menu > summary:hover {
-    background: --alpha(var(--color-ink) / 7%);
+    background: var(--bar-hover);
   }
 
   /* Three bars that fold into a cross. Transform-only. */

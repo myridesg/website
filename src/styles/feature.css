@@ -221,9 +221,6 @@
 
 .feature-card {
   container: feature-card / inline-size;
-  padding: var(--card-pad);
-  border-radius: var(--radius-card);
-  background: var(--studio-card);
 }
 
 .feature-card__title {
@@ -401,27 +398,21 @@
 
   display: grid;
   gap: var(--space-6) var(--space-5);
-  inline-size: 100%;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.feature-related__item {
-  position: relative;
+.feature-related__item,
+.feature-guide {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: var(--card-pad);
-  border-radius: var(--radius-card);
-  background: var(--studio-card);
-  text-align: left;
 }
 
 .feature-related__line {
   max-inline-size: 22em;
   margin: var(--space-2) 0 0;
-  text-align: left;
   font-size: var(--type-body);
   line-height: 1.5;
   color: var(--studio-text);
@@ -466,7 +457,7 @@
 
 /* ── Further reading (FeaturedGuides.astro, maintenance page) ─────────────
    Links, so cards, as the related links; three in a row from 768px. The
-   title's link covers the whole card. */
+   title's link covers the whole card (studio.css). */
 
 .feature-guides {
   display: grid;
@@ -476,37 +467,9 @@
   list-style: none;
 }
 
-.feature-guides > .feature-point {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: var(--card-pad);
-  border: 0;
-  border-radius: var(--radius-card);
-  background: var(--studio-card);
-  text-align: left;
-}
-
 .feature-guides a {
   color: inherit;
   text-decoration: none;
-}
-
-.feature-guides a::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-}
-
-.feature-guides a:focus-visible {
-  outline: none;
-}
-
-.feature-guides a:focus-visible::after {
-  outline: 2px solid var(--studio-headline);
-  outline-offset: 4px;
 }
 
 @media (hover: hover) {

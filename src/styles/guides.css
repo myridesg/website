@@ -234,10 +234,26 @@
    on the app's own home-header red (homeHeader.surface in myridesg-v2), the
    topic bar under it a step deeper. The one exception to the site's one red:
    a surface, never text, never anywhere else. White on #9b0f06 is 8.5:1.
-   SiteNav.astro reads --guide-bar; the same in both themes. */
+   The same in both themes. The bar takes the tone through SiteNav's own
+   tokens: white type, "SG" and current marker, a white "Get the app" with
+   red type, a white focus ring. The phone menu sheet keeps the page's
+   ground and ink. */
 :root[data-header='deep'] {
   --guide-bar: #9b0f06;
   --guide-bar-low: #7d0c05;
+}
+
+:root[data-header='deep'] .site-header {
+  --bar-bg: var(--guide-bar);
+  --bar-bg-pinned: var(--guide-bar);
+  --bar-ink: var(--color-on-dark);
+  --bar-label: --alpha(var(--color-on-dark) / 82%);
+  --bar-sg: var(--color-on-dark);
+  --bar-cta-bg: var(--color-on-dark);
+  --bar-cta-ink: var(--guide-bar);
+  --bar-icon-ring: --alpha(var(--color-on-dark) / 30%);
+  --bar-hover: --alpha(var(--color-on-dark) / 14%);
+  --focus-ring: var(--color-on-dark);
 }
 
 /* ── Topic bar ──────────────────────────────────────────────────────────── */

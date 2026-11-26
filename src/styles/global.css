@@ -387,8 +387,9 @@
   }
 
   /* Keyboard focus must stay visible everywhere. */
+  /* --focus-ring: a surface where red would vanish sets its own. */
   :focus-visible {
-    outline: 2px solid var(--color-red);
+    outline: 2px solid var(--focus-ring, var(--color-red));
     outline-offset: 2px;
   }
 
