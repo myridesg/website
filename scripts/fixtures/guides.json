@@ -1282,7 +1282,10 @@
   ],
   "publishedAt": "2026-05-12T00:00:00.000Z",
   "updatedAt": "2026-05-12T00:00:00.000Z",
-  "tags": [],
+  "tags": [
+   "Honda",
+   "CB400"
+  ],
   "relatedSlugs": [],
   "seo": {
    "noIndex": false
@@ -1320,7 +1323,10 @@
   ],
   "publishedAt": "2026-05-12T00:00:00.000Z",
   "updatedAt": "2026-05-12T00:00:00.000Z",
-  "tags": [],
+  "tags": [
+   "Honda",
+   "Scooters"
+  ],
   "relatedSlugs": [],
   "seo": {
    "noIndex": false
@@ -1358,7 +1364,9 @@
   ],
   "publishedAt": "2026-05-12T00:00:00.000Z",
   "updatedAt": "2026-05-12T00:00:00.000Z",
-  "tags": [],
+  "tags": [
+   "honda "
+  ],
   "relatedSlugs": [],
   "seo": {
    "noIndex": false
@@ -1738,7 +1746,9 @@
   ],
   "publishedAt": "2026-05-12T00:00:00.000Z",
   "updatedAt": "2026-05-12T00:00:00.000Z",
-  "tags": [],
+  "tags": [
+   "scooters"
+  ],
   "relatedSlugs": [],
   "seo": {
    "noIndex": false
@@ -3608,10 +3618,19 @@
   ],
   "publishedAt": "2026-05-13T00:00:00.000Z",
   "updatedAt": "2026-05-13T00:00:00.000Z",
-  "tags": [],
+  "tags": [
+   "Fixture only"
+  ],
   "relatedSlugs": [],
   "seo": {
    "noIndex": true
+  },
+  "heroImage": {
+   "url": "/icon-512x512.png",
+   "width": 512,
+   "height": 512,
+   "alt": "The MyRideSG app icon",
+   "caption": "Credit-free fixture caption"
   }
  },
  {
@@ -3654,10 +3673,22 @@
   ],
   "publishedAt": "2026-05-14T00:00:00.000Z",
   "updatedAt": "2026-06-03T00:00:00.000Z",
-  "tags": [],
+  "tags": [
+   "Fixture only",
+   "Honda"
+  ],
   "relatedSlugs": [],
   "seo": {
    "noIndex": true
+  },
+  "heroImage": {
+   "url": "/icon-512x512.png",
+   "width": 512,
+   "height": 512,
+   "alt": "The MyRideSG app icon",
+   "caption": "The app icon, standing in for a photo",
+   "credit": "Fixture Photographer, CC BY-SA 4.0, via Wikimedia Commons",
+   "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fixture.jpg"
   }
  }
 ]

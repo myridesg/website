@@ -5,19 +5,22 @@ import SiteFooter from '@/components/ui/SiteFooter.astro'
 import GuideNav from '@/components/ui/guide/GuideNav.astro'
 import GuideCover from '@/components/ui/guide/GuideCover.astro'
 import GuideByline from '@/components/ui/guide/GuideByline.astro'
+import GuideTags from '@/components/ui/guide/GuideTags.astro'
+import GuideShare from '@/components/ui/guide/GuideShare.astro'
 import FeatureAsk from '@/components/ui/feature/FeatureAsk.astro'
 import { GUIDE_GROUPS, topicPath, type GuideGroupId } from '@/lib/guide-navigation'
 import type { GuideEntry } from '@/lib/guides'
+import type { GuideTag } from '@/lib/guide-tags'
 import { parsePhotoCredit } from '@/lib/photo-credit'
 import { forBuild } from '@/lib/build-image'
 import '@/styles/guides.css'
 
 /**
- * The guide article's page: the topic bar, a picture (with its credit when it
- * is a photo), two tags, the title and the byline in a wide head, then the
- * text in a narrower column under it. The default slot is the body; "after"
- * is whatever follows the text (more guides). The page ends on the closing
- * band.
+ * The guide article's page: the topic bar, a picture (with its caption and
+ * credit when it is a photo), two tags, the title and the byline in a wide
+ * head, then the text in a narrower column under it, ending on the article's
+ * tags and the share links. The default slot is the body; "after" is whatever
+ * follows the text (more guides). The page ends on the closing band.
  */
 interface Props {
   guide: GuideEntry
@@ -28,13 +31,18 @@ interface Props {
   description: string
   noindex?: boolean
   canonical?: string
+  /** The address to share: the canonical one, absolute. */
+  shareUrl: string
+  /** The article's tags that have a page of their own. */
+  tags: GuideTag[]
   structuredData?: Record<string, unknown>[]
 }
 
-const { guide, topics, seoTitle, description, noindex, canonical, structuredData } = Astro.props
+const { guide, topics, seoTitle, description, noindex, canonical, shareUrl, tags, structuredData } = Astro.props
 const { article, topic, cover, readMinutes } = guide
 const photo = article.heroImage
 const credit = photo?.credit ? parsePhotoCredit(photo.credit) : null
+const caption = photo?.caption ?? null
 const group = GUIDE_GROUPS.find((g) => g.id === topic)!
 const name = article.author.name.trim() && article.author.name !== 'Unknown' ? article.author.name : null
 ---
@@ -62,16 +70,22 @@ const name = article.author.name.trim() && article.author.name !== 'Unknown' ? a
     <header class="guide-head">
       <figure class="guide-head__picture">
         <GuideCover cover={cover} photo={photo} size="hero" eager />
-        {credit && (
+        {(caption || credit) && (
           <figcaption class="guide-head__credit">
-            Photo: {photo?.sourceUrl ? <a href={photo.sourceUrl} rel="noopener">{credit.author}</a> : credit.author}
-            {credit.licence && (
+            {caption && <span class="guide-head__caption">{caption}</span>}
+            {caption && credit && ' · '}
+            {credit && (
               <>
-                , <a href={credit.licence.url} rel="license noopener">{credit.licence.name}</a>
+                Photo: {photo?.sourceUrl ? <a href={photo.sourceUrl} rel="noopener">{credit.author}</a> : credit.author}
+                {credit.licence && (
+                  <>
+                    , <a href={credit.licence.url} rel="license noopener">{credit.licence.name}</a>
+                  </>
+                )}
+                {credit.rest}
+                {credit.licence && ', cropped'}
               </>
             )}
-            {credit.rest}
-            {credit.licence && ', cropped'}
           </figcaption>
         )}
       </figure>
@@ -92,6 +106,10 @@ const name = article.author.name.trim() && article.author.name !== 'Unknown' ? a
     <article class="guide-text">
       <p class="guide-text__lead">{article.description}</p>
       <slot />
+      <footer class="guide-end">
+        <GuideTags tags={tags} />
+        <GuideShare url={shareUrl} title={article.title} />
+      </footer>
     </article>
 
     <slot name="after" />

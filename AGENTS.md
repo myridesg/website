@@ -112,7 +112,7 @@ names kept as aliases for branches in review: do not use them in new work. The
 drawings of the app (`components/ui/app/`, the `--app-*` tokens) keep the app's
 own colours, including its deep header red.
 
-**One named exception: the guides header.** On `/guides/`, `/guides/topic/*`
+**One named exception: the guides header.** On `/guides/`, `/guides/topic/*`, `/guides/tag/*`
 and `/guides/<slug>/` (BaseLayout `headerTone="deep"`) the site header stands on
 the app's deep header red, `--guide-bar: #9b0f06`, with the topic bar under it
 on `--guide-bar-low: #7d0c05`. It is a surface colour only: never text, never

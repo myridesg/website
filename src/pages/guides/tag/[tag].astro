@@ -1,0 +1,90 @@
+---
+import type { GetStaticPaths } from 'astro'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import SiteNav from '@/components/ui/SiteNav.astro'
+import SiteFooter from '@/components/ui/SiteFooter.astro'
+import GuideNav from '@/components/ui/guide/GuideNav.astro'
+import GuideGrid from '@/components/ui/guide/GuideGrid.astro'
+import FeatureAsk from '@/components/ui/feature/FeatureAsk.astro'
+import { contentRepo } from '@/lib/content'
+import { GUIDE_GROUPS } from '@/lib/guide-navigation'
+import { loadGuides } from '@/lib/guide-data'
+import { guideTags, tagPath } from '@/lib/guide-tags'
+import { breadcrumbEntity, webPageEntity } from '@/lib/seo'
+import '@/styles/guides.css'
+
+// One page per tag that two or more listed guides share (see guide-tags.ts).
+// It is a topic page without the topic's object: a tag is the editor's word,
+// not one of the four topics, so there is no picture made for it.
+export const getStaticPaths = (async () => {
+  const listed = (await loadGuides(contentRepo)).filter((entry) => entry.listed)
+  const topics = GUIDE_GROUPS.filter((group) => listed.some((entry) => entry.topic === group.id)).map(
+    (group) => group.id,
+  )
+  return guideTags(listed).map((tag) => ({
+    params: { tag: tag.slug },
+    props: { tag, topics },
+  }))
+}) satisfies GetStaticPaths
+
+const { tag, topics } = Astro.props
+const site = Astro.site!
+const path = tagPath(tag.slug)
+const { guides, label } = tag
+const count = guides.length
+const title = `${label} guides for Singapore riders`
+const intro = `Every MyRideSG guide tagged ${label}.`
+
+const structuredData = [
+  webPageEntity(site, {
+    path,
+    type: 'CollectionPage',
+    name: title,
+    description: intro,
+    mainEntity: { '@id': new URL(`${path}#guides`, site).href },
+  }),
+  breadcrumbEntity(site, path, [
+    { name: 'Home', href: '/' },
+    { name: 'Riding guides', href: '/guides/' },
+    { name: label },
+  ]),
+  {
+    '@type': 'ItemList',
+    '@id': new URL(`${path}#guides`, site).href,
+    numberOfItems: count,
+    itemListElement: guides.map((guide, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: guide.article.title,
+      url: new URL(`/guides/${guide.article.slug}/`, site).href,
+    })),
+  },
+]
+---
+
+<BaseLayout title={title} description={intro} structuredData={structuredData} headerTone="deep">
+  <SiteNav />
+
+  <main class="feature-page guides-page">
+    <GuideNav topics={topics} />
+
+    <div class="guides-wrap">
+      <header class="topic-head">
+        <div class="topic-head__copy">
+          <h1 class="topic-head__title">{label}<span class="topic-head__dot" aria-hidden="true">.</span></h1>
+          <p class="guides-head__lead">{intro}</p>
+          <p class="topic-head__count">{count} guides</p>
+        </div>
+      </header>
+
+      <GuideGrid guides={guides} heading="h2" />
+    </div>
+
+    <FeatureAsk
+      headline="Keep your motorcycle records close."
+      note="Log services, fuel and renewal dates in MyRideSG on iOS or Android."
+    />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>

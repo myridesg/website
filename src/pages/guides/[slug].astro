@@ -8,6 +8,7 @@ import RelatedGuides from '@/components/ui/guide/RelatedGuides.astro'
 import { contentRepo } from '@/lib/content'
 import { GUIDE_GROUPS, isMaintenanceGuide, relatedGuides } from '@/lib/guide-navigation'
 import { loadGuides } from '@/lib/guide-data'
+import { guideTags, linkedTags } from '@/lib/guide-tags'
 import { anchorHeadings, faqItemsOf, guideBreadcrumbs } from '@/lib/guides'
 import {
   breadcrumbEntity,
@@ -27,15 +28,16 @@ export const getStaticPaths = (async () => {
   const topics = GUIDE_GROUPS.filter((group) => listed.some((entry) => entry.topic === group.id)).map(
     (group) => group.id,
   )
+  const tagPages = guideTags(listed)
   return guides.map((guide) => ({
     params: { slug: guide.article.slug },
-    props: { guide, listed, topics },
+    props: { guide, listed, topics, tags: linkedTags(guide.article.tags, tagPages) },
   }))
 }) satisfies GetStaticPaths
 
 // Props are inferred from getStaticPaths above; a local `Props` interface would
 // be ignored by Astro's generated types for a dynamic route.
-const { guide, listed, topics } = Astro.props
+const { guide, listed, topics, tags } = Astro.props
 const { article } = guide
 
 // Portable Text arrives as JSON in bodySource, tagged by bodyFormat, because
@@ -126,6 +128,8 @@ const structuredData = [
   description={article.seo.metaDescription ?? article.description}
   noindex={article.seo.noIndex}
   canonical={article.seo.canonicalUrl ?? undefined}
+  shareUrl={canonical}
+  tags={tags}
   structuredData={structuredData}
 >
   <GuideContents items={contents} />

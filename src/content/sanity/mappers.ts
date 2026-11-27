@@ -3,7 +3,7 @@
  *
  * Differences from the monorepo, both deliberate:
  *
- *   - heroImage maps to an ArticleImage (url, size, alt, credit) rather than
+ *   - heroImage maps to an ArticleImage (url, size, alt, caption, credit) rather than
  *     v2's `heroImageUrl` string. The GROQ projects it through the asset, so
  *     no @sanity/image-url: there is no crop or hotspot to apply, only a URL.
  *   - No `avatar` on the author ref: nothing here shows one.
@@ -27,6 +27,7 @@ export interface ArticleImageDoc {
   width: number
   height: number
   alt?: string | null
+  caption?: string | null
   credit?: string | null
   sourceUrl?: string | null
 }
@@ -85,6 +86,7 @@ export function mapArticleImage(doc: ArticleImageDoc | null | undefined): Articl
     width: doc.width,
     height: doc.height,
     alt: doc.alt ?? '',
+    caption: doc.caption?.trim() || null,
     credit: doc.credit ?? null,
     sourceUrl: doc.sourceUrl ?? null,
   }

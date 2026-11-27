@@ -150,3 +150,60 @@ test('built page: guides pages ask for the deep header, and only they do', () =>
   for (const page of ['index.html', 'support/index.html', 'rider-tools/index.html'])
     assert.ok(!/<html[^>]* data-header=/.test(read(`dist-guides/${page}`)), page)
 })
+
+const end = (html) => html.match(/<footer class="guide-end"[\s\S]*?<\/footer>/)?.[0] ?? ''
+
+test('built page: an article ends on WhatsApp, Telegram and Copy link, all to its canonical address', () => {
+  const html = guide('honda-cb400-problems')
+  const share = end(html)
+  const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)[1]
+  const hrefs = [...share.matchAll(/class="guide-share__link" href="([^"]+)"/g)].map((m) => m[1].replaceAll('&amp;', '&'))
+  assert.equal(hrefs.length, 3)
+  const [whatsapp, telegram, copy] = hrefs.map((href) => new URL(href))
+  assert.equal(whatsapp.host, 'wa.me')
+  assert.ok(whatsapp.searchParams.get('text').endsWith(` ${canonical}`))
+  assert.equal(telegram.href.split('?')[0], 'https://t.me/share/url')
+  assert.equal(telegram.searchParams.get('url'), canonical)
+  assert.match(telegram.searchParams.get('text'), /^Honda CB400 Common Problems/)
+  // Without the script, Copy link is still the address to press and hold.
+  assert.equal(copy.href, canonical)
+  assert.match(share, /data-copy-link/)
+  // Nothing on the page is loaded from WhatsApp or Telegram.
+  assert.ok(!/<(script|img|iframe|link)[^>]+(wa\.me|whatsapp|t\.me|telegram)/i.test(html))
+})
+
+test('built page: tags shared by two listed guides link to a tag page; the rest are not shown', () => {
+  const tags = end(guide('honda-cb400-problems')).match(/<nav class="guide-tags"[\s\S]*?<\/nav>/)[0]
+  assert.match(tags, /<a href="\/guides\/tag\/honda\/">Honda<\/a>/)
+  assert.ok(!tags.includes('CB400'), 'a tag on one guide has no page, so no link')
+  assert.match(end(guide('honda-pcx-problems')), /href="\/guides\/tag\/scooters\/">Scooters</)
+  // Two unlisted guides share "Fixture only": unlisted guides do not make a page.
+  assert.ok(!existsSync('dist-guides/guides/tag/fixture-only/index.html'))
+  assert.ok(!existsSync('dist-guides/guides/tag/cb400/index.html'))
+  assert.ok(!/<nav class="guide-tags"/.test(guide('motorcycle-oil-change-singapore')), 'no tags, no tag row')
+})
+
+test('built page: a tag page lists the listed guides with that tag, in the topic-page look', () => {
+  const page = read('dist-guides/guides/tag/honda/index.html')
+  assert.match(page, /<title>Honda guides for Singapore riders/)
+  assert.match(page, /<h1 class="topic-head__title"[^>]*>Honda<span[^>]*aria-hidden="true"[^>]*>\.<\/span><\/h1>/)
+  assert.match(page, />3 guides</)
+  assert.equal(cards(page), 3)
+  for (const slug of ['honda-cb400-problems', 'honda-pcx-problems', 'honda-wave-problems'])
+    assert.match(page, new RegExp(`href="/guides/${slug}/"`))
+  assert.ok(!page.includes('/guides/fixture-one-heading/'), 'an unlisted guide is on no list')
+  assert.match(page, /<html[^>]* data-header="deep"/)
+  assert.match(page, /"@type":"CollectionPage"[\s\S]*"@type":"BreadcrumbList"/)
+  const sitemap = read('dist-guides/sitemap-0.xml')
+  assert.match(sitemap, /\/guides\/tag\/honda\//)
+  assert.match(sitemap, /\/guides\/tag\/scooters\//)
+})
+
+test('built page: the hero photo reads "caption · credit", or the caption alone', () => {
+  const credit = (html) => html.match(/<figcaption class="guide-head__credit">([\s\S]*?)<\/figcaption>/)?.[1]
+  const both = credit(guide('fixture-one-heading'))
+  assert.match(both, /^<span class="guide-head__caption">The app icon, standing in for a photo<\/span> · Photo: <a/)
+  assert.match(both, /CC BY-SA 4\.0<\/a>, via Wikimedia Commons, cropped$/)
+  assert.equal(credit(guide('fixture-long-values')), '<span class="guide-head__caption">Credit-free fixture caption</span>')
+  assert.equal(credit(guide('honda-cb400-problems')), undefined, 'no photo, no caption line')
+})

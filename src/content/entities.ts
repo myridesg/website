@@ -25,13 +25,16 @@ export interface ArticleAuthorRef {
 
 /**
  * A picture stored in Sanity. v2 carries only `heroImageUrl`; this site also
- * needs the size (for astro:assets) and the credit its licence asks for.
+ * needs the size (for astro:assets), a caption and the credit its licence
+ * asks for.
  */
 export interface ArticleImage {
   url: string
   width: number
   height: number
   alt: string
+  /** One line on what the photo shows: the Sanity asset's `description`. */
+  caption: string | null
   /** e.g. "Rainmaker47, CC BY-SA 3.0, via Wikimedia Commons" */
   credit: string | null
   /** The page the credit links to: where the picture and its licence live. */
