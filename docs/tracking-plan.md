@@ -19,7 +19,8 @@ What the site tells PostHog, and when. If it is not in this table, the site does
 1. Write down the question it answers. If there is no question, do not add it.
 2. Add a row to the table above.
 3. Add the dashboard tile that shows the answer.
-4. Only then write the code that sends it.
+4. If it records something new about visitors, update "On our website" in Section 5 of `src/pages/privacy.astro`, and have it reviewed.
+5. Only then write the code that sends it.
 
 ## Known gaps
 

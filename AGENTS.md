@@ -156,9 +156,6 @@ code at all.
 
 ## Known gaps
 
-- The privacy policy does not yet cover the website's PostHog analytics. It
-  needs legal review before `PUBLIC_POSTHOG_KEY` goes into production. Do not
-  edit `privacy.astro` — flag it.
 - `/catalog` is not built yet. It is absent from the nav on purpose; do not
   link it until it exists.
 - `/guides` is built and linked, but its content is empty until

@@ -66,8 +66,9 @@ gitignored and must never be committed.
 
 1. In the PostHog project settings, turn on **cookieless server hash mode**.
    Without it every event is silently dropped. Turn on **heatmaps** too.
-2. Get legal review of `src/pages/privacy.astro`. It does not yet describe
-   website analytics, and the site has no opt-out.
+2. Check that `src/pages/privacy.astro` Section 5 ("On our website") still
+   describes what `docs/tracking-plan.md` lists. It was reviewed against the
+   events on 29 November 2026.
 
 ### The Sanity read token is load-bearing
 
