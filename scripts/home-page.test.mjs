@@ -248,3 +248,9 @@ test('built page: part 8 shows the first rows and folds the rest under one close
   assert.equal(unescape(textOf(label)).trim(), DETAIL.moreQuestions(hidden))
   assert.ok(jsonLd().includes(FAQ_ITEMS.at(-1).q), 'folded questions stay in the FAQPage data')
 })
+
+test('built page: every store button sits in a named place', () => {
+  for (const place of ['header', 'hero', 'finale', 'footer']) {
+    assert.match(html(), new RegExp(`data-analytics-location="${place}"`), place)
+  }
+})

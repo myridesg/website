@@ -31,7 +31,7 @@ const note = node.note?.trim()
 const isExternal = Boolean(href && /^https?:\/\//i.test(href))
 ---
 
-<aside class="guide-cta">
+<aside class="guide-cta" data-analytics-location="guide">
   {note && <p class="guide-cta__note">{note}</p>}
 
   {
