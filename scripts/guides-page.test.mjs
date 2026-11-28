@@ -207,3 +207,9 @@ test('built page: the hero photo reads "caption · credit", or the caption alone
   assert.equal(credit(guide('fixture-long-values')), '<span class="guide-head__caption">Credit-free fixture caption</span>')
   assert.equal(credit(guide('honda-cb400-problems')), undefined, 'no photo, no caption line')
 })
+
+test('built page: an article marks where it ends, once, and the index does not', () => {
+  const marks = (html) => html.match(/data-guide-end/g)?.length ?? 0
+  assert.equal(marks(read('dist-guides/guides/motorcycle-oil-change-singapore/index.html')), 1)
+  assert.equal(marks(read('dist-guides/guides/index.html')), 0)
+})

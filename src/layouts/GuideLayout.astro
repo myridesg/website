@@ -106,7 +106,7 @@ const name = article.author.name.trim() && article.author.name !== 'Unknown' ? a
     <article class="guide-text">
       <p class="guide-text__lead">{article.description}</p>
       <slot />
-      <footer class="guide-end">
+      <footer class="guide-end" data-guide-end>
         <GuideTags tags={tags} />
         <GuideShare url={shareUrl} title={article.title} />
       </footer>

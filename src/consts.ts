@@ -177,3 +177,6 @@ export const NAV: readonly NavItem[] = [
   { label: 'Guides', href: '/guides/' },
   { label: 'Support', href: '/support/' },
 ]
+
+/** PostHog's EU ingestion host. The CSP's connect-src in astro.config.mjs must name it. */
+export const POSTHOG_HOST = 'https://eu.i.posthog.com'

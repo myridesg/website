@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { readFileSync, statSync, existsSync } from 'node:fs'
+import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs'
 
 const html = () => readFileSync('dist/index.html', 'utf8')
 const jsonLd = () => [...html().matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('')
@@ -247,4 +247,21 @@ test('built page: part 8 shows the first rows and folds the rest under one close
   assert.doesNotMatch(attrs, /\bopen\b/, 'the fold starts closed')
   assert.equal(unescape(textOf(label)).trim(), DETAIL.moreQuestions(hidden))
   assert.ok(jsonLd().includes(FAQ_ITEMS.at(-1).q), 'folded questions stay in the FAQPage data')
+})
+
+test('built page: every store button sits in a named place', () => {
+  for (const place of ['header', 'hero', 'finale', 'footer']) {
+    assert.match(html(), new RegExp(`data-analytics-location="${place}"`), place)
+  }
+})
+
+test('built page: with no key, no analytics code is shipped', () => {
+  // This site inlines its scripts, so dist/_astro alone could stay clean while
+  // the code rode in the HTML. Check both. The CSP <meta> is set aside: it names
+  // the PostHog hosts on every build, key or no key.
+  const shipped = readdirSync('dist/_astro').filter((f) => f.endsWith('.js'))
+  for (const file of shipped) {
+    assert.doesNotMatch(readFileSync(`dist/_astro/${file}`, 'utf8'), /posthog/i, file)
+  }
+  assert.doesNotMatch(html().replace(/<meta http-equiv="content-security-policy"[^>]*>/i, ''), /posthog/i)
 })
