@@ -15,8 +15,13 @@
 #   leaves `wrangler dev` with no runtime to start. The static build does not
 #   need it, but the same lockfile serves local dev, so it stays on.
 #
+# core-js: DENIED.
+#   It arrives transitively via posthog-js. Its postinstall only prints a
+#   funding banner; nothing the build or the site needs.
+#
 # Flip a package to true only with a reason recorded here.
 allowBuilds:
+  core-js: false
   esbuild: false
   workerd: true
 minimumReleaseAgeExclude:

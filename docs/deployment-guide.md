@@ -56,6 +56,7 @@ and no warning loud enough to notice. Set them on both.
 | `SANITY_DATASET` | set | set | Required for `/guides`. |
 | `SANITY_API_READ_TOKEN` | set, **encrypted** | set, **encrypted** | See below. |
 | `SANITY_API_VERSION` | omit | omit | Defaults to the date pinned in `src/lib/content.ts`. |
+| `PUBLIC_POSTHOG_KEY` | set | omit | PostHog project key. Production only: Preview stays unset, so it ships no analytics code. Public by design. |
 | `SITE_URL` | omit | omit | Defaults to `https://myridesg.com`. See below. |
 
 Values live in `.env.example`; the real ones are in `.env`, which is

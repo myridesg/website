@@ -1,8 +1,8 @@
 # MyRideSG — marketing site
 
 Standalone marketing and content site for MyRideSG, split out of the
-`myridesg-v2` monorepo. Astro, fully static, no backend, apart from the one
-exception in rule 1.
+`myridesg-v2` monorepo. Astro, fully static, with no backend of its own, apart
+from the one exception in rule 1. Visits are counted by PostHog (rule 7).
 
 The product is a **native iOS/Android app**. This site markets it and hosts the
 SEO content. There is no web app here, no auth, and no user accounts.
@@ -16,6 +16,7 @@ SEO content. There is no web app here, no auth, and no user accounts.
 | Styling | Tailwind CSS v4 via `@tailwindcss/vite` |
 | Content | Sanity (guides) + local TS data (bike catalog) |
 | Images | `astro:assets` → WebP |
+| Analytics | PostHog, EU, cookieless — see docs/tracking-plan.md |
 | Package manager | pnpm · Node >= 22.12 |
 | TypeScript | **pinned to 6.x** — `astro check` cannot use 7.x (the native compiler drops the programmatic API the language server needs) |
 
@@ -48,7 +49,8 @@ src/
     islands/    .tsx — React, hydrated. Exception, not default.
   content/      vendored data layer from myridesg-v2 (see below)
   lib/          home-content.ts (every home page string), faq-items.ts, seo.ts
-  scripts/      client modules; scroll-progress.ts drives the home page motion
+  scripts/      client modules; scroll-progress.ts drives the home page motion;
+                analytics.ts sends the PostHog events (rule 7)
   assets/       images processed by astro:assets
   styles/       global.css — Tailwind entry + @theme tokens, incl. the one list of
                 spacing (--space-*, --section-pad), type roles (--type-*) and cards;
@@ -143,6 +145,13 @@ plausible "4,800 riders" and ship a false advertising claim. If a number is
 needed and not verifiable, leave it out.
 
 Related: never attach invented ratings or reviews to a **named real business**.
+
+**7. Analytics is PostHog, and it stays cookieless.** Every event is written
+in `docs/tracking-plan.md` before it is written in code. Autocapture, session
+replay and cookies stay off, and the SDK is the `module.no-external` build so
+it never loads a script from another origin. `scripts/analytics-guard.test.mjs`
+holds all of that. With no `PUBLIC_POSTHOG_KEY` the build ships no analytics
+code at all.
 
 ## Known gaps
 

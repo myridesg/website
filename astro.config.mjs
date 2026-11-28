@@ -41,14 +41,20 @@ export default defineConfig({
   // menu and the scroll handler, and a hand-maintained hash list would go stale
   // on the next build.
   //
-  // The site loads nothing off-origin: images come from astro:assets, fonts are
-  // @fontsource (bundled), and Sanity is read at build time only. Hence 'self'
-  // everywhere and 'none' for the things nothing uses — there are no forms, no
-  // workers and no manifest. connect-src is 'self' rather than 'none': the
-  // site still makes no fetch calls, so same-origin is all it would ever need,
-  // and 'none' blocked audit tools that fetch /robots.txt from the page
-  // context — Lighthouse reported "robots.txt is not valid" (SEO) because the
-  // request itself was refused, not because the file was wrong.
+  // The site loads no script, image or font from another origin: images come
+  // from astro:assets, fonts are @fontsource (bundled), and Sanity is read at
+  // build time only. Hence 'self' everywhere and 'none' for the things nothing
+  // uses — there are no forms, no workers and no manifest.
+  //
+  // The one thing the page sends off-origin is analytics (src/scripts/analytics.ts),
+  // so connect-src adds PostHog's EU ingestion and assets hosts (POSTHOG_HOST in
+  // src/consts.ts; scripts/analytics-guard.test.mjs keeps the two in step).
+  // They are connect-src only: script-src stays hash-and-'self', because the
+  // SDK is bundled into the page (posthog-js/dist/module.no-external) and never
+  // injects a script. connect-src keeps 'self' too: 'none' blocked audit tools
+  // that fetch /robots.txt from the page context — Lighthouse reported
+  // "robots.txt is not valid" (SEO) because the request itself was refused, not
+  // because the file was wrong.
   //
   // Two directives a <meta> CSP cannot carry — frame-ancestors, which every
   // browser ignores there, and HSTS, which is not CSP at all — live in
@@ -59,7 +65,7 @@ export default defineConfig({
         "default-src 'self'",
         "img-src 'self'",
         "font-src 'self'",
-        "connect-src 'self'",
+        "connect-src 'self' https://eu.i.posthog.com https://eu-assets.i.posthog.com",
         "object-src 'none'",
         "base-uri 'self'",
         "form-action 'none'",

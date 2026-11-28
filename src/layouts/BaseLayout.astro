@@ -331,6 +331,9 @@ const bingSiteVerification = envVar('BING_SITE_VERIFICATION')
 
   <body class="flex min-h-dvh flex-col">
     <slot />
+    <script>
+      import '@/scripts/analytics.ts'
+    </script>
   </body>
 </html>
 
