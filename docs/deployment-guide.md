@@ -56,11 +56,18 @@ and no warning loud enough to notice. Set them on both.
 | `SANITY_DATASET` | set | set | Required for `/guides`. |
 | `SANITY_API_READ_TOKEN` | set, **encrypted** | set, **encrypted** | See below. |
 | `SANITY_API_VERSION` | omit | omit | Defaults to the date pinned in `src/lib/content.ts`. |
-| `PUBLIC_POSTHOG_KEY` | set | omit | PostHog project key. Production only: Preview stays unset, so it ships no analytics code. Public by design. |
+| `PUBLIC_POSTHOG_KEY` | set | omit | PostHog project key. Production only: Preview stays unset, so it ships no analytics code. Public by design. Read "Before setting the PostHog key" below first. |
 | `SITE_URL` | omit | omit | Defaults to `https://myridesg.com`. See below. |
 
 Values live in `.env.example`; the real ones are in `.env`, which is
 gitignored and must never be committed.
+
+### Before setting the PostHog key
+
+1. In the PostHog project settings, turn on **cookieless server hash mode**.
+   Without it every event is silently dropped. Turn on **heatmaps** too.
+2. Get legal review of `src/pages/privacy.astro`. It does not yet describe
+   website analytics, and the site has no opt-out.
 
 ### The Sanity read token is load-bearing
 

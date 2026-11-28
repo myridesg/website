@@ -18,6 +18,12 @@ test('analytics keeps its privacy settings', () => {
     "person_profiles: 'never'",
     'autocapture: false',
     'disable_session_recording: true',
+    'capture_exceptions: false',
+    'capture_performance: false',
+    'capture_dead_clicks: false',
+    'disable_surveys: true',
+    'advanced_disable_flags: true',
+    'send_instantly: true',
   ]) assert.ok(client.includes(setting), setting)
 })
 

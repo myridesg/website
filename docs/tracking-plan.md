@@ -24,3 +24,4 @@ What the site tells PostHog, and when. If it is not in this table, the site does
 ## Known gaps
 
 - A phone that scans the QR code lands on `/get/` and is redirected before any event can be sent, so QR scans are not counted.
+- On a guide short enough that its end is on screen when it opens, `guide_finished` is sent at once.

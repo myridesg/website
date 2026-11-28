@@ -150,11 +150,15 @@ Related: never attach invented ratings or reviews to a **named real business**.
 in `docs/tracking-plan.md` before it is written in code. Autocapture, session
 replay and cookies stay off, and the SDK is the `module.no-external` build so
 it never loads a script from another origin. `scripts/analytics-guard.test.mjs`
-holds all of that. With no `PUBLIC_POSTHOG_KEY` the build ships no analytics
+checks the client settings in source; the project's own PostHog settings are
+not covered by any test. With no `PUBLIC_POSTHOG_KEY` the build ships no analytics
 code at all.
 
 ## Known gaps
 
+- The privacy policy does not yet cover the website's PostHog analytics. It
+  needs legal review before `PUBLIC_POSTHOG_KEY` goes into production. Do not
+  edit `privacy.astro` — flag it.
 - `/catalog` is not built yet. It is absent from the nav on purpose; do not
   link it until it exists.
 - `/guides` is built and linked, but its content is empty until
